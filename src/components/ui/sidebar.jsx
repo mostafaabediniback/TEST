@@ -41,6 +41,7 @@ function useSidebar() {
 }
 function SidebarProvider({
   defaultOpen = true,
+  hoverToOpen = false,
   open: openProp,
   onOpenChange: setOpenProp,
   className,
@@ -53,10 +54,14 @@ function SidebarProvider({
   const triggerRef = React.useRef(null);
   const [openMobile, setOpenMobile] = React.useState(false);
   const [_open, _setOpen] = React.useState(defaultOpen);
-  const open = openProp ?? _open;
+  const [hovered, setHovered] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const persistentOpen = openProp ?? _open;
+  const isPinned = hoverToOpen && persistentOpen;
+  const open = persistentOpen || (hoverToOpen && !isMobile && (hovered || menuOpen));
   const setOpen = React.useCallback(
     (value) => {
-      const openState = typeof value === "function" ? value(open) : value;
+      const openState = typeof value === "function" ? value(persistentOpen) : value;
       if (setOpenProp) {
         setOpenProp(openState);
       } else {
@@ -64,13 +69,17 @@ function SidebarProvider({
       }
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
-    [setOpenProp, open],
+    [setOpenProp, persistentOpen],
   );
   const toggleSidebar = React.useCallback(() => {
     return isMobile
       ? setOpenMobile((open2) => !open2)
       : setOpen((open2) => !open2);
   }, [isMobile, setOpen, setOpenMobile]);
+  React.useEffect(() => {
+    // Returning from a touch layout must not restore a stale mouse hover.
+    if (isMobile) setHovered(false);
+  }, [isMobile]);
   React.useEffect(() => {
     const handleKeyDown = (event) => {
       if (
@@ -94,6 +103,11 @@ function SidebarProvider({
       state,
       open,
       setOpen,
+      hoverToOpen,
+      isPinned,
+      setHovered,
+      menuOpen,
+      setMenuOpen,
       isMobile,
       openMobile,
       setOpenMobile,
@@ -105,6 +119,9 @@ function SidebarProvider({
       state,
       open,
       setOpen,
+      hoverToOpen,
+      isPinned,
+      menuOpen,
       isMobile,
       openMobile,
       setOpenMobile,
@@ -142,9 +159,12 @@ function Sidebar({
   title = "Sidebar",
   description = "Application navigation",
   closeLabel = "Close",
+  onPointerEnter,
+  onPointerLeave,
+  onPointerOver,
   ...props
 }) {
-  const { isMobile, state, openMobile, setOpenMobile, sidebarId, triggerRef } =
+  const { isMobile, state, openMobile, setOpenMobile, sidebarId, triggerRef, hoverToOpen, setHovered } =
     useSidebar();
   if (collapsible === "none") {
     return (
@@ -156,6 +176,9 @@ function Sidebar({
           "flex h-full w-[var(--sidebar-width)] flex-col bg-sidebar text-sidebar-foreground",
           className,
         )}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onPointerOver={onPointerOver}
         {...props}
       >
         {children}
@@ -181,6 +204,9 @@ function Sidebar({
           }}
           side={side}
           closeLabel={closeLabel}
+          onPointerEnter={onPointerEnter}
+          onPointerLeave={onPointerLeave}
+          onPointerOver={onPointerOver}
           {...props}
         >
           <SheetHeader className="sr-only">
@@ -226,6 +252,23 @@ function Sidebar({
             : "group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)] group-data-[side=left]:border-r group-data-[side=right]:border-l",
           className,
         )}
+        onPointerEnter={(event) => {
+          onPointerEnter?.(event);
+          if (hoverToOpen && event.pointerType !== "touch" && !event.defaultPrevented) {
+            setHovered(event.currentTarget.contains(event.target));
+          }
+        }}
+        onPointerOver={(event) => {
+          onPointerOver?.(event);
+          // Portalled menus are React children, but are outside the sidebar DOM.
+          if (hoverToOpen && event.pointerType !== "touch" && !event.defaultPrevented) {
+            setHovered(event.currentTarget.contains(event.target));
+          }
+        }}
+        onPointerLeave={(event) => {
+          onPointerLeave?.(event);
+          if (hoverToOpen && !event.defaultPrevented) setHovered(false);
+        }}
         {...props}
       >
         <div

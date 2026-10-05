@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@/compone
 import { useLocale } from "@/context/LocaleContext";
 import { cn } from "@/lib/utils";
 
-const languages = [
+export const languages = [
   { value: "fa", label: "فارسی", direction: "rtl" },
   { value: "en", label: "English", direction: "ltr" },
 ];

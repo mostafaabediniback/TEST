@@ -22,11 +22,12 @@ function renderApp(path = "/vehicles") {
 }
 
 async function switchToEnglish(user) {
-  await user.click(screen.getByRole("button", { name: "تغییر زبان" }));
-  const dialog = await screen.findByRole("dialog", { name: "زبان" });
-  await user.click(within(dialog).getByRole("button", { name: "English" }));
-  await user.keyboard("{Escape}");
-  await waitFor(() => expect(screen.queryByRole("dialog", { name: "Language" })).toBeNull());
+  await user.click(screen.getByRole("button", { name: "منوی پروفایل" }));
+  const profile = await screen.findByRole("menu", { name: "منوی پروفایل" });
+  await user.click(within(profile).getByRole("menuitem", { name: "زبان" }));
+  const language = await screen.findByRole("menu", { name: "زبان" });
+  await user.click(within(language).getByRole("menuitemradio", { name: "English" }));
+  await waitFor(() => expect(screen.queryByRole("menu", { name: "Profile menu" })).toBeNull());
 }
 
 afterEach(() => {
@@ -89,20 +90,57 @@ describe("bilingual dashboard", () => {
     expect(await screen.findByText("4 cars found", {}, { timeout: 2500 })).toBeTruthy();
   });
 
-  it("collapses the desktop sidebar and restores it with Ctrl+B", async () => {
+  it("pins the initially collapsed desktop sidebar with its trigger and unpins it with Ctrl+B", async () => {
     const user = userEvent.setup();
     renderApp("/settings");
     const trigger = screen.getByRole("button", { name: "باز و بسته کردن سایدبار" });
     const sidebar = document.querySelector('[data-slot="sidebar"]');
-    expect(sidebar.getAttribute("data-state")).toBe("expanded");
-
-    await user.click(trigger);
+    const pin = screen.getByRole("button", { name: "باز نگه داشتن سایدبار" });
     expect(sidebar.getAttribute("data-state")).toBe("collapsed");
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(pin.getAttribute("aria-pressed")).toBe("false");
 
-    await user.keyboard("{Control>}b{/Control}");
+    await user.click(trigger);
     expect(sidebar.getAttribute("data-state")).toBe("expanded");
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    expect(pin.getAttribute("aria-pressed")).toBe("true");
+
+    await user.keyboard("{Control>}b{/Control}");
+    expect(sidebar.getAttribute("data-state")).toBe("collapsed");
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(pin.getAttribute("aria-pressed")).toBe("false");
+  });
+
+  it.each([
+    { locale: "fa", pinLabel: "باز نگه داشتن سایدبار" },
+    { locale: "en", pinLabel: "Pin sidebar" },
+  ])("opens the $locale sidebar on hover and keeps it open only while pinned", async ({ locale, pinLabel }) => {
+    localStorage.setItem("car-map-locale", locale);
+    const user = userEvent.setup();
+    renderApp("/settings");
+    const sidebar = document.querySelector('[data-slot="sidebar"]');
+    const container = document.querySelector('[data-slot="sidebar-container"]');
+    const pin = screen.getByRole("button", { name: pinLabel });
+    expect(sidebar.getAttribute("data-state")).toBe("collapsed");
+
+    await user.hover(container);
+    expect(sidebar.getAttribute("data-state")).toBe("expanded");
+    expect(pin.getAttribute("aria-pressed")).toBe("false");
+    await user.unhover(container);
+    expect(sidebar.getAttribute("data-state")).toBe("collapsed");
+
+    await user.hover(container);
+    await user.click(pin);
+    expect(pin.getAttribute("aria-pressed")).toBe("true");
+    await user.unhover(pin);
+    expect(sidebar.getAttribute("data-state")).toBe("expanded");
+
+    await user.hover(pin);
+    await user.click(pin);
+    expect(pin.getAttribute("aria-pressed")).toBe("false");
+    expect(sidebar.getAttribute("data-state")).toBe("expanded");
+    await user.unhover(pin);
+    expect(sidebar.getAttribute("data-state")).toBe("collapsed");
   });
 
   it.each([
@@ -122,12 +160,88 @@ describe("bilingual dashboard", () => {
     expect(drawer.getAttribute("data-side")).toBe(side);
     expect(drawer.getAttribute("dir")).toBe(direction);
     expect(within(drawer).getByRole("navigation", { name: navigation })).toBeTruthy();
+    expect(within(drawer).queryByRole("button", { name: /Pin sidebar|باز نگه داشتن سایدبار/ })).toBeNull();
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
 
     await user.keyboard("{Escape}");
     await waitFor(() => expect(screen.queryByRole("dialog", { name: navigation })).toBeNull());
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
     await waitFor(() => expect(document.activeElement).toBe(trigger));
+  });
+
+  it.each([
+    { locale: "fa", profileLabel: "منوی پروفایل", languageLabel: "زبان", pinLabel: "باز نگه داشتن سایدبار", currentLanguage: "فارسی" },
+    { locale: "en", profileLabel: "Profile menu", languageLabel: "Language", pinLabel: "Pin sidebar", currentLanguage: "English" },
+  ])("keeps the unpinned $locale sidebar expanded while its profile menus are open", async ({ locale, profileLabel, languageLabel, pinLabel, currentLanguage }) => {
+    localStorage.setItem("car-map-locale", locale);
+    const user = userEvent.setup();
+    renderApp("/settings");
+    const sidebar = document.querySelector('[data-slot="sidebar"]');
+    const container = document.querySelector('[data-slot="sidebar-container"]');
+    await user.hover(container);
+    await user.click(screen.getByRole("button", { name: profileLabel }));
+    const profile = await screen.findByRole("menu", { name: profileLabel });
+    await user.click(within(profile).getByRole("menuitem", { name: languageLabel }));
+    const language = await screen.findByRole("menu", { name: languageLabel });
+
+    await user.hover(language);
+    expect(sidebar.getAttribute("data-state")).toBe("expanded");
+    expect(screen.getByRole("button", { name: pinLabel }).getAttribute("aria-pressed")).toBe("false");
+
+    await user.click(within(language).getByRole("menuitemradio", { name: currentLanguage }));
+    await waitFor(() => expect(screen.queryByRole("menu", { name: profileLabel })).toBeNull());
+    await waitFor(() => expect(sidebar.getAttribute("data-state")).toBe("collapsed"));
+  });
+
+  it.each([
+    { locale: "fa", profileLabel: "منوی پروفایل", languageLabel: "زبان", openKey: "{ArrowLeft}", currentLanguage: "فارسی" },
+    { locale: "en", profileLabel: "Profile menu", languageLabel: "Language", openKey: "{ArrowRight}", currentLanguage: "English" },
+  ])("supports $locale keyboard navigation and restores focus through nested profile menus", async ({ locale, profileLabel, languageLabel, openKey, currentLanguage }) => {
+    localStorage.setItem("car-map-locale", locale);
+    const user = userEvent.setup();
+    renderApp("/settings");
+    const trigger = screen.getByRole("button", { name: profileLabel });
+    trigger.focus();
+    await user.keyboard("{Enter}");
+    const profile = await screen.findByRole("menu", { name: profileLabel });
+    const languageTrigger = within(profile).getByRole("menuitem", { name: languageLabel });
+    languageTrigger.focus();
+    await user.keyboard(openKey);
+    const language = await screen.findByRole("menu", { name: languageLabel });
+    expect(within(language).getByRole("menuitemradio", { name: currentLanguage }).getAttribute("aria-checked")).toBe("true");
+
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("menu", { name: languageLabel })).toBeNull());
+    await waitFor(() => expect(document.activeElement).toBe(languageTrigger));
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("menu", { name: profileLabel })).toBeNull());
+    await waitFor(() => expect(document.activeElement).toBe(trigger));
+  });
+
+  it("changes language from the mobile profile submenu while preserving the open drawer", async () => {
+    setViewport(390);
+    const user = userEvent.setup();
+    renderApp("/settings");
+    await user.click(screen.getByRole("button", { name: "باز و بسته کردن سایدبار" }));
+    const drawer = await screen.findByRole("dialog", { name: "ناوبری" });
+    expect(within(drawer).getByRole("button", { name: "منوی پروفایل" })).toBeTruthy();
+
+    await user.pointer({ keys: "[TouchA]", target: within(drawer).getByRole("button", { name: "منوی پروفایل" }) });
+    const profile = await screen.findByRole("menu", { name: "منوی پروفایل" });
+    await user.pointer({ keys: "[TouchA]", target: within(profile).getByRole("menuitem", { name: "زبان" }) });
+    const language = await screen.findByRole("menu", { name: "زبان" });
+    await user.pointer({ keys: "[TouchA]", target: within(language).getByRole("menuitemradio", { name: "English" }) });
+    await waitFor(() => expect(screen.queryByRole("menu", { name: "Profile menu" })).toBeNull());
+
+    const updatedDrawer = screen.getByRole("dialog", { name: "Navigation" });
+    expect(updatedDrawer.getAttribute("dir")).toBe("ltr");
+    expect(updatedDrawer.getAttribute("data-side")).toBe("left");
+    expect(within(updatedDrawer).getByRole("button", { name: "Profile menu" })).toBeTruthy();
+    expect(document.documentElement.lang).toBe("en");
+    expect(document.documentElement.dir).toBe("ltr");
+    expect(localStorage.getItem("car-map-locale")).toBe("en");
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Navigation" })).toBeNull());
   });
 
   it.each([

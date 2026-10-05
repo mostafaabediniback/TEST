@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { CircleAlert } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { CarMarkers } from "./CarMarkers";
@@ -20,22 +20,21 @@ import { useCars } from "@/hooks/useCars";
 import { getCars } from "@/api/carsApi";
 import { useCarFilters } from "@/context/CarFilterContext";
 import { useLocale } from "@/context/LocaleContext";
+import { MapPositionProvider, useMapPosition } from "@/context/MapPositionContext";
+import { MAX_MAP_ZOOM } from "@/lib/mapPosition";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const INITIAL_CENTER = [35.7008, 51.4001];
-const INITIAL_ZOOM = 13;
-
 export function WorldMap() {
-  const [viewport, setViewport] = useState({
-    lat: INITIAL_CENTER[0],
-    lng: INITIAL_CENTER[1],
-    z: INITIAL_ZOOM,
-    x: 0,
-    y: 0,
-  });
+  return <MapPositionProvider><ResolvedWorldMap /></MapPositionProvider>;
+}
+
+function ResolvedWorldMap() {
+  const { position, initialCenter } = useMapPosition();
+  const [viewport, setViewport] = useState(position);
   const { debouncedSearch, status, showRaster, showVector } = useCarFilters();
   const { direction, t } = useLocale();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const selectedCarId = searchParams.get("car");
   const [selectedCar, setSelectedCar] = useState(null);
   const drawerId = useId();
@@ -54,7 +53,9 @@ export function WorldMap() {
   );
 
   const { data: cars = [], isFetching, isError } = useCars(requestFilters);
-  const onViewportChange = useCallback((next) => setViewport(next), []);
+  const onViewportChange = useCallback((next) => setViewport((previous) => (
+    previous.lat === next.lat && previous.lng === next.lng && previous.z === next.z ? previous : next
+  )), []);
   const currentCar = cars.find((car) => String(car.id) === selectedCarId);
   const {
     data: carDetails,
@@ -90,31 +91,28 @@ export function WorldMap() {
     (car, markerElement) => {
       setSelectedCar(car);
       selectedMarkerRef.current = markerElement;
-      setSearchParams(
-        (previous) => {
-          const next = new URLSearchParams(previous);
-          next.set("car", String(car.id));
-          return next;
-        },
+      // Map movement writes history directly without rerendering the router.
+      const next = new URLSearchParams(window.location.search);
+      next.set("car", String(car.id));
+      navigate(
+        { search: next.toString(), hash: window.location.hash },
         { replace: true },
       );
     },
-    [setSearchParams],
+    [navigate],
   );
 
   const onDrawerOpenChange = useCallback(
     (open) => {
       if (open) return;
-      setSearchParams(
-        (previous) => {
-          const next = new URLSearchParams(previous);
-          next.delete("car");
-          return next;
-        },
+      const next = new URLSearchParams(window.location.search);
+      next.delete("car");
+      navigate(
+        { search: next.toString(), hash: window.location.hash },
         { replace: true },
       );
     },
-    [setSearchParams],
+    [navigate],
   );
 
   const returnFocus = useCallback(
@@ -135,8 +133,10 @@ export function WorldMap() {
       aria-label={t("Live map")}
     >
       <MapContainer
-        center={INITIAL_CENTER}
-        zoom={INITIAL_ZOOM}
+        center={initialCenter}
+        zoom={position.z}
+        minZoom={0}
+        maxZoom={MAX_MAP_ZOOM}
         zoomControl={false}
         preferCanvas
         className="z-0"
@@ -167,8 +167,7 @@ export function WorldMap() {
         />
         <MapEvents
           onViewportChange={onViewportChange}
-          initialCenter={INITIAL_CENTER}
-          initialZoom={INITIAL_ZOOM}
+          selectedCarId={selectedCarId}
           focusedCar={focusedCar}
           showRaster={showRaster}
         />

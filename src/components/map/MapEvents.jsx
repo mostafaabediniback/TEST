@@ -1,53 +1,46 @@
-import { useEffect } from "react";
-import { useMap, useMapEvents } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import { useMap } from "react-leaflet";
 import { useLocale } from "@/context/LocaleContext";
+import { useMapPosition } from "@/context/MapPositionContext";
+import { buildViewport } from "@/lib/mapPosition";
 
-function latLngToTile(lat, lng, zoom) {
-  const n = 2 ** zoom;
-  const x = Math.floor(((lng + 180) / 360) * n);
-  const latRad = (lat * Math.PI) / 180;
-  const y = Math.floor((1 - Math.asinh(Math.tan(latRad)) / Math.PI) * 0.5 * n);
-  return { x, y };
-}
-
-function buildViewport(map) {
-  const center = map.getCenter();
-  const z = map.getZoom();
-  const { x, y } = latLngToTile(center.lat, center.lng, z);
-  return {
-    lat: center.lat,
-    lng: center.lng,
-    z,
-    x,
-    y,
-  };
-}
-
-export function MapEvents({ onViewportChange, initialCenter, initialZoom, focusedCar, showRaster }) {
+export function MapEvents({ onViewportChange, selectedCarId, focusedCar, showRaster }) {
   const map = useMap();
+  const { position, initialCenter, restoredFromUrl, initialCarId, savePosition } = useMapPosition();
+  const restoredSelectionRef = useRef(restoredFromUrl ? initialCarId : null);
   const { direction, isRtl, t } = useLocale();
   const focusedId = focusedCar?.id;
   const focusedLat = focusedCar?.lat;
   const focusedLng = focusedCar?.lng;
 
-  const events = useMapEvents({
-    moveend() {
-      onViewportChange(buildViewport(events));
-    },
-    zoomend() {
-      onViewportChange(buildViewport(events));
-    },
-  });
+  useEffect(() => {
+    let timer;
+    const cancelPending = () => clearTimeout(timer);
+    const onMoveEnd = () => {
+      cancelPending();
+      const center = map.getCenter();
+      const next = buildViewport(center.lat, center.lng, map.getZoom());
+      savePosition(next);
+      // Coalesce rapid completed gestures; a new gesture cancels the pending fetch.
+      timer = setTimeout(() => onViewportChange(next), 150);
+    };
+    map.on("movestart", cancelPending);
+    map.on("moveend", onMoveEnd);
+    return () => {
+      cancelPending();
+      map.off("movestart", cancelPending);
+      map.off("moveend", onMoveEnd);
+    };
+  }, [map, onViewportChange, savePosition]);
 
   useEffect(() => {
-    onViewportChange(buildViewport(map));
-  }, [map, onViewportChange]);
-
-  useEffect(() => {
+    if (selectedCarId !== restoredSelectionRef.current) restoredSelectionRef.current = null;
+    // A selected car in a refresh URL must not override its saved map position.
+    if (restoredSelectionRef.current && String(focusedId) === restoredSelectionRef.current) return;
     if (focusedId != null && Number.isFinite(focusedLat) && Number.isFinite(focusedLng)) {
       map.setView([focusedLat, focusedLng], 16);
     }
-  }, [map, focusedId, focusedLat, focusedLng]);
+  }, [map, selectedCarId, focusedId, focusedLat, focusedLng]);
 
   useEffect(() => {
     let frame;
@@ -74,10 +67,10 @@ export function MapEvents({ onViewportChange, initialCenter, initialZoom, focuse
   }, [map, direction, isRtl, showRaster, t]);
 
   useEffect(() => {
-    const recenter = () => map.setView(initialCenter, initialZoom, { animate: true });
+    const recenter = () => map.setView(initialCenter, position.z, { animate: true });
     window.addEventListener("car-map:recenter", recenter);
     return () => window.removeEventListener("car-map:recenter", recenter);
-  }, [map, initialCenter, initialZoom]);
+  }, [map, initialCenter, position.z]);
 
   return null;
 }
