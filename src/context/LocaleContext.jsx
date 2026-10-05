@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useSt
 import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { translate } from "@/i18n/messages";
 
-const STORAGE_KEY = "car-map-locale";
+const STORAGE_KEY = "layout-starter-locale";
 const LocaleContext = createContext(null);
 
 function readLocale() {
@@ -31,7 +31,7 @@ export function LocaleProvider({ children }) {
   useLayoutEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = direction;
-    document.title = t("Car Map Dashboard");
+    document.title = t("Starter layout");
     try {
       window.localStorage.setItem(STORAGE_KEY, locale);
     } catch {

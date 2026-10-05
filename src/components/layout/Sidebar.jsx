@@ -1,4 +1,4 @@
-import { CarFront, Map, Pin, Settings } from "lucide-react";
+import { LayoutDashboard, PanelsTopLeft, Pin, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar as SidebarRoot,
@@ -19,8 +19,8 @@ import { useLocale } from "@/context/LocaleContext";
 import { SidebarProfile } from "./SidebarProfile";
 
 const items = [
-  { label: "Map", icon: Map, to: "/" },
-  { label: "Vehicles", icon: CarFront, to: "/vehicles" },
+  { label: "Test menu 1", icon: LayoutDashboard, to: "/" },
+  { label: "Test menu 2", icon: PanelsTopLeft, to: "/test-2" },
   { label: "Settings", icon: Settings, to: "/settings" },
 ];
 
@@ -38,7 +38,7 @@ export function Sidebar() {
       dir={direction}
       collapsible="icon"
       title={t("Navigation")}
-      description={t("Fleet management")}
+      description={t("Application")}
       closeLabel={t("Close sidebar")}
     >
       <SidebarHeader className="h-16 justify-center border-b">
@@ -48,17 +48,17 @@ export function Sidebar() {
               size="lg"
               render={<Link to="/" />}
               onClick={closeMobile}
-              tooltip={t("Fleet management")}
+              tooltip={t("Application")}
             >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <CarFront className="size-5" />
+                <LayoutDashboard className="size-5" />
               </span>
               <span className="grid min-w-0 gap-0.5 text-start group-data-[collapsible=icon]:hidden">
                 <span className="truncate text-sm font-semibold">
-                  {t("Fleet management")}
+                  {t("Application")}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {t("Fleet overview")}
+                  {t("Starter layout")}
                 </span>
               </span>
             </SidebarMenuButton>

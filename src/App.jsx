@@ -1,7 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import Dashboard from "@/pages/Dashboard";
-import Vehicles from "@/pages/Vehicles";
+import TemplatePage from "@/pages/TemplatePage";
 import Settings from "@/pages/Settings";
 
 export default function App() {
@@ -9,9 +8,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="vehicles" element={<Vehicles />} />
+          <Route index element={<TemplatePage title="Test menu 1" />} />
+          <Route path="test-2" element={<TemplatePage title="Test menu 2" />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
