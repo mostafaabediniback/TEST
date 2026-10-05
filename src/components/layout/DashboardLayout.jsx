@@ -4,6 +4,7 @@ import { SearchBox } from "./SearchBox";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { SearchProvider } from "@/context/SearchContext";
 import { useLocale } from "@/context/LocaleContext";
+import { Toolbar } from "./Toolbar";
 
 export function DashboardLayout() {
   const { direction, t } = useLocale();
@@ -21,6 +22,11 @@ export function DashboardLayout() {
           </header>
           <div className="relative min-h-0 flex-1">
             <Outlet />
+                        {!isSettings && (
+              <div className="absolute end-3 top-3 z-[800] sm:end-4 sm:top-4">
+                <Toolbar />
+              </div>
+            )}
           </div>
         </SidebarInset>
       </SidebarProvider>
