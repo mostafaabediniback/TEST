@@ -1,4 +1,4 @@
-import { LayoutDashboard, PanelsTopLeft, Pin, Settings } from "lucide-react";
+import { LayoutDashboard, Map as MapIcon, PanelsTopLeft, Pin, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar as SidebarRoot,
@@ -21,6 +21,7 @@ import { SidebarProfile } from "./SidebarProfile";
 const items = [
   { label: "Test menu 1", icon: LayoutDashboard, to: "/" },
   { label: "Test menu 2", icon: PanelsTopLeft, to: "/test-2" },
+  { label: "Map", icon: MapIcon, to: "/map" },
   { label: "Settings", icon: Settings, to: "/settings" },
 ];
 

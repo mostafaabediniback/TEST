@@ -1,0 +1,54 @@
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: hsl(var(--muted));
+  font-family: var(--font-sans);
+}
+
+.leaflet-control-zoom,
+.leaflet-control-attribution,
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  border-color: hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.leaflet-control-zoom {
+  overflow: hidden;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 0.08) !important;
+}
+
+.leaflet-control-zoom a {
+  border-color: hsl(var(--border)) !important;
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+}
+
+.car-popup {
+  display: grid;
+  min-width: 150px;
+  gap: 4px;
+  text-align: start;
+  direction: rtl;
+  font-family: var(--font-fa);
+}
+
+.car-popup strong {
+  font-size: 14px;
+}
+
+.car-popup span {
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+}
+
+.cars-canvas-layer {
+  image-rendering: auto;
+}
