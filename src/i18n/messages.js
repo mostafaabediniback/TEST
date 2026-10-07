@@ -1,5 +1,6 @@
 export const messages = {
   fa: {
+    "Map": "نقشه",
     "Application": "برنامه",
     "Starter layout": "قالب پایه",
     "Navigation": "منوها",

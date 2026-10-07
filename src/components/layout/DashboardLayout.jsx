@@ -5,6 +5,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { SearchProvider } from "@/context/SearchContext";
 import { useLocale } from "@/context/LocaleContext";
 import { Toolbar } from "./Toolbar";
+import { GlobalLoading } from "./GlobalLoading";
 
 export function DashboardLayout() {
   const { direction, t } = useLocale();
@@ -13,6 +14,7 @@ export function DashboardLayout() {
 
   return (
     <SearchProvider>
+      <GlobalLoading />
       <SidebarProvider defaultOpen={false} hoverToOpen dir={direction} className="h-dvh min-h-0 overflow-hidden">
         <Sidebar />
         <SidebarInset className="h-dvh min-w-0 overflow-hidden">
