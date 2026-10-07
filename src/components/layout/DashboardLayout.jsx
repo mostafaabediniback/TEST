@@ -24,7 +24,7 @@ export function DashboardLayout() {
           </header>
           <div className="relative min-h-0 flex-1">
             <Outlet />
-                        {!isSettings && (
+                        {!isSettings && pathname !== "/" && (
               <div className="absolute end-3 top-3 z-[800] sm:end-4 sm:top-4">
                 <Toolbar />
               </div>

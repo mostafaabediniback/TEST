@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import TemplatePage from "@/pages/TemplatePage";
+import TestMenuOne from "@/pages/TestMenuOne";
 import Settings from "@/pages/Settings";
 import Map from "@/pages/map";
 import { FilterProvider } from "@/context/FilterContext";
@@ -13,7 +14,7 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<DashboardLayout />}>
-              <Route index element={<TemplatePage title="Test menu 1" />} />
+              <Route index element={<TestMenuOne />} />
               <Route
                 path="test-2"
                 element={<TemplatePage title="Test menu 2" />}
