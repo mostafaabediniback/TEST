@@ -5,6 +5,23 @@ import { useMap } from "react-leaflet";
 import { useMapController } from "@/context/MapControllerContext";
 import { useMapInfo } from "@/context/MapInfoContext";
 
+function getMapInfo(map, position) {
+  const z = Math.floor(map.getZoom());
+  const tileCount = 2 ** z;
+  const point = map.project(position, z);
+  const tileX = Math.floor(point.x / 256);
+  const tileY = Math.floor(point.y / 256);
+  const latLng = map.wrapLatLng(position);
+
+  return {
+    lat: latLng.lat,
+    lng: latLng.lng,
+    x: ((tileX % tileCount) + tileCount) % tileCount,
+    y: Math.max(0, Math.min(tileCount - 1, tileY)),
+    z,
+  };
+}
+
 export default function MapInstance() {
   const map = useMap();
   const navigate = useNavigate();
@@ -22,72 +39,69 @@ export default function MapInstance() {
   }, [map, setMap]);
 
   useEffect(() => {
+    let pointerPoint = null;
+    let animationFrame = null;
+
     function updateMapInfo() {
-      const center = map.getCenter();
-      const zoom = map.getZoom();
+      const position = pointerPoint
+        ? map.containerPointToLatLng(pointerPoint)
+        : map.getCenter();
 
-      const z = Math.floor(zoom);
-      const tileSize = 256;
-      const scale = tileSize * 2 ** z;
+      setMapInfo(getMapInfo(map, position));
+    }
 
-      const latitudeRadians =
-        (center.lat * Math.PI) / 180;
+    function handleMouseMove(event) {
+      pointerPoint = event.containerPoint;
 
-      const xPixel =
-        ((center.lng + 180) / 360) * scale;
-
-      const yPixel =
-        ((1 -
-          Math.log(
-            Math.tan(latitudeRadians) +
-              1 / Math.cos(latitudeRadians),
-          ) /
-            Math.PI) /
-          2) *
-        scale;
-
-      const x = Math.floor(xPixel / tileSize);
-      const y = Math.floor(yPixel / tileSize);
-
-      setMapInfo({
-        lat: center.lat,
-        lng: center.lng,
-        z,
-        x,
-        y,
-      });
-
-      if (
-        pathname === "/dashboard" ||
-        pathname.startsWith("/dashboard/")
-      ) {
-        const nextPath = `/dashboard/${z}/${x}/${y}`;
-
-        // Avoid unnecessary history/navigation updates.
-        if (window.location.pathname !== nextPath) {
-          navigate(nextPath, {
-            replace: true,
-          });
-        }
+      // Publish the latest pointer position at most once per frame.
+      if (animationFrame === null) {
+        animationFrame = window.requestAnimationFrame(() => {
+          animationFrame = null;
+          updateMapInfo();
+        });
       }
     }
 
-    // This updates the context but does not need to navigate immediately.
     updateMapInfo();
-
+    map.on("mousemove", handleMouseMove);
     map.on("moveend", updateMapInfo);
     map.on("zoomend", updateMapInfo);
 
     return () => {
+      map.off("mousemove", handleMouseMove);
       map.off("moveend", updateMapInfo);
       map.off("zoomend", updateMapInfo);
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
     };
-  }, [
-    map,
-    navigate,
-    pathname,
-    setMapInfo,
-  ]);
+  }, [map, setMapInfo]);
+
+  useEffect(() => {
+    function updateMapPath() {
+      if (
+        pathname === "/dashboard" ||
+        pathname.startsWith("/dashboard/")
+      ) {
+        // The route follows the viewport center, independently of the pointer.
+        const { z, x, y } = getMapInfo(map, map.getCenter());
+        const nextPath = `/dashboard/${z}/${x}/${y}`;
+
+        if (window.location.pathname !== nextPath) {
+          navigate(nextPath, { replace: true });
+        }
+      }
+    }
+
+    updateMapPath();
+    map.on("moveend", updateMapPath);
+    map.on("zoomend", updateMapPath);
+
+    return () => {
+      map.off("moveend", updateMapPath);
+      map.off("zoomend", updateMapPath);
+    };
+  }, [map, navigate, pathname]);
 
   return null;
 }
