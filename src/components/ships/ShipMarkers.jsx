@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ScatterplotLayer } from "@deck.gl/layers";
 import { X } from "lucide-react";
@@ -24,13 +24,17 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
   const displayedShip = { ...selected, ...preview.ship };
   const selectedCoordinates = useMemo(() => getShipCoordinates(selected) ?? getShipCoordinates(preview.position) ?? getShipCoordinates(preview.ship), [selected, preview.position, preview.ship]);
 
-  function closeSelection() {
+  const closeSelection = useCallback(() => {
     setSearch((current) => { const next = new URLSearchParams(current); next.delete("shipId"); return next; }, { replace: true });
     setSelectedShip(null);
-  }
+    setHoveredShip(null);
+  }, [setSearch, setSelectedShip]);
 
   useEffect(() => {
     overlay.setProps({
+      onClick: ({ object }) => {
+        if (!object && selectedId !== null) closeSelection();
+      },
       layers: [
         new ScatterplotLayer({
           id: "ship-markers",
@@ -53,9 +57,14 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
           },
           onClick: ({ object }) => {
             if (object?.id == null) return;
+            if (String(object.id) === selectedId) {
+              closeSelection();
+              return true;
+            }
             setSelectedShip(object);
             setHoveredShip(null);
             setSearch((current) => { const next = new URLSearchParams(current); next.set("shipId", String(object.id)); return next; }, { replace: true });
+            return true;
           },
         }),
         new ScatterplotLayer({
@@ -73,9 +82,18 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
         }),
       ],
     });
-  }, [ships, map, overlay, setSearch, setSelectedShip, selectedCoordinates]);
+  }, [ships, map, overlay, setSearch, setSelectedShip, selectedCoordinates, selectedId, closeSelection]);
 
-  useEffect(() => () => { overlay.setProps({ layers: [] }); map.getCanvas().style.cursor = ""; }, [overlay, map]);
+  useEffect(() => () => { overlay.setProps({ layers: [], onClick: null }); map.getCanvas().style.cursor = ""; }, [overlay, map]);
+
+  useEffect(() => {
+    if (selectedId === null) return;
+    function handleKeyDown(event) {
+      if (event.key === "Escape") closeSelection();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedId, closeSelection]);
 
   const hoverCoordinates = getShipCoordinates(hoveredShip);
   return <>
