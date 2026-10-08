@@ -1,2 +1,5 @@
 allowBuilds:
-  esbuild: false
+  '@maplibre/maplibre-gl-native': false
+  canvas: false
+  sharp: false
+  sqlite3: false

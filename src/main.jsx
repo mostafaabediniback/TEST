@@ -1,13 +1,18 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import App from "./App";
-import { LocaleProvider } from "@/context/LocaleContext";
+import "./index.css";
+import "./i18n/config";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <LocaleProvider>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </LocaleProvider>
-  </React.StrictMode>,
+    </QueryClientProvider>
+  </React.StrictMode>
 );
