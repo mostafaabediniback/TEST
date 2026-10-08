@@ -1,141 +1,101 @@
-"use client";
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CircleMarker, Popup } from "react-leaflet";
-
-import ShipDetails from "./ShipDetails";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { ScatterplotLayer } from "@deck.gl/layers";
+import { X } from "lucide-react";
+import { useMapController } from "@/context/MapControllerContext";
+import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
+import { getShipCoordinates, getShipDetailsNavigation } from "@/lib/shipNavigation";
+import MapPopup from "../map/MapPopup";
+import ShipDetails from "./ShipDetails";
 
-const defaultMarkerStyle = {
-  color: "#ffffff",
-  weight: 2,
-  fillColor: "#2563eb",
-  fillOpacity: 0.95,
-};
-
-const hoverMarkerStyle = {
-  radius: 10,
-  color: "#dbeafe",
-  weight: 3,
-  fillColor: "#1d4ed8",
-  fillOpacity: 1,
-};
-
-function ShipMarker({ ship }) {
+export default function ShipMarkers({ ships = [], map, overlay }) {
   const navigate = useNavigate();
-  const [isSelected, setIsSelected] = useState(false);
+  const location = useLocation();
+  const [search, setSearch] = useSearchParams();
+  const { selectedShip, setSelectedShip } = useMapController();
+  const { t, direction } = useLocale();
+  const [hoveredShip, setHoveredShip] = useState(null);
+  const selectedId = search.get("shipId");
+  const selected = useMemo(() => selectedId === null ? null
+    : ships.find((ship) => String(ship.id) === selectedId)
+    ?? (String(selectedShip?.id) === selectedId ? selectedShip : { id: selectedId }), [ships, selectedShip, selectedId]);
+  const preview = useShipPreview(selected, selectedId !== null);
+  const displayedShip = { ...selected, ...preview.ship };
+  const selectedCoordinates = useMemo(() => getShipCoordinates(selected) ?? getShipCoordinates(preview.position) ?? getShipCoordinates(preview.ship), [selected, preview.position, preview.ship]);
 
-  const shipId = ship.id;
-  const portId = ship.port_id ?? ship.portId;
-
-  const preview = useShipPreview(ship, isSelected);
-
-  function handleMarkerClick(event) {
-    const marker = event.target;
-
-    setIsSelected(true);
-
-    // Prevent the hover tooltip from remaining visible.
-    marker.closeTooltip();
-
-    // Explicitly open the click popup next to this marker.
-    marker.openPopup();
+  function closeSelection() {
+    setSearch((current) => { const next = new URLSearchParams(current); next.delete("shipId"); return next; }, { replace: true });
+    setSelectedShip(null);
   }
 
-  function handleMouseOver(event) {
-    const marker = event.target;
-
-    marker.setStyle(hoverMarkerStyle);
-    marker.openTooltip();
-  }
-
-  function handleMouseOut(event) {
-    const marker = event.target;
-
-    marker.setStyle({
-      radius: 7,
-      ...defaultMarkerStyle,
+  useEffect(() => {
+    overlay.setProps({
+      layers: [
+        new ScatterplotLayer({
+          id: "ship-markers",
+          data: ships.filter((ship) => getShipCoordinates(ship)),
+          getPosition: getShipCoordinates,
+          radiusUnits: "pixels",
+          getRadius: 7,
+          filled: true,
+          stroked: true,
+          getFillColor: [37, 99, 235, 242],
+          getLineColor: [255, 255, 255, 255],
+          lineWidthUnits: "pixels",
+          getLineWidth: 2,
+          pickable: true,
+          autoHighlight: true,
+          highlightColor: [147, 197, 253, 255],
+          onHover: ({ object }) => {
+            setHoveredShip(object ?? null);
+            map.getCanvas().style.cursor = object ? "pointer" : "";
+          },
+          onClick: ({ object }) => {
+            if (object?.id == null) return;
+            setSelectedShip(object);
+            setHoveredShip(null);
+            setSearch((current) => { const next = new URLSearchParams(current); next.set("shipId", String(object.id)); return next; }, { replace: true });
+          },
+        }),
+        new ScatterplotLayer({
+          id: "selected-ship-ring",
+          data: selectedCoordinates ? [selectedCoordinates] : [],
+          getPosition: (coordinates) => coordinates,
+          radiusUnits: "pixels",
+          getRadius: 13,
+          filled: false,
+          stroked: true,
+          lineWidthUnits: "pixels",
+          getLineWidth: 3,
+          getLineColor: [37, 99, 235, 255],
+          pickable: false,
+        }),
+      ],
     });
+  }, [ships, map, overlay, setSearch, setSelectedShip, selectedCoordinates]);
 
-    // The popup remains open after clicking, but the hover tooltip closes.
-    if (!isSelected) {
-      marker.closeTooltip();
-    }
-  }
+  useEffect(() => () => { overlay.setProps({ layers: [] }); map.getCanvas().style.cursor = ""; }, [overlay, map]);
 
-  function handleDetailsClick() {
-    navigate(`/ships/${shipId}`, {
-      state: {
-        ship,
-        portId,
-      },
-    });
-  }
-
-  const displayedShip = preview.ship ?? ship;
-
-  return (
-    <CircleMarker
-      center={[Number(ship.lat), Number(ship.lon)]}
-      radius={7}
-      pathOptions={defaultMarkerStyle}
-      eventHandlers={{
-        click: handleMarkerClick,
-        mouseover: handleMouseOver,
-        mouseout: handleMouseOut,
-        popupclose: () => {
-          setIsSelected(false);
-        },
-      }}
-    >
-      {/* <Tooltip
-        direction="top"
-        offset={[0, -10]}
-        opacity={1}
-        interactive={false}
-      >
-        <ShipDetails
-          ship={displayedShip}
-          photo={preview.photo}
-          position={preview.position}
-          voyage={preview.voyage}
-          isLoading={preview.isLoading}
-          compact
-        />
-      </Tooltip> */}
-
-      <Popup
-        direction="top"
-        offset={[0, -10]}
-        closeButton
-        autoPan
-      >
-        <ShipDetails
-          ship={displayedShip}
-          photo={preview.photo}
-          position={preview.position}
-          voyage={preview.voyage}
-          port={preview.port}
-          isLoading={preview.isLoading}
-          onDetailsClick={handleDetailsClick}
-        />
-      </Popup>
-    </CircleMarker>
-  );
-}
-
-export default function ShipMarkers({ ships = [] }) {
-  return ships.map((ship, index) => {
-    const lat = Number(ship.lat);
-    const lon = Number(ship.lon);
-
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-      return null;
-    }
-
-    const key = ship.id ?? `${lat}-${lon}-${index}`;
-
-    return <ShipMarker key={key} ship={ship} />;
-  });
+  const hoverCoordinates = getShipCoordinates(hoveredShip);
+  return <>
+    {hoverCoordinates && String(hoveredShip.id) !== selectedId && (
+      <MapPopup map={map} coordinates={hoverCoordinates} hover>
+        <div dir={direction} className="px-3 py-2 text-sm font-semibold text-slate-900">{hoveredShip.name || t("unnamedShip")}</div>
+      </MapPopup>
+    )}
+    {selectedId !== null && selectedCoordinates && (
+      <MapPopup map={map} coordinates={selectedCoordinates}>
+        <div dir={direction} className="relative p-3">
+          <button type="button" aria-label={t("closeSelection")} onClick={closeSelection} className="absolute end-2 top-2 z-10 rounded-full p-1 text-slate-600 hover:bg-white/70"><X size={16} /></button>
+          <ShipDetails ship={displayedShip} photo={preview.photo} position={preview.position} voyage={preview.voyage} port={preview.port} isLoading={preview.isLoading} detailsLabel={t("viewDetails")} onDetailsClick={() => {
+            setSelectedShip(displayedShip);
+            const target = getShipDetailsNavigation(displayedShip, { source: "map", returnTo: location.pathname + location.search });
+            navigate(target.to, { state: target.state });
+          }} />
+          {preview.isError && <p role="status" className="mt-2 text-xs text-amber-700">{t("partialShipData")}</p>}
+        </div>
+      </MapPopup>
+    )}
+  </>;
 }

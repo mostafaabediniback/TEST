@@ -46,5 +46,11 @@
   "latitude": "خط العرض",
   "Visible columns": "الأعمدة الظاهرة",
   "Choose fields shown in the table.": "اختر الحقول التي ستظهر في الجدول.",
-  "Required": "مطلوب"
+  "Required": "مطلوب",
+  "viewDetails": "عرض التفاصيل",
+  "backToMap": "العودة إلى الخريطة",
+  "backToTable": "العودة إلى الجدول",
+  "unnamedShip": "سفينة بلا اسم",
+  "closeSelection": "إغلاق معلومات السفينة",
+  "partialShipData": "تعذر تحميل بعض معلومات السفينة."
 }

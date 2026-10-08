@@ -6,7 +6,7 @@ export default function ShipRow({ label, value }) {
       </span>
 
       <span className="max-w-[150px] truncate text-right text-xs font-semibold text-slate-800">
-        {value || "Unknown"}
+        {value == null || value === "" ? "Unknown" : value}
       </span>
     </div>
   );

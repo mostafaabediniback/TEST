@@ -5,9 +5,11 @@ const MapControllerContext = createContext(null);
 
 export function MapControllerProvider({ children }) {
   const [map, setMap] = useState(null);
+  const [mapView, setMapView] = useState(null);
+  const [selectedShip, setSelectedShip] = useState(null);
 
   return (
-    <MapControllerContext.Provider value={{ map, setMap }}>
+    <MapControllerContext.Provider value={{ map, setMap, mapView, setMapView, selectedShip, setSelectedShip }}>
       {children}
     </MapControllerContext.Provider>
   );

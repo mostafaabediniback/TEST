@@ -1,47 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useMap } from "react-leaflet";
+import { getVisibleTiles } from "@/lib/mapTiles";
 import { useQueries } from "@tanstack/react-query";
 import { getShipsInTile } from "@/api/shipApi";
-
-const TILE_SIZE = 256;
-
-function getVisibleTiles(map) {
-  const z = Math.floor(map.getZoom());
-  const pixelBounds = map.getPixelBounds();
-
-  const minX = Math.floor(pixelBounds.min.x / TILE_SIZE);
-  const maxX = Math.floor(pixelBounds.max.x / TILE_SIZE);
-  const minY = Math.floor(pixelBounds.min.y / TILE_SIZE);
-  const maxY = Math.floor(pixelBounds.max.y / TILE_SIZE);
-
-  const tileCount = 2 ** z;
-
-  // Set guarantees that duplicate z/x/y tiles are removed.
-  const tileKeys = new Set();
-
-  for (let x = minX; x <= maxX; x += 1) {
-    for (let y = minY; y <= maxY; y += 1) {
-      if (y < 0 || y >= tileCount) {
-        continue;
-      }
-
-      const wrappedX = ((x % tileCount) + tileCount) % tileCount;
-      const key = `${z}/${wrappedX}/${y}`;
-
-      tileKeys.add(key);
-    }
-  }
-
-  return Array.from(tileKeys, (key) => {
-    const [z, x, y] = key.split("/").map(Number);
-
-    return {
-      z,
-      x,
-      y,
-    };
-  });
-}
 
 function getTileKeys(tiles) {
   return tiles
@@ -50,8 +10,7 @@ function getTileKeys(tiles) {
     .join("|");
 }
 
-export function useShipsInVisibleTiles({ limit = 1000 } = {}) {
-  const map = useMap();
+export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
   const [tiles, setTiles] = useState([]);
 
   useEffect(() => {
@@ -78,13 +37,13 @@ export function useShipsInVisibleTiles({ limit = 1000 } = {}) {
     updateTiles();
 
     map.on("moveend", updateTiles);
-    map.on("zoomend", updateTiles);
+    map.on("resize", updateTiles);
 
     return () => {
       clearTimeout(timeoutId);
 
       map.off("moveend", updateTiles);
-      map.off("zoomend", updateTiles);
+      map.off("resize", updateTiles);
     };
   }, [map]);
 

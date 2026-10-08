@@ -11,40 +11,41 @@ import {
 
 export function useShipPreview(ship, enabled = true) {
   const shipId = ship?.id;
-  const portId = ship?.port_id ?? ship?.portId;
+  const seedPortId = ship?.port_id ?? ship?.portId;
 
   const shipQuery = useQuery({
     queryKey: ["ship", "preview", shipId],
     queryFn: () => getShipById(shipId),
-    enabled: Boolean(shipId) && enabled,
+    enabled: shipId != null && shipId !== "" && enabled,
     staleTime: 5 * 60 * 1000,
   });
 
   const photoQuery = useQuery({
     queryKey: ["ship", shipId, "photo"],
     queryFn: () => getShipPhoto(shipId),
-    enabled: Boolean(shipId) && enabled,
+    enabled: shipId != null && shipId !== "" && enabled,
     staleTime: 10 * 60 * 1000,
   });
 
   const positionQuery = useQuery({
     queryKey: ["ship", shipId, "position"],
     queryFn: () => getShipPosition(shipId),
-    enabled: Boolean(shipId) && enabled,
+    enabled: shipId != null && shipId !== "" && enabled,
     staleTime: 30 * 1000,
   });
 
   const voyageQuery = useQuery({
     queryKey: ["ship", shipId, "voyage"],
     queryFn: () => getShipVoyage(shipId),
-    enabled: Boolean(shipId) && enabled,
+    enabled: shipId != null && shipId !== "" && enabled,
     staleTime: 5 * 60 * 1000,
   });
 
+  const portId = seedPortId ?? shipQuery.data?.port_id ?? shipQuery.data?.portId;
   const portQuery = useQuery({
     queryKey: ["port", portId],
     queryFn: () => getPortById(portId),
-    enabled: Boolean(portId) && enabled,
+    enabled: portId != null && portId !== "" && enabled,
     staleTime: 10 * 60 * 1000,
   });
 

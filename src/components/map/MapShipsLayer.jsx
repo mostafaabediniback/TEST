@@ -1,13 +1,13 @@
 import { useShipsInVisibleTiles } from "@/hooks/useShipsInTiles";
 import ShipMarkers from "../ships/ShipMarkers";
 
-export default function MapShipsLayer() {
+export default function MapShipsLayer({ map, overlay }) {
   const {
     ships,
     isPending,
     isError,
     errors,
-  } = useShipsInVisibleTiles();
+  } = useShipsInVisibleTiles({ map });
 
   if (isError) {
     console.error("Failed to load ships:", errors);
@@ -21,7 +21,7 @@ export default function MapShipsLayer() {
         </div>
       )}
 
-      <ShipMarkers  ships={ships} />
+      <ShipMarkers ships={ships} map={map} overlay={overlay} />
     </>
   );
 }

@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "leaflet/dist/leaflet.css";
+@import "maplibre-gl/dist/maplibre-gl.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
@@ -136,3 +136,17 @@
     @apply font-sans;
   } */
 }
+
+/* Ship popups share the map's translucent control surface. */
+.ship-map-popup .maplibregl-popup-content {
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 75%);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 78%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 28px rgb(15 23 42 / 18%);
+  font-family: inherit;
+}
+.ship-map-popup .maplibregl-popup-tip { border-top-color: rgb(255 255 255 / 78%); }
+.ship-map-hover { pointer-events: none; }

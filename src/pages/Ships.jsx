@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getShipDetailsNavigation } from "@/lib/shipNavigation";
 import {
   ChevronLeft,
   ChevronRight,
   Columns3,
+  Eye,
   Search,
   Ship,
   X,
@@ -42,11 +45,14 @@ const columns = [
 
 export default function Ships() {
   const { t, formatNumber, direction } = useLocale();
-  const [filter, setFilter] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const savedTable = location.state?.tableState;
+  const [filter, setFilter] = useState(savedTable?.filter ?? "");
+  const [page, setPage] = useState(savedTable?.page ?? 1);
+  const [pageSize, setPageSize] = useState(savedTable?.pageSize ?? 20);
   const [visibleColumns, setVisibleColumns] = useState(
-    columns.map((column) => column.key)
+    savedTable?.visibleColumns ?? columns.map((column) => column.key)
   );
 
   const { data, isPending, isError, error } = useShips({
@@ -63,6 +69,14 @@ export default function Ships() {
   const displayedColumns = columns.filter((column) =>
     visibleColumns.includes(column.key)
   );
+
+  function showDetails(ship) {
+    const tableState = { filter, page, pageSize, visibleColumns };
+    const returnTo = location.pathname + location.search;
+    navigate(returnTo, { replace: true, state: { ...location.state, tableState } });
+    const target = getShipDetailsNavigation(ship, { source: "table", returnTo, tableState });
+    navigate(target.to, { state: target.state });
+  }
 
   function handleFilterChange(event) {
     setFilter(event.target.value);
@@ -186,6 +200,7 @@ export default function Ships() {
                   {displayedColumns.map(({ key, labelKey }) => (
                     <TableHead key={key}>{t(labelKey)}</TableHead>
                   ))}
+                  <TableHead>{t("viewDetails")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -205,6 +220,11 @@ export default function Ships() {
                         )}
                       </TableCell>
                     ))}
+                    <TableCell>
+                      <Button variant="ghost" size="icon-sm" disabled={ship.id == null} aria-label={t("viewDetails") + ": " + (ship.name ?? ship.id)} onClick={() => showDetails(ship)}>
+                        <Eye aria-hidden="true" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

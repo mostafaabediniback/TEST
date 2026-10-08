@@ -46,5 +46,11 @@
   "latitude": "Latitude",
   "Visible columns": "Visible columns",
   "Choose fields shown in the table.": "Choose the fields to show in the table.",
-  "Required": "Required"
+  "Required": "Required",
+  "viewDetails": "View details",
+  "backToMap": "Back to map",
+  "backToTable": "Back to table",
+  "unnamedShip": "Unnamed ship",
+  "closeSelection": "Close ship information",
+  "partialShipData": "Some ship information could not be loaded."
 }

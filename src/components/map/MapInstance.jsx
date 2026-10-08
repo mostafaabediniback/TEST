@@ -1,107 +1,46 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMap } from "react-leaflet";
-
 import { useMapController } from "@/context/MapControllerContext";
 import { useMapInfo } from "@/context/MapInfoContext";
+import { getMapView, lngLatToTile } from "@/lib/mapTiles";
 
-function getMapInfo(map, position) {
-  const z = Math.floor(map.getZoom());
-  const tileCount = 2 ** z;
-  const point = map.project(position, z);
-  const tileX = Math.floor(point.x / 256);
-  const tileY = Math.floor(point.y / 256);
-  const latLng = map.wrapLatLng(position);
-
-  return {
-    lat: latLng.lat,
-    lng: latLng.lng,
-    x: ((tileX % tileCount) + tileCount) % tileCount,
-    y: Math.max(0, Math.min(tileCount - 1, tileY)),
-    z,
-  };
-}
-
-export default function MapInstance() {
-  const map = useMap();
+export default function MapInstance({ map }) {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-  const { setMap } = useMapController();
+  const location = useLocation();
+  const { setMap, setMapView } = useMapController();
   const { setMapInfo } = useMapInfo();
 
+  useEffect(() => { setMap(map); return () => setMap(null); }, [map, setMap]);
   useEffect(() => {
-    setMap(map);
-
-    return () => {
-      setMap(null);
-    };
-  }, [map, setMap]);
-
-  useEffect(() => {
-    let pointerPoint = null;
-    let animationFrame = null;
-
-    function updateMapInfo() {
-      const position = pointerPoint
-        ? map.containerPointToLatLng(pointerPoint)
-        : map.getCenter();
-
-      setMapInfo(getMapInfo(map, position));
+    let point = null, frame = null;
+    function updateInfo() {
+      const position = point ? map.unproject(point) : map.getCenter();
+      setMapInfo({ lat: position.lat, lng: ((position.lng + 180) % 360 + 360) % 360 - 180, ...lngLatToTile(position.lng, position.lat, Math.floor(map.getZoom())) });
     }
-
-    function handleMouseMove(event) {
-      pointerPoint = event.containerPoint;
-
-      // Publish the latest pointer position at most once per frame.
-      if (animationFrame === null) {
-        animationFrame = window.requestAnimationFrame(() => {
-          animationFrame = null;
-          updateMapInfo();
-        });
-      }
+    function onMove(event) {
+      point = event.point;
+      if (frame === null) frame = requestAnimationFrame(() => { frame = null; updateInfo(); });
     }
-
-    updateMapInfo();
-    map.on("mousemove", handleMouseMove);
-    map.on("moveend", updateMapInfo);
-    map.on("zoomend", updateMapInfo);
-
+    updateInfo();
+    map.on("mousemove", onMove);
+    map.on("moveend", updateInfo);
     return () => {
-      map.off("mousemove", handleMouseMove);
-      map.off("moveend", updateMapInfo);
-      map.off("zoomend", updateMapInfo);
-      if (animationFrame !== null) {
-        window.cancelAnimationFrame(animationFrame);
-      }
+      map.off("mousemove", onMove);
+      map.off("moveend", updateInfo);
+      if (frame !== null) cancelAnimationFrame(frame);
     };
   }, [map, setMapInfo]);
 
   useEffect(() => {
-    function updateMapPath() {
-      if (
-        pathname === "/dashboard" ||
-        pathname.startsWith("/dashboard/")
-      ) {
-        // The route follows the viewport center, independently of the pointer.
-        const { z, x, y } = getMapInfo(map, map.getCenter());
-        const nextPath = `/dashboard/${z}/${x}/${y}`;
-
-        if (window.location.pathname !== nextPath) {
-          navigate(nextPath, { replace: true });
-        }
-      }
+    function updateView() {
+      const { z, x, y } = lngLatToTile(map.getCenter().lng, map.getCenter().lat, Math.floor(map.getZoom()));
+      const pathname = "/dashboard/" + z + "/" + x + "/" + y;
+      setMapView(getMapView(map, pathname));
+      if (pathname !== location.pathname) navigate({ pathname, search: location.search }, { replace: true, state: location.state });
     }
-
-    updateMapPath();
-    map.on("moveend", updateMapPath);
-    map.on("zoomend", updateMapPath);
-
-    return () => {
-      map.off("moveend", updateMapPath);
-      map.off("zoomend", updateMapPath);
-    };
-  }, [map, navigate, pathname]);
-
+    updateView();
+    map.on("moveend", updateView);
+    return () => map.off("moveend", updateView);
+  }, [map, navigate, location.pathname, location.search, location.state, setMapView]);
   return null;
 }

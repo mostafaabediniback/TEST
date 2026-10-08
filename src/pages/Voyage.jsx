@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getShipDetailsNavigation } from "@/lib/shipNavigation";
 import {
   ChevronLeft,
   ChevronRight,
   Columns3,
+  Eye,
   Search,
   Ship,
   X,
@@ -51,11 +54,14 @@ function formatTimestamp(value, formatNumber) {
 
 export default function Voyage() {
   const { t, formatNumber, direction } = useLocale();
-  const [filter, setFilter] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const savedTable = location.state?.tableState;
+  const [filter, setFilter] = useState(savedTable?.filter ?? "");
+  const [page, setPage] = useState(savedTable?.page ?? 1);
+  const [pageSize, setPageSize] = useState(savedTable?.pageSize ?? 20);
   const [visibleColumns, setVisibleColumns] = useState(
-    columns.map((column) => column.key)
+    savedTable?.visibleColumns ?? columns.map((column) => column.key)
   );
 
   // The API has no general text-search parameter, so use the entered value
@@ -78,6 +84,14 @@ export default function Voyage() {
   const displayedColumns = columns.filter((column) =>
     visibleColumns.includes(column.key)
   );
+
+  function showDetails(voyage) {
+    const tableState = { filter, page, pageSize, visibleColumns };
+    const returnTo = location.pathname + location.search;
+    navigate(returnTo, { replace: true, state: { ...location.state, tableState } });
+    const target = getShipDetailsNavigation({ id: voyage.ship_id }, { source: "table", returnTo, tableState });
+    navigate(target.to, { state: target.state });
+  }
 
   function handleFilterChange(event) {
     setFilter(event.target.value);
@@ -196,6 +210,7 @@ export default function Voyage() {
                   {displayedColumns.map(({ key, labelKey }) => (
                     <TableHead key={key}>{t(labelKey)}</TableHead>
                   ))}
+                  <TableHead>{t("viewDetails")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -224,6 +239,11 @@ export default function Voyage() {
                         </TableCell>
                       );
                     })}
+                    <TableCell>
+                      <Button variant="ghost" size="icon-sm" disabled={voyage.ship_id == null} aria-label={t("viewDetails") + ": " + (voyage.name ?? voyage.ship_id)} onClick={() => showDetails(voyage)}>
+                        <Eye aria-hidden="true" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

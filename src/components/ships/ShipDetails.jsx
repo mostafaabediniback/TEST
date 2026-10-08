@@ -1,4 +1,5 @@
 import ShipRow from "./ShipRow";
+import { getShipCoordinates } from "@/lib/shipNavigation";
 
 export default function ShipDetails({
   ship,
@@ -9,18 +10,11 @@ export default function ShipDetails({
   compact = false,
   isLoading = false,
   onDetailsClick,
+  detailsLabel = "View details",
 }) {
-  const lat = Number(
-    position?.lat ??
-      position?.latitude ??
-      ship?.lat,
-  );
-
-  const lon = Number(
-    position?.lon ??
-      position?.longitude ??
-      ship?.lon,
-  );
+  const coordinates = getShipCoordinates(position) ?? getShipCoordinates(ship);
+  const lat = coordinates?.[1];
+  const lon = coordinates?.[0];
 
   const imageUrl =
     photo?.url ??
@@ -124,7 +118,7 @@ export default function ShipDetails({
           onClick={onDetailsClick}
           className="mt-3 w-full rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
         >
-          View details
+          {detailsLabel}
         </button>
       )}
     </div>

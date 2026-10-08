@@ -102,3 +102,13 @@ export async function getShips({
 
   return response.data;
 }
+
+export async function getShipSummary(id) {
+  const response = await axiosClient.get(`/mersad/ship/${id}/summary`);
+  return response.data;
+}
+
+export async function getShipCompanies(id) {
+  const response = await axiosClient.get(`/mersad/ship/${id}/companies`);
+  return response.data;
+}

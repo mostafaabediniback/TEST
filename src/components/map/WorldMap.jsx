@@ -1,86 +1,67 @@
-// src/components/WorldMap.jsx
-
-import "leaflet/dist/leaflet.css";
-
-import { useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { GeoJSON, MapContainer, TileLayer } from "react-leaflet";
-
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { Map as MapLibreMap, setWorkerUrl } from "maplibre-gl";
+import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
+import { MapLibreOverlay } from "@deck.gl/maplibre";
+import { useMapController } from "@/context/MapControllerContext";
+import { tileToLngLat } from "@/lib/mapTiles";
 import MapInstance from "./MapInstance";
 import MapShipsLayer from "./MapShipsLayer";
 
-const DEFAULT_CENTER = [31.2304, 121.4737];
-const DEFAULT_ZOOM = 10;
-
-function tileToLatLng(z, x, y) {
-  const tileCount = 2 ** z;
-
-  const longitude = (x / tileCount) * 360 - 180;
-
-  const latitudeRadians = Math.atan(
-    Math.sinh(Math.PI - (2 * Math.PI * y) / tileCount),
-  );
-
-  const latitude = (latitudeRadians * 180) / Math.PI;
-
-  return [latitude, longitude];
-}
+setWorkerUrl(maplibreWorkerUrl);
 
 export default function WorldMap({ geoData }) {
+  const container = useRef(null);
   const { z, x, y } = useParams();
+  const { pathname } = useLocation();
+  const { mapView } = useMapController();
+  const [initialView] = useState(() => {
+    if (mapView?.pathname === pathname) return mapView;
+    const zoom = Number(z), tileX = Number(x), tileY = Number(y);
+    return Number.isInteger(zoom) && zoom >= 2 && zoom <= 19 && Number.isFinite(tileX) && Number.isFinite(tileY)
+      ? { center: tileToLngLat(zoom, tileX + 0.5, tileY + 0.5), zoom }
+      : { center: [121.4737, 31.2304], zoom: 10 };
+  });
+  const [engine, setEngine] = useState(null);
 
-  const initialMapPosition = useMemo(() => {
-    const parsedZoom = Number(z);
-    const parsedX = Number(x);
-    const parsedY = Number(y);
+  useEffect(() => {
+    const map = new MapLibreMap({
+      container: container.current,
+      ...initialView,
+      minZoom: 2,
+      maxZoom: 19,
+      style: {
+        version: 8,
+        sources: { osm: { type: "raster", tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"], tileSize: 256, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' } },
+        layers: [{ id: "base-map", type: "raster", source: "osm" }],
+      },
+    });
+    const overlay = new MapLibreOverlay({ interleaved: true, layers: [] });
+    map.addControl(overlay);
+    map.once("load", () => setEngine({ map, overlay }));
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(container.current);
+    return () => { resizeObserver.disconnect(); map.remove(); };
+  }, [initialView]);
 
-    const validValues =
-      Number.isFinite(parsedZoom) &&
-      Number.isFinite(parsedX) &&
-      Number.isFinite(parsedY) &&
-      parsedZoom >= 0 &&
-      parsedX >= 0 &&
-      parsedY >= 0;
-
-    if (!validValues) {
-      return {
-        center: DEFAULT_CENTER,
-        zoom: DEFAULT_ZOOM,
-      };
-    }
-
-    return {
-      center: tileToLatLng(
-        parsedZoom,
-        parsedX + 0.5,
-        parsedY + 0.5,
-      ),
-      zoom: parsedZoom,
+  useEffect(() => {
+    if (!engine || !geoData) return;
+    const { map } = engine;
+    map.addSource("countries", { type: "geojson", data: geoData });
+    map.addLayer({ id: "countries-fill", type: "fill", source: "countries", paint: { "fill-color": "#3388ff", "fill-opacity": 0.2 } });
+    map.addLayer({ id: "countries-line", type: "line", source: "countries", paint: { "line-color": "#3388ff", "line-width": 2 } });
+    return () => {
+      if (map.getLayer("countries-line")) map.removeLayer("countries-line");
+      if (map.getLayer("countries-fill")) map.removeLayer("countries-fill");
+      if (map.getSource("countries")) map.removeSource("countries");
     };
-  }, [z, x, y]);
+  }, [engine, geoData]);
 
-return (
-  <div className="absolute inset-0 h-full w-full">
-    <MapContainer
-      center={initialMapPosition.center}
-      zoom={initialMapPosition.zoom}
-      minZoom={2}
-      scrollWheelZoom
-      zoomControl={false}
-      className="h-full w-full"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-
-      <MapInstance />
-
-      {geoData && <GeoJSON data={geoData} />}
-
-      <MapShipsLayer />
-    </MapContainer>
-  </div>
-);
-
+  return <div className="absolute inset-0 h-full w-full">
+    <div ref={container} className="h-full w-full" />
+    {engine && <>
+      <MapInstance map={engine.map} />
+      <MapShipsLayer map={engine.map} overlay={engine.overlay} />
+    </>}
+  </div>;
 }

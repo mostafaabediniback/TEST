@@ -58,5 +58,11 @@
   "arrivalTime": "زمان رسیدن",
   "loadingVoyages": "در حال بارگذاری سفرها...",
   "loadVoyagesError": "بارگذاری سفرها ناموفق بود.",
-  "noVoyagesFound": "سفری پیدا نشد."
+  "noVoyagesFound": "سفری پیدا نشد.",
+  "viewDetails": "جزئیات بیشتر",
+  "backToMap": "بازگشت به نقشه",
+  "backToTable": "بازگشت به جدول",
+  "unnamedShip": "کشتی بدون نام",
+  "closeSelection": "بستن اطلاعات کشتی",
+  "partialShipData": "بخشی از اطلاعات کشتی دریافت نشد."
 }
