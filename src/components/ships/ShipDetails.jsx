@@ -23,7 +23,7 @@ export default function ShipDetails({
 
   return (
     <div
-      className={`font-sans text-slate-800 ${
+      className={`ship-details font-sans text-slate-800 ${
         compact ? "min-w-[200px]" : "min-w-[280px]"
       }`}
     >

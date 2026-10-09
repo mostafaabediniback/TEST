@@ -139,6 +139,9 @@
 
 /* Ship popups share the map's translucent control surface. */
 .ship-map-popup .maplibregl-popup-content {
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
   padding: 0;
   border: 1px solid rgb(255 255 255 / 75%);
   border-radius: 14px;
@@ -148,5 +151,35 @@
   box-shadow: 0 8px 28px rgb(15 23 42 / 18%);
   font-family: inherit;
 }
-.ship-map-popup .maplibregl-popup-tip { border-top-color: rgb(255 255 255 / 78%); }
+.ship-map-popup:not(.ship-map-hover) .maplibregl-popup-content { width: 306px; }
+.ship-map-popup .maplibregl-popup-content .ship-details { min-width: 0; }
+.ship-map-popup .maplibregl-popup-tip {
+  position: absolute;
+  margin: 0;
+  border: 8px solid transparent;
+}
+.ship-map-popup[data-side="right"] .maplibregl-popup-tip {
+  left: -16px;
+  top: var(--ship-popup-tip-y);
+  transform: translateY(-50%);
+  border-right-color: rgb(255 255 255 / 78%);
+}
+.ship-map-popup[data-side="left"] .maplibregl-popup-tip {
+  right: -16px;
+  top: var(--ship-popup-tip-y);
+  transform: translateY(-50%);
+  border-left-color: rgb(255 255 255 / 78%);
+}
+.ship-map-popup[data-side="bottom"] .maplibregl-popup-tip {
+  top: -16px;
+  left: var(--ship-popup-tip-x);
+  transform: translateX(-50%);
+  border-bottom-color: rgb(255 255 255 / 78%);
+}
+.ship-map-popup[data-side="top"] .maplibregl-popup-tip {
+  bottom: -16px;
+  left: var(--ship-popup-tip-x);
+  transform: translateX(-50%);
+  border-top-color: rgb(255 255 255 / 78%);
+}
 .ship-map-hover { pointer-events: none; }
