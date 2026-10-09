@@ -20,6 +20,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useLocale } from "@/context/LocaleContext";
 
+import { VesselTypeFilter } from "./VesselTypeFilter";
+
 const filterItems = [
   {
     id: "map",
@@ -160,6 +162,8 @@ export function Toolbar() {
 
  return (
     <div className="flex w-fit flex-col gap-1 rounded-xl border bg-background/95 p-1.5 shadow-panel backdrop-blur">
+      <VesselTypeFilter />
+      <Separator />
       {filterItems.map((item, index) => {
         const Icon = item.icon;
         const selectedValue = selectedFilters[item.id];

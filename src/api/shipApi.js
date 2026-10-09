@@ -2,11 +2,13 @@
 
 import axiosClient from "./axiosClient";
 
-export async function getShipsInTile({ z, x, y }) {
+export async function getShipsInTile({ z, x, y, type, signal }) {
+  const params = new URLSearchParams({ skip: "0" });
+  const types = Array.isArray(type) ? type : type == null ? [] : [type];
+  for (const value of types) params.append("type", value);
   const response = await axiosClient.get(`/mersad/ship/${z}/${x}/${y}/tile`, {
-    params: {
-      skip: 0,
-    },
+    params,
+    signal,
   });
 
   return response.data;

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { getVisibleTiles } from "@/lib/mapTiles";
 import { useQueries } from "@tanstack/react-query";
 import { getShipsInTile } from "@/api/shipApi";
+import { useFilters } from "@/context/FilterContext";
+import { getVesselTypeFilter } from "@/lib/vesselTypes";
 
 function getTileKeys(tiles) {
   return tiles
@@ -12,6 +14,8 @@ function getTileKeys(tiles) {
 
 export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
   const [tiles, setTiles] = useState([]);
+  const { vesselTypes } = useFilters();
+  const type = useMemo(() => getVesselTypeFilter(vesselTypes), [vesselTypes]);
 
   useEffect(() => {
     let timeoutId;
@@ -48,16 +52,18 @@ export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
   }, [map]);
 
   const queries = useQueries({
-    queries: tiles.map(({ z, x, y }) => ({
-      // This must contain the complete tile identity.
-      queryKey: ["ships", "tile", z, x, y, limit],
+    queries: (type?.length === 0 ? [] : tiles).map(({ z, x, y }) => ({
+      // Cache each tile independently for every vessel-type selection.
+      queryKey: ["ships", "tile", z, x, y, limit, { type: type ?? null }],
 
-      queryFn: () =>
+      queryFn: ({ signal }) =>
         getShipsInTile({
           z,
           x,
           y,
           limit,
+          type,
+          signal,
         }),
 
       // Do not request the same tile again for 5 minutes.

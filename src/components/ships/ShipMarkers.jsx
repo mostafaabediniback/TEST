@@ -3,6 +3,8 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { PolygonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { X } from "lucide-react";
 import { useMapController } from "@/context/MapControllerContext";
+import { useFilters } from "@/context/FilterContext";
+import { matchesVesselTypes } from "@/lib/vesselTypes";
 import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
 import { getShipCoordinates, getShipDetailsNavigation } from "@/lib/shipNavigation";
@@ -16,6 +18,7 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
   const [search, setSearch] = useSearchParams();
   const { selectedShip, setSelectedShip } = useMapController();
   const { t, direction } = useLocale();
+  const { vesselTypes } = useFilters();
   const [hoveredShip, setHoveredShip] = useState(null);
   const selectedId = search.get("shipId");
   const selected = useMemo(() => selectedId === null ? null
@@ -23,20 +26,21 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
     ?? (String(selectedShip?.id) === selectedId ? selectedShip : { id: selectedId }), [ships, selectedShip, selectedId]);
   const preview = useShipPreview(selected, selectedId !== null);
   const displayedShip = { ...selected, ...preview.ship };
+  const selectedVisible = matchesVesselTypes(displayedShip, vesselTypes);
   const selectedCoordinates = useMemo(() => getShipCoordinates(selected) ?? getShipCoordinates(preview.position) ?? getShipCoordinates(preview.ship), [selected, preview.position, preview.ship]);
   const subscribeToZoom = useCallback((onChange) => {
     map.on("zoomend", onChange);
     return () => map.off("zoomend", onChange);
   }, [map]);
   const zoom = useSyncExternalStore(subscribeToZoom, () => map.getZoom());
-  const selectedMarker = useMemo(() => selectedCoordinates ? getShipMarker({
+  const selectedMarker = useMemo(() => selectedCoordinates && selectedVisible ? getShipMarker({
     ...selected,
     ...preview.ship,
     lon: selectedCoordinates[0],
     lat: selectedCoordinates[1],
-  }, zoom, preview.position) : null, [selected, preview.ship, preview.position, selectedCoordinates, zoom]);
-  const markers = useMemo(() => ships.map((ship) => String(ship.id) === selectedId && selectedMarker
-    ? selectedMarker : getShipMarker(ship, zoom)).filter(Boolean), [ships, selectedId, selectedMarker, zoom]);
+  }, zoom, preview.position) : null, [selected, preview.ship, preview.position, selectedCoordinates, selectedVisible, zoom]);
+  const markers = useMemo(() => ships.filter((ship) => matchesVesselTypes(ship, vesselTypes)).map((ship) => String(ship.id) === selectedId && selectedMarker
+    ? selectedMarker : getShipMarker(ship, zoom)).filter(Boolean), [ships, vesselTypes, selectedId, selectedMarker, zoom]);
 
   const closeSelection = useCallback(() => {
     setSearch((current) => { const next = new URLSearchParams(current); next.delete("shipId"); return next; }, { replace: true });
@@ -136,7 +140,7 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedId, closeSelection]);
 
-  const hoverCoordinates = getShipCoordinates(hoveredShip);
+  const hoverCoordinates = matchesVesselTypes(hoveredShip, vesselTypes) ? getShipCoordinates(hoveredShip) : null;
   const hoveredMarker = hoveredShip ? getShipMarker(hoveredShip, zoom) : null;
   return <>
     {hoverCoordinates && String(hoveredShip.id) !== selectedId && (
@@ -144,7 +148,7 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
         <div dir={direction} className="px-3 py-2 text-sm font-semibold text-slate-900">{hoveredShip.name || t("unnamedShip")}</div>
       </MapPopup>
     )}
-    {selectedId !== null && selectedCoordinates && (
+    {selectedId !== null && selectedCoordinates && selectedVisible && (
       <MapPopup map={map} coordinates={selectedCoordinates} markerRadius={selectedMarker?.radius}>
         <div dir={direction} className="relative p-3">
           <button type="button" aria-label={t("closeSelection")} onClick={closeSelection} className="absolute end-2 top-2 z-10 rounded-full p-1 text-slate-600 hover:bg-white/70"><X size={16} /></button>
