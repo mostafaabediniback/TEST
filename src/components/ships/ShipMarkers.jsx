@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ScatterplotLayer } from "@deck.gl/layers";
+import { PolygonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { X } from "lucide-react";
 import { useMapController } from "@/context/MapControllerContext";
 import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
 import { getShipCoordinates, getShipDetailsNavigation } from "@/lib/shipNavigation";
+import { getShipMarker } from "@/lib/shipMarkers";
 import MapPopup from "../map/MapPopup";
 import ShipDetails from "./ShipDetails";
 
@@ -23,6 +24,19 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
   const preview = useShipPreview(selected, selectedId !== null);
   const displayedShip = { ...selected, ...preview.ship };
   const selectedCoordinates = useMemo(() => getShipCoordinates(selected) ?? getShipCoordinates(preview.position) ?? getShipCoordinates(preview.ship), [selected, preview.position, preview.ship]);
+  const subscribeToZoom = useCallback((onChange) => {
+    map.on("zoomend", onChange);
+    return () => map.off("zoomend", onChange);
+  }, [map]);
+  const zoom = useSyncExternalStore(subscribeToZoom, () => map.getZoom());
+  const selectedMarker = useMemo(() => selectedCoordinates ? getShipMarker({
+    ...selected,
+    ...preview.ship,
+    lon: selectedCoordinates[0],
+    lat: selectedCoordinates[1],
+  }, zoom, preview.position) : null, [selected, preview.ship, preview.position, selectedCoordinates, zoom]);
+  const markers = useMemo(() => ships.map((ship) => String(ship.id) === selectedId && selectedMarker
+    ? selectedMarker : getShipMarker(ship, zoom)).filter(Boolean), [ships, selectedId, selectedMarker, zoom]);
 
   const closeSelection = useCallback(() => {
     setSearch((current) => { const next = new URLSearchParams(current); next.delete("shipId"); return next; }, { replace: true });
@@ -31,6 +45,27 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
   }, [setSearch, setSelectedShip]);
 
   useEffect(() => {
+    const interaction = {
+      pickable: true,
+      autoHighlight: true,
+      highlightColor: [147, 197, 253, 255],
+      onHover: ({ object }) => {
+        setHoveredShip(object?.ship ?? null);
+        map.getCanvas().style.cursor = object ? "pointer" : "";
+      },
+      onClick: ({ object }) => {
+        const ship = object?.ship;
+        if (ship?.id == null) return;
+        if (String(ship.id) === selectedId) {
+          closeSelection();
+          return true;
+        }
+        setSelectedShip(ship);
+        setHoveredShip(null);
+        setSearch((current) => { const next = new URLSearchParams(current); next.set("shipId", String(ship.id)); return next; }, { replace: true });
+        return true;
+      },
+    };
     overlay.setProps({
       onClick: ({ object }) => {
         if (!object && selectedId !== null) closeSelection();
@@ -38,39 +73,45 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
       layers: [
         new ScatterplotLayer({
           id: "ship-markers",
-          data: ships.filter((ship) => getShipCoordinates(ship)),
-          getPosition: getShipCoordinates,
+          data: markers.filter((marker) => !marker.polygon),
+          getPosition: (marker) => marker.coordinates,
           radiusUnits: "pixels",
-          getRadius: 7,
+          getRadius: (marker) => marker.radius,
           filled: true,
           stroked: true,
           getFillColor: [37, 99, 235, 242],
           getLineColor: [255, 255, 255, 255],
           lineWidthUnits: "pixels",
           getLineWidth: 2,
-          pickable: true,
-          autoHighlight: true,
-          highlightColor: [147, 197, 253, 255],
-          onHover: ({ object }) => {
-            setHoveredShip(object ?? null);
-            map.getCanvas().style.cursor = object ? "pointer" : "";
-          },
-          onClick: ({ object }) => {
-            if (object?.id == null) return;
-            if (String(object.id) === selectedId) {
-              closeSelection();
-              return true;
-            }
-            setSelectedShip(object);
-            setHoveredShip(null);
-            setSearch((current) => { const next = new URLSearchParams(current); next.set("shipId", String(object.id)); return next; }, { replace: true });
-            return true;
-          },
+          ...interaction,
+        }),
+        new PolygonLayer({
+          id: "ship-footprints",
+          data: markers.filter((marker) => marker.polygon),
+          getPolygon: (marker) => marker.polygon,
+          filled: true,
+          stroked: true,
+          getFillColor: [37, 99, 235, 242],
+          getLineColor: [255, 255, 255, 255],
+          lineWidthUnits: "pixels",
+          getLineWidth: 1.5,
+          ...interaction,
+        }),
+        new PolygonLayer({
+          id: "selected-ship-outline",
+          data: selectedMarker?.polygon ? [selectedMarker] : [],
+          getPolygon: (marker) => marker.selectionPolygon,
+          filled: false,
+          stroked: true,
+          lineWidthUnits: "pixels",
+          getLineWidth: 3,
+          getLineColor: [37, 99, 235, 255],
+          pickable: false,
         }),
         new ScatterplotLayer({
           id: "selected-ship-ring",
-          data: selectedCoordinates ? [selectedCoordinates] : [],
-          getPosition: (coordinates) => coordinates,
+          data: selectedMarker && !selectedMarker.polygon ? [selectedMarker] : [],
+          getPosition: (marker) => marker.coordinates,
           radiusUnits: "pixels",
           getRadius: 13,
           filled: false,
@@ -82,7 +123,7 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
         }),
       ],
     });
-  }, [ships, map, overlay, setSearch, setSelectedShip, selectedCoordinates, selectedId, closeSelection]);
+  }, [markers, selectedMarker, map, overlay, setSearch, setSelectedShip, selectedId, closeSelection]);
 
   useEffect(() => () => { overlay.setProps({ layers: [], onClick: null }); map.getCanvas().style.cursor = ""; }, [overlay, map]);
 
@@ -96,14 +137,15 @@ export default function ShipMarkers({ ships = [], map, overlay }) {
   }, [selectedId, closeSelection]);
 
   const hoverCoordinates = getShipCoordinates(hoveredShip);
+  const hoveredMarker = hoveredShip ? getShipMarker(hoveredShip, zoom) : null;
   return <>
     {hoverCoordinates && String(hoveredShip.id) !== selectedId && (
-      <MapPopup map={map} coordinates={hoverCoordinates} hover>
+      <MapPopup map={map} coordinates={hoverCoordinates} markerRadius={hoveredMarker?.radius} hover>
         <div dir={direction} className="px-3 py-2 text-sm font-semibold text-slate-900">{hoveredShip.name || t("unnamedShip")}</div>
       </MapPopup>
     )}
     {selectedId !== null && selectedCoordinates && (
-      <MapPopup map={map} coordinates={selectedCoordinates}>
+      <MapPopup map={map} coordinates={selectedCoordinates} markerRadius={selectedMarker?.radius}>
         <div dir={direction} className="relative p-3">
           <button type="button" aria-label={t("closeSelection")} onClick={closeSelection} className="absolute end-2 top-2 z-10 rounded-full p-1 text-slate-600 hover:bg-white/70"><X size={16} /></button>
           <ShipDetails ship={displayedShip} photo={preview.photo} position={preview.position} voyage={preview.voyage} port={preview.port} isLoading={preview.isLoading} detailsLabel={t("viewDetails")} onDetailsClick={() => {

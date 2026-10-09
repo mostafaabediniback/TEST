@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Popup } from "maplibre-gl";
 import { getMapPopupPlacement } from "@/lib/mapPopupPlacement";
 
-export default function MapPopup({ map, coordinates, hover = false, children }) {
+export default function MapPopup({ map, coordinates, hover = false, markerRadius = 7, children }) {
   const [container] = useState(() => document.createElement("div"));
   const [longitude, latitude] = coordinates;
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function MapPopup({ map, coordinates, hover = false, children }) 
       const placement = getMapPopupPlacement(point, {
         width: element.offsetWidth,
         height: element.offsetHeight,
-      }, bounds, hover ? 14 : 20);
+      }, bounds, markerRadius + (hover ? 7 : 13));
       element.dataset.side = placement.side;
       element.style.setProperty("--ship-popup-tip-x", `${placement.tipX}px`);
       element.style.setProperty("--ship-popup-tip-y", `${placement.tipY}px`);
@@ -67,6 +67,6 @@ export default function MapPopup({ map, coordinates, hover = false, children }) 
       window.removeEventListener("scroll", updatePosition, true);
       popup.remove();
     };
-  }, [map, longitude, latitude, hover, container]);
+  }, [map, longitude, latitude, hover, markerRadius, container]);
   return createPortal(children, container);
 }
