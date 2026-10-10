@@ -10,7 +10,7 @@ import {
   Activity,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { useLocale } from "@/context/LocaleContext";
+import { useDashboardLocale } from "@/components/dashboard/useDashboardLocale";
 const icons = {
   totalVehicles: Ship,
   activeVehicles: Ship,
@@ -29,7 +29,7 @@ const icons = {
   inTransitTrips: Route,
 };
 export default function KpiCard({ metric, value }) {
-  const { t, formatNumber } = useLocale();
+  const { t, formatNumber } = useDashboardLocale();
   const Icon = icons[metric] ?? Activity;
   const duration = metric.endsWith("Minutes");
   return (

@@ -251,7 +251,7 @@ test("All report types select their own row schemas and summary scopes", () => {
   );
 });
 test("Text search matches names and directed route labels", () => {
-  const data = response("reports", { search: "آذرخش", exportAll: true }).data;
+  const data = response("reports", { search: "Azarakhsh", exportAll: true }).data;
   assert.ok(data.items.length > 10);
   assert.ok(data.items.every((row) => row.vehicleId === "V001"));
   const route = response("routes").data.charts.routeTraffic[0];
@@ -263,11 +263,11 @@ test("Text search matches names and directed route labels", () => {
 test("Event report search matches visible parking rows only", () => {
   const data = response("reports", {
     reportType: "parking_events",
-    search: "شهید رجایی",
+    search: "Shahid Rajaee Port",
     exportAll: true,
   }).data;
   assert.ok(data.items.length);
-  assert.ok(data.items.every((row) => row.parkingName === "شهید رجایی"));
+  assert.ok(data.items.every((row) => row.parkingName === "Shahid Rajaee Port"));
 });
 test("Sorting, page clamping and exports leave aggregate statistics unchanged", () => {
   const first = response("reports", { pageSize: 10 });
@@ -357,8 +357,8 @@ test("Existing detail return navigation supports Home query state safely", () =>
 const context = {
   t: (key) => key.split(".").at(-1),
   formatNumber: (value) => String(value),
-  locale: "fa",
-  direction: "rtl",
+  locale: "en",
+  direction: "ltr",
 };
 test("CSV exports all filtered rows and neutralizes formula cells", () => {
   const result = response("reports", { vehicleId: "V001", exportAll: true });
@@ -377,7 +377,7 @@ test("CSV exports all filtered rows and neutralizes formula cells", () => {
     ).includes("'=HYPERLINK"),
   );
 });
-test("XLSX contains all filtered rows, selected columns, RTL and filter metadata", async () => {
+test("XLSX contains all filtered rows, selected columns, LTR and filter metadata", async () => {
   const result = response("reports", { vehicleId: "V001", exportAll: true });
   let captured;
   const originalCreate = URL.createObjectURL;
@@ -403,8 +403,8 @@ test("XLSX contains all filtered rows, selected columns, RTL and filter metadata
     const sheet = book.getWorksheet("Report");
     assert.equal(sheet.rowCount, result.data.items.length + 1);
     assert.equal(sheet.columnCount, 2);
-    assert.equal(sheet.views[0].rightToLeft, true);
-    assert.equal(sheet.getCell("A2").value, "آذرخش");
+    assert.equal(sheet.views[0].rightToLeft, false);
+    assert.equal(sheet.getCell("A2").value, "Azarakhsh");
     assert.equal(typeof sheet.getCell("B2").value, "number");
     assert.ok(
       book.getWorksheet("Filters").getCell("B4").value.includes("V001"),

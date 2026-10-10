@@ -267,7 +267,7 @@
       "parkingTraffic": [
         {
           "id": "P01",
-          "parkingName": "شهید رجایی",
+          "parkingName": "Shahid Rajaee Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 67,
@@ -279,7 +279,7 @@
         },
         {
           "id": "P02",
-          "parkingName": "بندر امام خمینی",
+          "parkingName": "Imam Khomeini Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 27,
@@ -291,7 +291,7 @@
         },
         {
           "id": "P03",
-          "parkingName": "بندر بوشهر",
+          "parkingName": "Bushehr Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 22,
@@ -303,7 +303,7 @@
         },
         {
           "id": "P04",
-          "parkingName": "بندر چابهار",
+          "parkingName": "Chabahar Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 62,
@@ -315,7 +315,7 @@
         },
         {
           "id": "P05",
-          "parkingName": "بندر انزلی",
+          "parkingName": "Anzali Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -327,7 +327,7 @@
         },
         {
           "id": "P06",
-          "parkingName": "بندر امیرآباد",
+          "parkingName": "Amirabad Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -895,7 +895,7 @@
       "parkingRanking": [
         {
           "id": "P01",
-          "parkingName": "شهید رجایی",
+          "parkingName": "Shahid Rajaee Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 67,
@@ -907,7 +907,7 @@
         },
         {
           "id": "P04",
-          "parkingName": "بندر چابهار",
+          "parkingName": "Chabahar Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 62,
@@ -919,7 +919,7 @@
         },
         {
           "id": "P02",
-          "parkingName": "بندر امام خمینی",
+          "parkingName": "Imam Khomeini Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 27,
@@ -931,7 +931,7 @@
         },
         {
           "id": "P05",
-          "parkingName": "بندر انزلی",
+          "parkingName": "Anzali Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -943,7 +943,7 @@
         },
         {
           "id": "P06",
-          "parkingName": "بندر امیرآباد",
+          "parkingName": "Amirabad Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -955,7 +955,7 @@
         },
         {
           "id": "P03",
-          "parkingName": "بندر بوشهر",
+          "parkingName": "Bushehr Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 22,
@@ -969,7 +969,7 @@
       "parkedByParking": [
         {
           "id": "P01",
-          "parkingName": "شهید رجایی",
+          "parkingName": "Shahid Rajaee Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 67,
@@ -981,7 +981,7 @@
         },
         {
           "id": "P02",
-          "parkingName": "بندر امام خمینی",
+          "parkingName": "Imam Khomeini Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 27,
@@ -993,7 +993,7 @@
         },
         {
           "id": "P03",
-          "parkingName": "بندر بوشهر",
+          "parkingName": "Bushehr Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 22,
@@ -1005,7 +1005,7 @@
         },
         {
           "id": "P04",
-          "parkingName": "بندر چابهار",
+          "parkingName": "Chabahar Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 62,
@@ -1017,7 +1017,7 @@
         },
         {
           "id": "P05",
-          "parkingName": "بندر انزلی",
+          "parkingName": "Anzali Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -1029,7 +1029,7 @@
         },
         {
           "id": "P06",
-          "parkingName": "بندر امیرآباد",
+          "parkingName": "Amirabad Port",
           "timeZone": "Asia/Tehran",
           "active": true,
           "entries": 23,
@@ -1045,9 +1045,9 @@
           "id": "P01→P02",
           "originParkingId": "P01",
           "destinationParkingId": "P02",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر امام خمینی",
-          "routeName": "شهید رجایی → بندر امام خمینی",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Imam Khomeini Port",
+          "routeName": "Shahid Rajaee Port → Imam Khomeini Port",
           "trips": 32,
           "completedTrips": 27,
           "averageDurationMinutes": 189.5185185185185,
@@ -1058,9 +1058,9 @@
           "id": "P02→P04",
           "originParkingId": "P02",
           "destinationParkingId": "P04",
-          "originName": "بندر امام خمینی",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر امام خمینی → بندر چابهار",
+          "originName": "Imam Khomeini Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Imam Khomeini Port → Chabahar Port",
           "trips": 30,
           "completedTrips": 30,
           "averageDurationMinutes": 191.13333333333333,
@@ -1071,9 +1071,9 @@
           "id": "P04→P01",
           "originParkingId": "P04",
           "destinationParkingId": "P01",
-          "originName": "بندر چابهار",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر چابهار → شهید رجایی",
+          "originName": "Chabahar Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Chabahar Port → Shahid Rajaee Port",
           "trips": 27,
           "completedTrips": 27,
           "averageDurationMinutes": 184.07407407407408,
@@ -1084,9 +1084,9 @@
           "id": "P04→P05",
           "originParkingId": "P04",
           "destinationParkingId": "P05",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر انزلی",
-          "routeName": "بندر چابهار → بندر انزلی",
+          "originName": "Chabahar Port",
+          "destinationName": "Anzali Port",
+          "routeName": "Chabahar Port → Anzali Port",
           "trips": 26,
           "completedTrips": 23,
           "averageDurationMinutes": 189.47826086956522,
@@ -1097,9 +1097,9 @@
           "id": "P05→P01",
           "originParkingId": "P05",
           "destinationParkingId": "P01",
-          "originName": "بندر انزلی",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر انزلی → شهید رجایی",
+          "originName": "Anzali Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Anzali Port → Shahid Rajaee Port",
           "trips": 25,
           "completedTrips": 25,
           "averageDurationMinutes": 186.2,
@@ -1110,9 +1110,9 @@
           "id": "P01→P04",
           "originParkingId": "P01",
           "destinationParkingId": "P04",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر چابهار",
-          "routeName": "شهید رجایی → بندر چابهار",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Shahid Rajaee Port → Chabahar Port",
           "trips": 22,
           "completedTrips": 22,
           "averageDurationMinutes": 187.1818181818182,
@@ -1123,9 +1123,9 @@
           "id": "P03→P06",
           "originParkingId": "P03",
           "destinationParkingId": "P06",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر بوشهر → بندر امیرآباد",
+          "originName": "Bushehr Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Bushehr Port → Amirabad Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 181.8,
@@ -1136,9 +1136,9 @@
           "id": "P06→P01",
           "originParkingId": "P06",
           "destinationParkingId": "P01",
-          "originName": "بندر امیرآباد",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر امیرآباد → شهید رجایی",
+          "originName": "Amirabad Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Amirabad Port → Shahid Rajaee Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 194.8,
@@ -1149,9 +1149,9 @@
           "id": "P01→P03",
           "originParkingId": "P01",
           "destinationParkingId": "P03",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر بوشهر",
-          "routeName": "شهید رجایی → بندر بوشهر",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Shahid Rajaee Port → Bushehr Port",
           "trips": 12,
           "completedTrips": 12,
           "averageDurationMinutes": 183.41666666666666,
@@ -1162,9 +1162,9 @@
           "id": "P06→P03",
           "originParkingId": "P06",
           "destinationParkingId": "P03",
-          "originName": "بندر امیرآباد",
-          "destinationName": "بندر بوشهر",
-          "routeName": "بندر امیرآباد → بندر بوشهر",
+          "originName": "Amirabad Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Amirabad Port → Bushehr Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 181.8,
@@ -1175,9 +1175,9 @@
           "id": "P03→P04",
           "originParkingId": "P03",
           "destinationParkingId": "P04",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر بوشهر → بندر چابهار",
+          "originName": "Bushehr Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Bushehr Port → Chabahar Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 177.8,
@@ -1188,9 +1188,9 @@
           "id": "P04→P06",
           "originParkingId": "P04",
           "destinationParkingId": "P06",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر چابهار → بندر امیرآباد",
+          "originName": "Chabahar Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Chabahar Port → Amirabad Port",
           "trips": 8,
           "completedTrips": 8,
           "averageDurationMinutes": 195.625,
@@ -1203,9 +1203,9 @@
           "id": "P01→P02",
           "originParkingId": "P01",
           "destinationParkingId": "P02",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر امام خمینی",
-          "routeName": "شهید رجایی → بندر امام خمینی",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Imam Khomeini Port",
+          "routeName": "Shahid Rajaee Port → Imam Khomeini Port",
           "trips": 32,
           "completedTrips": 27,
           "averageDurationMinutes": 189.5185185185185,
@@ -1216,9 +1216,9 @@
           "id": "P02→P04",
           "originParkingId": "P02",
           "destinationParkingId": "P04",
-          "originName": "بندر امام خمینی",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر امام خمینی → بندر چابهار",
+          "originName": "Imam Khomeini Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Imam Khomeini Port → Chabahar Port",
           "trips": 30,
           "completedTrips": 30,
           "averageDurationMinutes": 191.13333333333333,
@@ -1229,9 +1229,9 @@
           "id": "P04→P01",
           "originParkingId": "P04",
           "destinationParkingId": "P01",
-          "originName": "بندر چابهار",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر چابهار → شهید رجایی",
+          "originName": "Chabahar Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Chabahar Port → Shahid Rajaee Port",
           "trips": 27,
           "completedTrips": 27,
           "averageDurationMinutes": 184.07407407407408,
@@ -1242,9 +1242,9 @@
           "id": "P04→P05",
           "originParkingId": "P04",
           "destinationParkingId": "P05",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر انزلی",
-          "routeName": "بندر چابهار → بندر انزلی",
+          "originName": "Chabahar Port",
+          "destinationName": "Anzali Port",
+          "routeName": "Chabahar Port → Anzali Port",
           "trips": 26,
           "completedTrips": 23,
           "averageDurationMinutes": 189.47826086956522,
@@ -1255,9 +1255,9 @@
           "id": "P03→P06",
           "originParkingId": "P03",
           "destinationParkingId": "P06",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر بوشهر → بندر امیرآباد",
+          "originName": "Bushehr Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Bushehr Port → Amirabad Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 181.8,
@@ -1268,9 +1268,9 @@
           "id": "P06→P01",
           "originParkingId": "P06",
           "destinationParkingId": "P01",
-          "originName": "بندر امیرآباد",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر امیرآباد → شهید رجایی",
+          "originName": "Amirabad Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Amirabad Port → Shahid Rajaee Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 194.8,
@@ -1281,9 +1281,9 @@
           "id": "P01→P03",
           "originParkingId": "P01",
           "destinationParkingId": "P03",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر بوشهر",
-          "routeName": "شهید رجایی → بندر بوشهر",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Shahid Rajaee Port → Bushehr Port",
           "trips": 12,
           "completedTrips": 12,
           "averageDurationMinutes": 183.41666666666666,
@@ -1294,9 +1294,9 @@
           "id": "P05→P01",
           "originParkingId": "P05",
           "destinationParkingId": "P01",
-          "originName": "بندر انزلی",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر انزلی → شهید رجایی",
+          "originName": "Anzali Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Anzali Port → Shahid Rajaee Port",
           "trips": 25,
           "completedTrips": 25,
           "averageDurationMinutes": 186.2,
@@ -1307,9 +1307,9 @@
           "id": "P01→P04",
           "originParkingId": "P01",
           "destinationParkingId": "P04",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر چابهار",
-          "routeName": "شهید رجایی → بندر چابهار",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Shahid Rajaee Port → Chabahar Port",
           "trips": 22,
           "completedTrips": 22,
           "averageDurationMinutes": 187.1818181818182,
@@ -1320,9 +1320,9 @@
           "id": "P06→P03",
           "originParkingId": "P06",
           "destinationParkingId": "P03",
-          "originName": "بندر امیرآباد",
-          "destinationName": "بندر بوشهر",
-          "routeName": "بندر امیرآباد → بندر بوشهر",
+          "originName": "Amirabad Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Amirabad Port → Bushehr Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 181.8,
@@ -1333,9 +1333,9 @@
           "id": "P03→P04",
           "originParkingId": "P03",
           "destinationParkingId": "P04",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر بوشهر → بندر چابهار",
+          "originName": "Bushehr Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Bushehr Port → Chabahar Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 177.8,
@@ -1346,9 +1346,9 @@
           "id": "P04→P06",
           "originParkingId": "P04",
           "destinationParkingId": "P06",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر چابهار → بندر امیرآباد",
+          "originName": "Chabahar Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Chabahar Port → Amirabad Port",
           "trips": 8,
           "completedTrips": 8,
           "averageDurationMinutes": 195.625,
@@ -1361,9 +1361,9 @@
           "id": "P01→P02",
           "originParkingId": "P01",
           "destinationParkingId": "P02",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر امام خمینی",
-          "routeName": "شهید رجایی → بندر امام خمینی",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Imam Khomeini Port",
+          "routeName": "Shahid Rajaee Port → Imam Khomeini Port",
           "trips": 32,
           "completedTrips": 27,
           "averageDurationMinutes": 189.5185185185185,
@@ -1374,9 +1374,9 @@
           "id": "P02→P04",
           "originParkingId": "P02",
           "destinationParkingId": "P04",
-          "originName": "بندر امام خمینی",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر امام خمینی → بندر چابهار",
+          "originName": "Imam Khomeini Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Imam Khomeini Port → Chabahar Port",
           "trips": 30,
           "completedTrips": 30,
           "averageDurationMinutes": 191.13333333333333,
@@ -1387,9 +1387,9 @@
           "id": "P04→P01",
           "originParkingId": "P04",
           "destinationParkingId": "P01",
-          "originName": "بندر چابهار",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر چابهار → شهید رجایی",
+          "originName": "Chabahar Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Chabahar Port → Shahid Rajaee Port",
           "trips": 27,
           "completedTrips": 27,
           "averageDurationMinutes": 184.07407407407408,
@@ -1400,9 +1400,9 @@
           "id": "P04→P05",
           "originParkingId": "P04",
           "destinationParkingId": "P05",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر انزلی",
-          "routeName": "بندر چابهار → بندر انزلی",
+          "originName": "Chabahar Port",
+          "destinationName": "Anzali Port",
+          "routeName": "Chabahar Port → Anzali Port",
           "trips": 26,
           "completedTrips": 23,
           "averageDurationMinutes": 189.47826086956522,
@@ -1413,9 +1413,9 @@
           "id": "P03→P06",
           "originParkingId": "P03",
           "destinationParkingId": "P06",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر بوشهر → بندر امیرآباد",
+          "originName": "Bushehr Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Bushehr Port → Amirabad Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 181.8,
@@ -1426,9 +1426,9 @@
           "id": "P06→P01",
           "originParkingId": "P06",
           "destinationParkingId": "P01",
-          "originName": "بندر امیرآباد",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر امیرآباد → شهید رجایی",
+          "originName": "Amirabad Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Amirabad Port → Shahid Rajaee Port",
           "trips": 15,
           "completedTrips": 15,
           "averageDurationMinutes": 194.8,
@@ -1439,9 +1439,9 @@
           "id": "P01→P03",
           "originParkingId": "P01",
           "destinationParkingId": "P03",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر بوشهر",
-          "routeName": "شهید رجایی → بندر بوشهر",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Shahid Rajaee Port → Bushehr Port",
           "trips": 12,
           "completedTrips": 12,
           "averageDurationMinutes": 183.41666666666666,
@@ -1452,9 +1452,9 @@
           "id": "P05→P01",
           "originParkingId": "P05",
           "destinationParkingId": "P01",
-          "originName": "بندر انزلی",
-          "destinationName": "شهید رجایی",
-          "routeName": "بندر انزلی → شهید رجایی",
+          "originName": "Anzali Port",
+          "destinationName": "Shahid Rajaee Port",
+          "routeName": "Anzali Port → Shahid Rajaee Port",
           "trips": 25,
           "completedTrips": 25,
           "averageDurationMinutes": 186.2,
@@ -1465,9 +1465,9 @@
           "id": "P01→P04",
           "originParkingId": "P01",
           "destinationParkingId": "P04",
-          "originName": "شهید رجایی",
-          "destinationName": "بندر چابهار",
-          "routeName": "شهید رجایی → بندر چابهار",
+          "originName": "Shahid Rajaee Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Shahid Rajaee Port → Chabahar Port",
           "trips": 22,
           "completedTrips": 22,
           "averageDurationMinutes": 187.1818181818182,
@@ -1478,9 +1478,9 @@
           "id": "P06→P03",
           "originParkingId": "P06",
           "destinationParkingId": "P03",
-          "originName": "بندر امیرآباد",
-          "destinationName": "بندر بوشهر",
-          "routeName": "بندر امیرآباد → بندر بوشهر",
+          "originName": "Amirabad Port",
+          "destinationName": "Bushehr Port",
+          "routeName": "Amirabad Port → Bushehr Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 181.8,
@@ -1491,9 +1491,9 @@
           "id": "P03→P04",
           "originParkingId": "P03",
           "destinationParkingId": "P04",
-          "originName": "بندر بوشهر",
-          "destinationName": "بندر چابهار",
-          "routeName": "بندر بوشهر → بندر چابهار",
+          "originName": "Bushehr Port",
+          "destinationName": "Chabahar Port",
+          "routeName": "Bushehr Port → Chabahar Port",
           "trips": 10,
           "completedTrips": 10,
           "averageDurationMinutes": 177.8,
@@ -1504,9 +1504,9 @@
           "id": "P04→P06",
           "originParkingId": "P04",
           "destinationParkingId": "P06",
-          "originName": "بندر چابهار",
-          "destinationName": "بندر امیرآباد",
-          "routeName": "بندر چابهار → بندر امیرآباد",
+          "originName": "Chabahar Port",
+          "destinationName": "Amirabad Port",
+          "routeName": "Chabahar Port → Amirabad Port",
           "trips": 8,
           "completedTrips": 8,
           "averageDurationMinutes": 195.625,
@@ -1518,7 +1518,7 @@
         {
           "id": "V001",
           "vehicleId": "V001",
-          "vehicleTitle": "آذرخش",
+          "vehicleTitle": "Azarakhsh",
           "registration": "IR-2100",
           "trips": 15,
           "completedTrips": 14,
@@ -1529,7 +1529,7 @@
         {
           "id": "V002",
           "vehicleId": "V002",
-          "vehicleTitle": "مروارید",
+          "vehicleTitle": "Morvarid",
           "registration": "IR-2101",
           "trips": 15,
           "completedTrips": 14,
@@ -1540,7 +1540,7 @@
         {
           "id": "V003",
           "vehicleId": "V003",
-          "vehicleTitle": "دریابان",
+          "vehicleTitle": "Daryaban",
           "registration": "IR-2102",
           "trips": 15,
           "completedTrips": 14,
@@ -1551,7 +1551,7 @@
         {
           "id": "V004",
           "vehicleId": "V004",
-          "vehicleTitle": "سپهر",
+          "vehicleTitle": "Sepehr",
           "registration": "IR-2103",
           "trips": 15,
           "completedTrips": 14,
@@ -1562,7 +1562,7 @@
         {
           "id": "V005",
           "vehicleId": "V005",
-          "vehicleTitle": "خلیج فارس",
+          "vehicleTitle": "Persian Gulf",
           "registration": "IR-2104",
           "trips": 15,
           "completedTrips": 14,
@@ -1573,7 +1573,7 @@
         {
           "id": "V006",
           "vehicleId": "V006",
-          "vehicleTitle": "آریا",
+          "vehicleTitle": "Aria",
           "registration": "IR-2105",
           "trips": 15,
           "completedTrips": 14,
@@ -1584,7 +1584,7 @@
         {
           "id": "V007",
           "vehicleId": "V007",
-          "vehicleTitle": "ماهان",
+          "vehicleTitle": "Mahan",
           "registration": "IR-2106",
           "trips": 14,
           "completedTrips": 14,
@@ -1595,7 +1595,7 @@
         {
           "id": "V008",
           "vehicleId": "V008",
-          "vehicleTitle": "باران",
+          "vehicleTitle": "Baran",
           "registration": "IR-2107",
           "trips": 14,
           "completedTrips": 14,
@@ -1606,7 +1606,7 @@
         {
           "id": "V009",
           "vehicleId": "V009",
-          "vehicleTitle": "نیلگون",
+          "vehicleTitle": "Nilgoon",
           "registration": "IR-2108",
           "trips": 14,
           "completedTrips": 14,
@@ -1617,7 +1617,7 @@
         {
           "id": "V010",
           "vehicleId": "V010",
-          "vehicleTitle": "ساحل",
+          "vehicleTitle": "Sahel",
           "registration": "IR-2109",
           "trips": 14,
           "completedTrips": 14,
@@ -1628,7 +1628,7 @@
         {
           "id": "V011",
           "vehicleId": "V011",
-          "vehicleTitle": "مرجان",
+          "vehicleTitle": "Marjan",
           "registration": "IR-2110",
           "trips": 14,
           "completedTrips": 14,
@@ -1639,7 +1639,7 @@
         {
           "id": "V012",
           "vehicleId": "V012",
-          "vehicleTitle": "آفتاب",
+          "vehicleTitle": "Aftab",
           "registration": "IR-2111",
           "trips": 14,
           "completedTrips": 14,
@@ -1650,7 +1650,7 @@
         {
           "id": "V013",
           "vehicleId": "V013",
-          "vehicleTitle": "کارون",
+          "vehicleTitle": "Karun",
           "registration": "IR-2112",
           "trips": 14,
           "completedTrips": 14,
@@ -1661,7 +1661,7 @@
         {
           "id": "V014",
           "vehicleId": "V014",
-          "vehicleTitle": "دنا",
+          "vehicleTitle": "Dena",
           "registration": "IR-2113",
           "trips": 14,
           "completedTrips": 14,
@@ -1672,7 +1672,7 @@
         {
           "id": "V015",
           "vehicleId": "V015",
-          "vehicleTitle": "الوند",
+          "vehicleTitle": "Alvand",
           "registration": "IR-2114",
           "trips": 15,
           "completedTrips": 14,
@@ -1683,7 +1683,7 @@
         {
           "id": "V016",
           "vehicleId": "V016",
-          "vehicleTitle": "هما",
+          "vehicleTitle": "Homa",
           "registration": "IR-2115",
           "trips": 15,
           "completedTrips": 14,
@@ -1696,7 +1696,7 @@
         {
           "id": "V001",
           "vehicleId": "V001",
-          "vehicleTitle": "آذرخش",
+          "vehicleTitle": "Azarakhsh",
           "registration": "IR-2100",
           "trips": 15,
           "completedTrips": 14,
@@ -1707,7 +1707,7 @@
         {
           "id": "V002",
           "vehicleId": "V002",
-          "vehicleTitle": "مروارید",
+          "vehicleTitle": "Morvarid",
           "registration": "IR-2101",
           "trips": 15,
           "completedTrips": 14,
@@ -1718,7 +1718,7 @@
         {
           "id": "V003",
           "vehicleId": "V003",
-          "vehicleTitle": "دریابان",
+          "vehicleTitle": "Daryaban",
           "registration": "IR-2102",
           "trips": 15,
           "completedTrips": 14,
@@ -1729,7 +1729,7 @@
         {
           "id": "V004",
           "vehicleId": "V004",
-          "vehicleTitle": "سپهر",
+          "vehicleTitle": "Sepehr",
           "registration": "IR-2103",
           "trips": 15,
           "completedTrips": 14,
@@ -1740,7 +1740,7 @@
         {
           "id": "V005",
           "vehicleId": "V005",
-          "vehicleTitle": "خلیج فارس",
+          "vehicleTitle": "Persian Gulf",
           "registration": "IR-2104",
           "trips": 15,
           "completedTrips": 14,
@@ -1751,7 +1751,7 @@
         {
           "id": "V006",
           "vehicleId": "V006",
-          "vehicleTitle": "آریا",
+          "vehicleTitle": "Aria",
           "registration": "IR-2105",
           "trips": 15,
           "completedTrips": 14,
@@ -1762,7 +1762,7 @@
         {
           "id": "V015",
           "vehicleId": "V015",
-          "vehicleTitle": "الوند",
+          "vehicleTitle": "Alvand",
           "registration": "IR-2114",
           "trips": 15,
           "completedTrips": 14,
@@ -1773,7 +1773,7 @@
         {
           "id": "V016",
           "vehicleId": "V016",
-          "vehicleTitle": "هما",
+          "vehicleTitle": "Homa",
           "registration": "IR-2115",
           "trips": 15,
           "completedTrips": 14,
@@ -1784,7 +1784,7 @@
         {
           "id": "V007",
           "vehicleId": "V007",
-          "vehicleTitle": "ماهان",
+          "vehicleTitle": "Mahan",
           "registration": "IR-2106",
           "trips": 14,
           "completedTrips": 14,
@@ -1795,7 +1795,7 @@
         {
           "id": "V008",
           "vehicleId": "V008",
-          "vehicleTitle": "باران",
+          "vehicleTitle": "Baran",
           "registration": "IR-2107",
           "trips": 14,
           "completedTrips": 14,
@@ -1806,7 +1806,7 @@
         {
           "id": "V009",
           "vehicleId": "V009",
-          "vehicleTitle": "نیلگون",
+          "vehicleTitle": "Nilgoon",
           "registration": "IR-2108",
           "trips": 14,
           "completedTrips": 14,
@@ -1817,7 +1817,7 @@
         {
           "id": "V010",
           "vehicleId": "V010",
-          "vehicleTitle": "ساحل",
+          "vehicleTitle": "Sahel",
           "registration": "IR-2109",
           "trips": 14,
           "completedTrips": 14,
@@ -1828,7 +1828,7 @@
         {
           "id": "V011",
           "vehicleId": "V011",
-          "vehicleTitle": "مرجان",
+          "vehicleTitle": "Marjan",
           "registration": "IR-2110",
           "trips": 14,
           "completedTrips": 14,
@@ -1839,7 +1839,7 @@
         {
           "id": "V012",
           "vehicleId": "V012",
-          "vehicleTitle": "آفتاب",
+          "vehicleTitle": "Aftab",
           "registration": "IR-2111",
           "trips": 14,
           "completedTrips": 14,
@@ -1850,7 +1850,7 @@
         {
           "id": "V013",
           "vehicleId": "V013",
-          "vehicleTitle": "کارون",
+          "vehicleTitle": "Karun",
           "registration": "IR-2112",
           "trips": 14,
           "completedTrips": 14,
@@ -1861,7 +1861,7 @@
         {
           "id": "V014",
           "vehicleId": "V014",
-          "vehicleTitle": "دنا",
+          "vehicleTitle": "Dena",
           "registration": "IR-2113",
           "trips": 14,
           "completedTrips": 14,
@@ -1874,62 +1874,62 @@
         "nodes": [
           {
             "name": "origin:P01",
-            "label": "شهید رجایی",
+            "label": "Shahid Rajaee Port",
             "side": "origin"
           },
           {
             "name": "destination:P02",
-            "label": "بندر امام خمینی",
+            "label": "Imam Khomeini Port",
             "side": "destination"
           },
           {
             "name": "origin:P02",
-            "label": "بندر امام خمینی",
+            "label": "Imam Khomeini Port",
             "side": "origin"
           },
           {
             "name": "destination:P04",
-            "label": "بندر چابهار",
+            "label": "Chabahar Port",
             "side": "destination"
           },
           {
             "name": "origin:P04",
-            "label": "بندر چابهار",
+            "label": "Chabahar Port",
             "side": "origin"
           },
           {
             "name": "destination:P01",
-            "label": "شهید رجایی",
+            "label": "Shahid Rajaee Port",
             "side": "destination"
           },
           {
             "name": "destination:P05",
-            "label": "بندر انزلی",
+            "label": "Anzali Port",
             "side": "destination"
           },
           {
             "name": "origin:P03",
-            "label": "بندر بوشهر",
+            "label": "Bushehr Port",
             "side": "origin"
           },
           {
             "name": "destination:P06",
-            "label": "بندر امیرآباد",
+            "label": "Amirabad Port",
             "side": "destination"
           },
           {
             "name": "origin:P06",
-            "label": "بندر امیرآباد",
+            "label": "Amirabad Port",
             "side": "origin"
           },
           {
             "name": "destination:P03",
-            "label": "بندر بوشهر",
+            "label": "Bushehr Port",
             "side": "destination"
           },
           {
             "name": "origin:P05",
-            "label": "بندر انزلی",
+            "label": "Anzali Port",
             "side": "origin"
           }
         ],
@@ -2014,10 +2014,10 @@
         "elapsedMinutes": 80,
         "estimatedMinutes": 300,
         "delayMinutes": 0,
-        "vehicleTitle": "آذرخش",
+        "vehicleTitle": "Azarakhsh",
         "registration": "IR-2100",
-        "originName": "بندر چابهار",
-        "destinationName": "بندر انزلی"
+        "originName": "Chabahar Port",
+        "destinationName": "Anzali Port"
       },
       {
         "id": "LV002",
@@ -2035,10 +2035,10 @@
         "elapsedMinutes": 110,
         "estimatedMinutes": 100,
         "delayMinutes": 10,
-        "vehicleTitle": "مروارید",
+        "vehicleTitle": "Morvarid",
         "registration": "IR-2101",
-        "originName": "شهید رجایی",
-        "destinationName": "بندر امام خمینی"
+        "originName": "Shahid Rajaee Port",
+        "destinationName": "Imam Khomeini Port"
       },
       {
         "id": "LV003",
@@ -2056,10 +2056,10 @@
         "elapsedMinutes": 140,
         "estimatedMinutes": 300,
         "delayMinutes": 0,
-        "vehicleTitle": "دریابان",
+        "vehicleTitle": "Daryaban",
         "registration": "IR-2102",
-        "originName": "شهید رجایی",
-        "destinationName": "بندر امام خمینی"
+        "originName": "Shahid Rajaee Port",
+        "destinationName": "Imam Khomeini Port"
       },
       {
         "id": "LV004",
@@ -2077,10 +2077,10 @@
         "elapsedMinutes": 170,
         "estimatedMinutes": 100,
         "delayMinutes": 70,
-        "vehicleTitle": "سپهر",
+        "vehicleTitle": "Sepehr",
         "registration": "IR-2103",
-        "originName": "شهید رجایی",
-        "destinationName": "بندر امام خمینی"
+        "originName": "Shahid Rajaee Port",
+        "destinationName": "Imam Khomeini Port"
       },
       {
         "id": "LV005",
@@ -2098,10 +2098,10 @@
         "elapsedMinutes": 200,
         "estimatedMinutes": 300,
         "delayMinutes": 0,
-        "vehicleTitle": "خلیج فارس",
+        "vehicleTitle": "Persian Gulf",
         "registration": "IR-2104",
-        "originName": "بندر چابهار",
-        "destinationName": "بندر انزلی"
+        "originName": "Chabahar Port",
+        "destinationName": "Anzali Port"
       },
       {
         "id": "LV006",
@@ -2119,10 +2119,10 @@
         "elapsedMinutes": 230,
         "estimatedMinutes": 100,
         "delayMinutes": 130,
-        "vehicleTitle": "آریا",
+        "vehicleTitle": "Aria",
         "registration": "IR-2105",
-        "originName": "بندر چابهار",
-        "destinationName": "بندر انزلی"
+        "originName": "Chabahar Port",
+        "destinationName": "Anzali Port"
       },
       {
         "id": "T0231",
@@ -2140,10 +2140,10 @@
         "elapsedMinutes": null,
         "estimatedMinutes": 169,
         "delayMinutes": 35,
-        "vehicleTitle": "هما",
+        "vehicleTitle": "Homa",
         "registration": "IR-2115",
-        "originName": "بندر انزلی",
-        "destinationName": "شهید رجایی"
+        "originName": "Anzali Port",
+        "destinationName": "Shahid Rajaee Port"
       },
       {
         "id": "T0216",
@@ -2161,10 +2161,10 @@
         "elapsedMinutes": null,
         "estimatedMinutes": 152,
         "delayMinutes": 12,
-        "vehicleTitle": "الوند",
+        "vehicleTitle": "Alvand",
         "registration": "IR-2114",
-        "originName": "بندر امیرآباد",
-        "destinationName": "شهید رجایی"
+        "originName": "Amirabad Port",
+        "destinationName": "Shahid Rajaee Port"
       },
       {
         "id": "T0202",
@@ -2182,10 +2182,10 @@
         "elapsedMinutes": null,
         "estimatedMinutes": 135,
         "delayMinutes": 0,
-        "vehicleTitle": "دنا",
+        "vehicleTitle": "Dena",
         "registration": "IR-2113",
-        "originName": "بندر چابهار",
-        "destinationName": "شهید رجایی"
+        "originName": "Chabahar Port",
+        "destinationName": "Shahid Rajaee Port"
       },
       {
         "id": "T0188",
@@ -2203,16 +2203,16 @@
         "elapsedMinutes": null,
         "estimatedMinutes": 118,
         "delayMinutes": 0,
-        "vehicleTitle": "کارون",
+        "vehicleTitle": "Karun",
         "registration": "IR-2112",
-        "originName": "بندر امام خمینی",
-        "destinationName": "بندر چابهار"
+        "originName": "Imam Khomeini Port",
+        "destinationName": "Chabahar Port"
       }
     ],
     "vehicles": [
       {
         "id": "V001",
-        "title": "آذرخش",
+        "title": "Azarakhsh",
         "registration": "IR-2100",
         "active": true,
         "initialParkingId": "P01",
@@ -2221,7 +2221,7 @@
       },
       {
         "id": "V002",
-        "title": "مروارید",
+        "title": "Morvarid",
         "registration": "IR-2101",
         "active": true,
         "initialParkingId": "P02",
@@ -2230,7 +2230,7 @@
       },
       {
         "id": "V003",
-        "title": "دریابان",
+        "title": "Daryaban",
         "registration": "IR-2102",
         "active": true,
         "initialParkingId": "P03",
@@ -2239,7 +2239,7 @@
       },
       {
         "id": "V004",
-        "title": "سپهر",
+        "title": "Sepehr",
         "registration": "IR-2103",
         "active": true,
         "initialParkingId": "P04",
@@ -2248,7 +2248,7 @@
       },
       {
         "id": "V005",
-        "title": "خلیج فارس",
+        "title": "Persian Gulf",
         "registration": "IR-2104",
         "active": true,
         "initialParkingId": "P05",
@@ -2257,7 +2257,7 @@
       },
       {
         "id": "V006",
-        "title": "آریا",
+        "title": "Aria",
         "registration": "IR-2105",
         "active": true,
         "initialParkingId": "P06",
@@ -2266,7 +2266,7 @@
       },
       {
         "id": "V007",
-        "title": "ماهان",
+        "title": "Mahan",
         "registration": "IR-2106",
         "active": true,
         "initialParkingId": "P01",
@@ -2275,7 +2275,7 @@
       },
       {
         "id": "V008",
-        "title": "باران",
+        "title": "Baran",
         "registration": "IR-2107",
         "active": true,
         "initialParkingId": "P02",
@@ -2284,7 +2284,7 @@
       },
       {
         "id": "V009",
-        "title": "نیلگون",
+        "title": "Nilgoon",
         "registration": "IR-2108",
         "active": true,
         "initialParkingId": "P03",
@@ -2293,7 +2293,7 @@
       },
       {
         "id": "V010",
-        "title": "ساحل",
+        "title": "Sahel",
         "registration": "IR-2109",
         "active": true,
         "initialParkingId": "P04",
@@ -2302,7 +2302,7 @@
       },
       {
         "id": "V011",
-        "title": "مرجان",
+        "title": "Marjan",
         "registration": "IR-2110",
         "active": true,
         "initialParkingId": "P05",
@@ -2311,7 +2311,7 @@
       },
       {
         "id": "V012",
-        "title": "آفتاب",
+        "title": "Aftab",
         "registration": "IR-2111",
         "active": true,
         "initialParkingId": "P06",
@@ -2320,7 +2320,7 @@
       },
       {
         "id": "V013",
-        "title": "کارون",
+        "title": "Karun",
         "registration": "IR-2112",
         "active": true,
         "initialParkingId": "P01",
@@ -2329,7 +2329,7 @@
       },
       {
         "id": "V014",
-        "title": "دنا",
+        "title": "Dena",
         "registration": "IR-2113",
         "active": true,
         "initialParkingId": "P02",
@@ -2338,7 +2338,7 @@
       },
       {
         "id": "V015",
-        "title": "الوند",
+        "title": "Alvand",
         "registration": "IR-2114",
         "active": true,
         "initialParkingId": "P03",
@@ -2347,7 +2347,7 @@
       },
       {
         "id": "V016",
-        "title": "هما",
+        "title": "Homa",
         "registration": "IR-2115",
         "active": true,
         "initialParkingId": "P04",
@@ -2356,7 +2356,7 @@
       },
       {
         "id": "V017",
-        "title": "پارس",
+        "title": "Pars",
         "registration": "IR-2116",
         "active": false,
         "initialParkingId": "P05",
@@ -2365,7 +2365,7 @@
       },
       {
         "id": "V018",
-        "title": "آرمان",
+        "title": "Arman",
         "registration": "IR-2117",
         "active": false,
         "initialParkingId": "P06",
@@ -2376,37 +2376,37 @@
     "parkings": [
       {
         "id": "P01",
-        "name": "شهید رجایی",
+        "name": "Shahid Rajaee Port",
         "active": true,
         "timezone": "Asia/Tehran"
       },
       {
         "id": "P02",
-        "name": "بندر امام خمینی",
+        "name": "Imam Khomeini Port",
         "active": true,
         "timezone": "Asia/Tehran"
       },
       {
         "id": "P03",
-        "name": "بندر بوشهر",
+        "name": "Bushehr Port",
         "active": true,
         "timezone": "Asia/Tehran"
       },
       {
         "id": "P04",
-        "name": "بندر چابهار",
+        "name": "Chabahar Port",
         "active": true,
         "timezone": "Asia/Tehran"
       },
       {
         "id": "P05",
-        "name": "بندر انزلی",
+        "name": "Anzali Port",
         "active": true,
         "timezone": "Asia/Tehran"
       },
       {
         "id": "P06",
-        "name": "بندر امیرآباد",
+        "name": "Amirabad Port",
         "active": true,
         "timezone": "Asia/Tehran"
       }
@@ -4737,7 +4737,7 @@
       "vehicles": [
         {
           "id": "V001",
-          "title": "آذرخش",
+          "title": "Azarakhsh",
           "registration": "IR-2100",
           "active": true,
           "initialParkingId": "P01",
@@ -4746,7 +4746,7 @@
         },
         {
           "id": "V002",
-          "title": "مروارید",
+          "title": "Morvarid",
           "registration": "IR-2101",
           "active": true,
           "initialParkingId": "P02",
@@ -4755,7 +4755,7 @@
         },
         {
           "id": "V003",
-          "title": "دریابان",
+          "title": "Daryaban",
           "registration": "IR-2102",
           "active": true,
           "initialParkingId": "P03",
@@ -4764,7 +4764,7 @@
         },
         {
           "id": "V004",
-          "title": "سپهر",
+          "title": "Sepehr",
           "registration": "IR-2103",
           "active": true,
           "initialParkingId": "P04",
@@ -4773,7 +4773,7 @@
         },
         {
           "id": "V005",
-          "title": "خلیج فارس",
+          "title": "Persian Gulf",
           "registration": "IR-2104",
           "active": true,
           "initialParkingId": "P05",
@@ -4782,7 +4782,7 @@
         },
         {
           "id": "V006",
-          "title": "آریا",
+          "title": "Aria",
           "registration": "IR-2105",
           "active": true,
           "initialParkingId": "P06",
@@ -4791,7 +4791,7 @@
         },
         {
           "id": "V007",
-          "title": "ماهان",
+          "title": "Mahan",
           "registration": "IR-2106",
           "active": true,
           "initialParkingId": "P01",
@@ -4800,7 +4800,7 @@
         },
         {
           "id": "V008",
-          "title": "باران",
+          "title": "Baran",
           "registration": "IR-2107",
           "active": true,
           "initialParkingId": "P02",
@@ -4809,7 +4809,7 @@
         },
         {
           "id": "V009",
-          "title": "نیلگون",
+          "title": "Nilgoon",
           "registration": "IR-2108",
           "active": true,
           "initialParkingId": "P03",
@@ -4818,7 +4818,7 @@
         },
         {
           "id": "V010",
-          "title": "ساحل",
+          "title": "Sahel",
           "registration": "IR-2109",
           "active": true,
           "initialParkingId": "P04",
@@ -4827,7 +4827,7 @@
         },
         {
           "id": "V011",
-          "title": "مرجان",
+          "title": "Marjan",
           "registration": "IR-2110",
           "active": true,
           "initialParkingId": "P05",
@@ -4836,7 +4836,7 @@
         },
         {
           "id": "V012",
-          "title": "آفتاب",
+          "title": "Aftab",
           "registration": "IR-2111",
           "active": true,
           "initialParkingId": "P06",
@@ -4845,7 +4845,7 @@
         },
         {
           "id": "V013",
-          "title": "کارون",
+          "title": "Karun",
           "registration": "IR-2112",
           "active": true,
           "initialParkingId": "P01",
@@ -4854,7 +4854,7 @@
         },
         {
           "id": "V014",
-          "title": "دنا",
+          "title": "Dena",
           "registration": "IR-2113",
           "active": true,
           "initialParkingId": "P02",
@@ -4863,7 +4863,7 @@
         },
         {
           "id": "V015",
-          "title": "الوند",
+          "title": "Alvand",
           "registration": "IR-2114",
           "active": true,
           "initialParkingId": "P03",
@@ -4872,7 +4872,7 @@
         },
         {
           "id": "V016",
-          "title": "هما",
+          "title": "Homa",
           "registration": "IR-2115",
           "active": true,
           "initialParkingId": "P04",
@@ -4881,7 +4881,7 @@
         },
         {
           "id": "V017",
-          "title": "پارس",
+          "title": "Pars",
           "registration": "IR-2116",
           "active": false,
           "initialParkingId": "P05",
@@ -4890,7 +4890,7 @@
         },
         {
           "id": "V018",
-          "title": "آرمان",
+          "title": "Arman",
           "registration": "IR-2117",
           "active": false,
           "initialParkingId": "P06",
@@ -4901,37 +4901,37 @@
       "parkings": [
         {
           "id": "P01",
-          "name": "شهید رجایی",
+          "name": "Shahid Rajaee Port",
           "active": true,
           "timezone": "Asia/Tehran"
         },
         {
           "id": "P02",
-          "name": "بندر امام خمینی",
+          "name": "Imam Khomeini Port",
           "active": true,
           "timezone": "Asia/Tehran"
         },
         {
           "id": "P03",
-          "name": "بندر بوشهر",
+          "name": "Bushehr Port",
           "active": true,
           "timezone": "Asia/Tehran"
         },
         {
           "id": "P04",
-          "name": "بندر چابهار",
+          "name": "Chabahar Port",
           "active": true,
           "timezone": "Asia/Tehran"
         },
         {
           "id": "P05",
-          "name": "بندر انزلی",
+          "name": "Anzali Port",
           "active": true,
           "timezone": "Asia/Tehran"
         },
         {
           "id": "P06",
-          "name": "بندر امیرآباد",
+          "name": "Amirabad Port",
           "active": true,
           "timezone": "Asia/Tehran"
         }

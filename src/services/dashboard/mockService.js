@@ -21,7 +21,7 @@ export function createMockService(fixture, tab) {
       signal?.addEventListener("abort", abort, { once: true });
     });
     if (mockState === "error")
-      throw new Error("خطا در دریافت داده‌های داشبورد. دوباره تلاش کنید.");
+      throw new Error("Could not load dashboard data. Please try again.");
     const source =
       mockState === "empty"
         ? {

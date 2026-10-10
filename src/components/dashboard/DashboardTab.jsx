@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, Inbox, RefreshCw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLocale } from "@/context/LocaleContext";
+import { useDashboardLocale } from "@/components/dashboard/useDashboardLocale";
 import FilterBar from "./FilterBar";
 import KpiCard from "./KpiCard";
 import DataTable from "./DataTable";
@@ -31,7 +31,7 @@ const FILTER_KEYS = [
   "visibleColumns",
 ];
 function LoadingState() {
-  const { t } = useLocale();
+  const { t } = useDashboardLocale();
   return (
     <div role="status" className="space-y-5">
       <span className="sr-only">{t("dashboard.loading")}</span>
@@ -49,7 +49,7 @@ function LoadingState() {
   );
 }
 export default function DashboardTab({ tab, service }) {
-  const context = useLocale();
+  const context = useDashboardLocale();
   const { t, formatNumber, locale } = context;
   const [params, setParams] = useSearchParams();
   const [exporting, setExporting] = useState(false);

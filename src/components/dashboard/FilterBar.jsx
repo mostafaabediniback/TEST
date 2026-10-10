@@ -1,7 +1,7 @@
 import { Filter, RotateCcw } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useLocale } from "@/context/LocaleContext";
+import { useDashboardLocale } from "@/components/dashboard/useDashboardLocale";
 import { REPORT_TYPES } from "./config";
 export default function FilterBar({
   tab,
@@ -10,7 +10,7 @@ export default function FilterBar({
   onChange,
   onReset,
 }) {
-  const { t } = useLocale();
+  const { t } = useDashboardLocale();
   const fields =
     tab === "overview"
       ? ["vehicleStatus", "parkingId", "vehicleId"]

@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useLocale } from "@/context/LocaleContext";
+import { useDashboardLocale } from "@/components/dashboard/useDashboardLocale";
 import { cellValue } from "./format";
 import { getShipDetailsNavigation } from "@/lib/shipNavigation";
 export default function DataTable({
@@ -39,7 +39,7 @@ export default function DataTable({
   onColumnsChange,
   fetching,
 }) {
-  const context = useLocale();
+  const context = useDashboardLocale();
   const { t, direction, formatNumber } = context;
   const location = useLocation();
   const pagination = response?.meta.pagination ?? {

@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useLocale } from "@/context/LocaleContext";
+import { useDashboardLocale } from "@/components/dashboard/useDashboardLocale";
 import { downloadBlob } from "./exports";
 echarts.use([
   BarChart,
@@ -74,7 +74,7 @@ export default function ChartContainer({
   wide = false,
   hint,
 }) {
-  const { t, direction } = useLocale();
+  const { t, direction } = useDashboardLocale();
   const chartRef = useRef(null);
   const enlargedRef = useRef(null);
   const [expanded, setExpanded] = useState(false);

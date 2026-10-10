@@ -199,7 +199,7 @@ export function buildDashboardResponse(
   now = Date.now(),
 ) {
   if (filters.dateFrom && filters.dateTo && filters.dateFrom > filters.dateTo)
-    throw new Error("تاریخ شروع باید قبل از تاریخ پایان باشد.");
+    throw new Error("The start date must be on or before the end date.");
   const model = materialize(source, now);
   const vehicles = model.vehicles;
   const parkings = model.parkings;
@@ -530,7 +530,7 @@ export function buildDashboardResponse(
       sortOrder *
       (typeof left === "number" && typeof right === "number"
         ? left - right
-        : String(left).localeCompare(String(right), "fa", { numeric: true }))
+        : String(left).localeCompare(String(right), "en", { numeric: true }))
     );
   });
   const pageSize = Math.min(100, Math.max(1, Number(filters.pageSize) || 10));
