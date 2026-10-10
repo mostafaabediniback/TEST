@@ -1,5 +1,8 @@
 allowBuilds:
-  '@maplibre/maplibre-gl-native': false
+  "@maplibre/maplibre-gl-native": false
   canvas: false
   sharp: false
   sqlite3: false
+
+overrides:
+  "exceljs>uuid": "^11.1.1"

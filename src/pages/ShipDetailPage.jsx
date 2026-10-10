@@ -3,7 +3,10 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useShipPreview } from "@/hooks/useShipPreview";
 import { getShipSummary, getShipCompanies } from "@/api/shipApi";
-import { getDetailsReturnTarget, getShipCoordinates } from "@/lib/shipNavigation";
+import {
+  getDetailsReturnTarget,
+  getShipCoordinates,
+} from "@/lib/shipNavigation";
 import { useLocale } from "@/context/LocaleContext";
 
 export default function ShipDetailPage() {
@@ -11,26 +14,51 @@ export default function ShipDetailPage() {
   const location = useLocation();
   const { id } = useParams();
   const { t } = useLocale();
-  const seed = String(location.state?.ship?.id) === id ? location.state.ship : { id };
-  const preview = useShipPreview(seed);
-  const ship = { ...seed, ...preview.ship };
-  const position = preview.position ?? {};
-  const voyage = preview.voyage ?? {};
-  const port = preview.port ?? {};
-  const summaryQuery = useQuery({ queryKey: ["ship", seed.id, "summary"], queryFn: () => getShipSummary(seed.id), staleTime: 5 * 60 * 1000 });
-  const companiesQuery = useQuery({ queryKey: ["ship", seed.id, "companies"], queryFn: () => getShipCompanies(seed.id), staleTime: 5 * 60 * 1000 });
-  const summary = summaryQuery.data ?? {};
-  const companyData = companiesQuery.data;
-  const companies = Array.isArray(companyData) ? companyData : companyData?.items ?? companyData?.companies ?? [];
+  const seed =
+    String(location.state?.ship?.id) === id ? location.state.ship : { id };
+  const isMock =
+    new URLSearchParams(location.search).get("mock") === "dashboard";
+  const mock = isMock ? (location.state?.dashboardMock ?? {}) : {};
+  const preview = useShipPreview(seed, !isMock);
+  const ship = isMock ? seed : { ...seed, ...preview.ship };
+  const position = isMock ? {} : (preview.position ?? {});
+  const voyage = isMock ? (mock.voyage ?? {}) : (preview.voyage ?? {});
+  const port = isMock ? (mock.port ?? {}) : (preview.port ?? {});
+  const summaryQuery = useQuery({
+    queryKey: ["ship", seed.id, "summary"],
+    queryFn: () => getShipSummary(seed.id),
+    enabled: !isMock,
+    staleTime: 5 * 60 * 1000,
+  });
+  const companiesQuery = useQuery({
+    queryKey: ["ship", seed.id, "companies"],
+    queryFn: () => getShipCompanies(seed.id),
+    enabled: !isMock,
+    staleTime: 5 * 60 * 1000,
+  });
+  const summary = isMock ? (mock.summary ?? {}) : (summaryQuery.data ?? {});
+  const companyData = isMock ? mock.companies : companiesQuery.data;
+  const companies = Array.isArray(companyData)
+    ? companyData
+    : (companyData?.items ?? companyData?.companies ?? []);
   const coordinates = getShipCoordinates(position) ?? getShipCoordinates(ship);
   const latitude = coordinates?.[1];
   const longitude = coordinates?.[0];
-  const imageUrl = preview.photo?.url ?? preview.photo?.photo_url ?? preview.photo?.image_url;
+  const imageUrl = isMock
+    ? null
+    : (preview.photo?.url ??
+      preview.photo?.photo_url ??
+      preview.photo?.image_url);
   const returnTo = getDetailsReturnTarget(location.search, location.state);
   const fromMap = returnTo.startsWith("/dashboard/");
   function handleBack() {
-    if (location.state?.returnTo === returnTo && window.history.state?.idx > 0) navigate(-1);
-    else navigate(returnTo, { replace: true, state: { tableState: location.state?.tableState } });
+    if (location.state?.returnTo === returnTo && window.history.state?.idx > 0)
+      navigate(-1);
+    else
+      navigate(returnTo, {
+        replace: true,
+        state: { tableState: location.state?.tableState },
+      });
   }
 
   return (
@@ -48,7 +76,14 @@ export default function ShipDetailPage() {
         </div>
       </header>
 
-      {preview.isError && <p role="status" className="mx-auto max-w-7xl px-4 pt-3 text-sm text-amber-700">{t("partialShipData")}</p>}
+      {preview.isError && (
+        <p
+          role="status"
+          className="mx-auto max-w-7xl px-4 pt-3 text-sm text-amber-700"
+        >
+          {t("partialShipData")}
+        </p>
+      )}
       <div className="mx-auto grid max-w-7xl gap-5 p-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)]">
         <div className="space-y-4">
           <section className="overflow-hidden rounded-lg border bg-white shadow-sm">
@@ -66,8 +101,14 @@ export default function ShipDetailPage() {
 
             <div className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3">
               <div>
-                <h1 className="font-semibold text-slate-900">{ship.name || t("unnamedShip")}</h1>
-                <p className="text-xs text-emerald-700">{preview.isLoading ? t("loadingShips") : t("shipId") + ": " + id}</p>
+                <h1 className="font-semibold text-slate-900">
+                  {ship.name || t("unnamedShip")}
+                </h1>
+                <p className="text-xs text-emerald-700">
+                  {preview.isLoading
+                    ? t("loadingShips")
+                    : t("shipId") + ": " + id}
+                </p>
               </div>
               <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
                 {voyage.status}
@@ -98,13 +139,25 @@ export default function ShipDetailPage() {
         <aside className="space-y-4">
           <section className="overflow-hidden rounded-lg border bg-white shadow-sm">
             <div className="flex h-56 items-center justify-center bg-slate-200 text-sm text-slate-500">
-              {imageUrl ? <img src={imageUrl} alt={ship.name || t("unnamedShip")} className="h-full w-full object-cover" /> : "No ship photo available"}
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={ship.name || t("unnamedShip")}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                "No ship photo available"
+              )}
             </div>
             <div className="p-4">
               <h2 className="text-lg font-semibold text-slate-900">
                 {ship.name || t("unnamedShip")}
               </h2>
-              <p className="mt-1 text-sm text-emerald-700">{preview.isLoading ? t("loadingShips") : t("shipId") + ": " + id}</p>
+              <p className="mt-1 text-sm text-emerald-700">
+                {preview.isLoading
+                  ? t("loadingShips")
+                  : t("shipId") + ": " + id}
+              </p>
             </div>
           </section>
 
@@ -124,7 +177,10 @@ export default function ShipDetailPage() {
             </h2>
             <ShipRow label="Latitude" value={latitude?.toFixed(5) ?? "—"} />
             <ShipRow label="Longitude" value={longitude?.toFixed(5) ?? "—"} />
-            <ShipRow label="Speed" value={position.speed == null ? "—" : `${position.speed} knots`} />
+            <ShipRow
+              label="Speed"
+              value={position.speed == null ? "—" : `${position.speed} knots`}
+            />
             <ShipRow label="Course" value={position.course} />
           </section>
 

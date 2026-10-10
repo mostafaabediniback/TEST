@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -41,26 +42,48 @@ const columns = [
 
 export default function Port() {
   const { t, formatNumber, direction } = useLocale();
-  const [filter, setFilter] = useState("");
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const mockParkings =
+    location.state?.dashboardMock ??
+    (searchParams.get("mock") === "dashboard" ? [] : undefined);
+  const [filter, setFilter] = useState(searchParams.get("name") ?? "");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [visibleColumns, setVisibleColumns] = useState(
-    columns.map((column) => column.key)
+    columns.map((column) => column.key),
   );
 
-  const { data, isPending, isError, error } = usePorts({
-    page,
-    page_size: pageSize,
-    name: filter.trim() || undefined,
-    sort_by: "id",
-    sort_order: "asc",
-  });
+  const portsQuery = usePorts(
+    {
+      page,
+      page_size: pageSize,
+      name: filter.trim() || undefined,
+      sort_by: "id",
+      sort_order: "asc",
+    },
+    { enabled: !mockParkings },
+  );
+  const mockRows = mockParkings?.filter((row) =>
+    row.name.includes(filter.trim()),
+  );
+  const { data, isPending, isError, error } = mockParkings
+    ? {
+        data: {
+          items: mockRows.slice((page - 1) * pageSize, page * pageSize),
+          total: mockRows.length,
+        },
+        isPending: false,
+        isError: false,
+        error: null,
+      }
+    : portsQuery;
 
   const rows = data?.items ?? data?.results ?? data?.data ?? [];
   const total = data?.total ?? data?.count ?? rows.length;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const displayedColumns = columns.filter((column) =>
-    visibleColumns.includes(column.key)
+    visibleColumns.includes(column.key),
   );
 
   function handleFilterChange(event) {
@@ -70,15 +93,14 @@ export default function Port() {
 
   function toggleColumn(key, checked) {
     setVisibleColumns((current) =>
-      checked
-        ? [...current, key]
-        : current.filter((column) => column !== key)
+      checked ? [...current, key] : current.filter((column) => column !== key),
     );
   }
 
   return (
     <section
       dir={direction}
+      style={mockParkings ? { paddingTop: 80 } : undefined}
       className="h-full overflow-y-auto bg-muted/30 p-4 sm:p-6"
     >
       <div className="mx-auto max-w-6xl space-y-5">

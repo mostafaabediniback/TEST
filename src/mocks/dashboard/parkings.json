@@ -1,0 +1,4842 @@
+{
+  "success": true,
+  "data": {
+    "summary": {
+      "totalVehicles": 18,
+      "activeVehicles": 16,
+      "parkedVehicles": 10,
+      "inTransitVehicles": 6,
+      "totalTrips": 230,
+      "completedTrips": 224,
+      "inTransitTrips": 6,
+      "delayedTrips": 137,
+      "activeParkings": 6,
+      "activeRoutes": 12,
+      "averageDurationMinutes": 187.33482142857142,
+      "averageStopMinutes": 2730.6308411214955,
+      "totalEntries": 224,
+      "totalExits": 230,
+      "stationedVehicles": 10
+    },
+    "charts": {
+      "tripsByDay": [
+        {
+          "date": "2026-09-11",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-13",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-15",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-17",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-19",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-21",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-23",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-25",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-27",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-29",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-01",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-03",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-05",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-07",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-10",
+          "trips": 6,
+          "delays": 3
+        }
+      ],
+      "vehicleTrend": [
+        {
+          "date": "2026-09-11",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-13",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-15",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-17",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-19",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-21",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-23",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-25",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-27",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-29",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-01",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-03",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-05",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-07",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-10",
+          "trips": 6,
+          "delays": 3
+        }
+      ],
+      "delayTrend": [
+        {
+          "date": "2026-09-11",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-13",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-15",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-17",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-19",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-21",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-23",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-09-25",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-27",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-09-29",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-01",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-03",
+          "trips": 16,
+          "delays": 9
+        },
+        {
+          "date": "2026-10-05",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-07",
+          "trips": 16,
+          "delays": 10
+        },
+        {
+          "date": "2026-10-10",
+          "trips": 6,
+          "delays": 3
+        }
+      ],
+      "vehicleStatus": [
+        {
+          "status": "parked",
+          "value": 10
+        },
+        {
+          "status": "in_transit",
+          "value": 6
+        },
+        {
+          "status": "inactive",
+          "value": 2
+        }
+      ],
+      "parkingTraffic": [
+        {
+          "id": "P01",
+          "parkingName": "شهید رجایی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 67,
+          "exits": 64,
+          "stationed": 6,
+          "averageStopMinutes": 2753.6065573770493,
+          "lastEntryAt": "2026-10-07T18:49:00.000Z",
+          "lastExitAt": "2026-10-10T06:10:00.000Z"
+        },
+        {
+          "id": "P02",
+          "parkingName": "بندر امام خمینی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 27,
+          "exits": 30,
+          "stationed": 0,
+          "averageStopMinutes": 2698.259259259259,
+          "lastEntryAt": "2026-10-05T15:50:00.000Z",
+          "lastExitAt": "2026-10-07T14:10:00.000Z"
+        },
+        {
+          "id": "P03",
+          "parkingName": "بندر بوشهر",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 22,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2703.681818181818,
+          "lastEntryAt": "2026-10-05T14:38:00.000Z",
+          "lastExitAt": "2026-10-07T13:45:00.000Z"
+        },
+        {
+          "id": "P04",
+          "parkingName": "بندر چابهار",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 62,
+          "exits": 61,
+          "stationed": 4,
+          "averageStopMinutes": 2755.189655172414,
+          "lastEntryAt": "2026-10-07T18:09:00.000Z",
+          "lastExitAt": "2026-10-10T06:40:00.000Z"
+        },
+        {
+          "id": "P05",
+          "parkingName": "بندر انزلی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2699.6521739130435,
+          "lastEntryAt": "2026-10-05T17:03:00.000Z",
+          "lastExitAt": "2026-10-07T15:25:00.000Z"
+        },
+        {
+          "id": "P06",
+          "parkingName": "بندر امیرآباد",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2702.521739130435,
+          "lastEntryAt": "2026-10-05T16:09:00.000Z",
+          "lastExitAt": "2026-10-07T15:00:00.000Z"
+        }
+      ],
+      "parkingTrend": [
+        {
+          "date": "2026-09-11",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-13",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-15",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-17",
+          "entries": 14,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-18",
+          "entries": 2,
+          "exits": 0
+        },
+        {
+          "date": "2026-09-19",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-21",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-23",
+          "entries": 15,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-24",
+          "entries": 1,
+          "exits": 0
+        },
+        {
+          "date": "2026-09-25",
+          "entries": 14,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-26",
+          "entries": 2,
+          "exits": 0
+        },
+        {
+          "date": "2026-09-27",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-09-29",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-10-01",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-10-03",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-10-05",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-10-07",
+          "entries": 16,
+          "exits": 16
+        },
+        {
+          "date": "2026-10-10",
+          "entries": 0,
+          "exits": 6
+        }
+      ],
+      "heatmap": [
+        {
+          "day": 6,
+          "hour": 11,
+          "value": 2
+        },
+        {
+          "day": 6,
+          "hour": 12,
+          "value": 3
+        },
+        {
+          "day": 1,
+          "hour": 12,
+          "value": 3
+        },
+        {
+          "day": 1,
+          "hour": 14,
+          "value": 7
+        },
+        {
+          "day": 3,
+          "hour": 13,
+          "value": 4
+        },
+        {
+          "day": 3,
+          "hour": 15,
+          "value": 6
+        },
+        {
+          "day": 5,
+          "hour": 15,
+          "value": 6
+        },
+        {
+          "day": 5,
+          "hour": 17,
+          "value": 9
+        },
+        {
+          "day": 0,
+          "hour": 11,
+          "value": 2
+        },
+        {
+          "day": 0,
+          "hour": 14,
+          "value": 5
+        },
+        {
+          "day": 2,
+          "hour": 12,
+          "value": 3
+        },
+        {
+          "day": 2,
+          "hour": 14,
+          "value": 7
+        },
+        {
+          "day": 4,
+          "hour": 13,
+          "value": 4
+        },
+        {
+          "day": 4,
+          "hour": 16,
+          "value": 7
+        },
+        {
+          "day": 6,
+          "hour": 15,
+          "value": 6
+        },
+        {
+          "day": 6,
+          "hour": 18,
+          "value": 6
+        },
+        {
+          "day": 1,
+          "hour": 11,
+          "value": 2
+        },
+        {
+          "day": 1,
+          "hour": 15,
+          "value": 8
+        },
+        {
+          "day": 3,
+          "hour": 12,
+          "value": 1
+        },
+        {
+          "day": 3,
+          "hour": 17,
+          "value": 9
+        },
+        {
+          "day": 5,
+          "hour": 13,
+          "value": 1
+        },
+        {
+          "day": 0,
+          "hour": 15,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 18,
+          "value": 6
+        },
+        {
+          "day": 2,
+          "hour": 11,
+          "value": 2
+        },
+        {
+          "day": 2,
+          "hour": 15,
+          "value": 8
+        },
+        {
+          "day": 4,
+          "hour": 12,
+          "value": 1
+        },
+        {
+          "day": 4,
+          "hour": 17,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 10,
+          "value": 1
+        },
+        {
+          "day": 6,
+          "hour": 13,
+          "value": 3
+        },
+        {
+          "day": 1,
+          "hour": 13,
+          "value": 5
+        },
+        {
+          "day": 3,
+          "hour": 14,
+          "value": 4
+        },
+        {
+          "day": 3,
+          "hour": 16,
+          "value": 8
+        },
+        {
+          "day": 5,
+          "hour": 18,
+          "value": 10
+        },
+        {
+          "day": 2,
+          "hour": 13,
+          "value": 6
+        },
+        {
+          "day": 4,
+          "hour": 14,
+          "value": 4
+        },
+        {
+          "day": 6,
+          "hour": 19,
+          "value": 7
+        },
+        {
+          "day": 1,
+          "hour": 16,
+          "value": 11
+        },
+        {
+          "day": 5,
+          "hour": 14,
+          "value": 2
+        },
+        {
+          "day": 0,
+          "hour": 19,
+          "value": 7
+        },
+        {
+          "day": 4,
+          "hour": 15,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 9,
+          "value": 2
+        },
+        {
+          "day": 6,
+          "hour": 14,
+          "value": 4
+        },
+        {
+          "day": 3,
+          "hour": 18,
+          "value": 10
+        },
+        {
+          "day": 0,
+          "hour": 12,
+          "value": 2
+        },
+        {
+          "day": 2,
+          "hour": 16,
+          "value": 8
+        },
+        {
+          "day": 4,
+          "hour": 18,
+          "value": 10
+        },
+        {
+          "day": 6,
+          "hour": 20,
+          "value": 9
+        },
+        {
+          "day": 5,
+          "hour": 19,
+          "value": 8
+        },
+        {
+          "day": 0,
+          "hour": 17,
+          "value": 9
+        },
+        {
+          "day": 1,
+          "hour": 17,
+          "value": 8
+        },
+        {
+          "day": 5,
+          "hour": 16,
+          "value": 4
+        },
+        {
+          "day": 0,
+          "hour": 16,
+          "value": 7
+        },
+        {
+          "day": 2,
+          "hour": 17,
+          "value": 8
+        },
+        {
+          "day": 4,
+          "hour": 19,
+          "value": 9
+        },
+        {
+          "day": 6,
+          "hour": 16,
+          "value": 8
+        },
+        {
+          "day": 0,
+          "hour": 8,
+          "value": 2
+        },
+        {
+          "day": 5,
+          "hour": 20,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 13,
+          "value": 2
+        },
+        {
+          "day": 2,
+          "hour": 19,
+          "value": 7
+        },
+        {
+          "day": 3,
+          "hour": 19,
+          "value": 5
+        },
+        {
+          "day": 5,
+          "hour": 21,
+          "value": 8
+        },
+        {
+          "day": 2,
+          "hour": 18,
+          "value": 9
+        },
+        {
+          "day": 4,
+          "hour": 20,
+          "value": 7
+        },
+        {
+          "day": 6,
+          "hour": 17,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 7,
+          "value": 1
+        },
+        {
+          "day": 1,
+          "hour": 18,
+          "value": 7
+        },
+        {
+          "day": 3,
+          "hour": 20,
+          "value": 7
+        },
+        {
+          "day": 5,
+          "hour": 22,
+          "value": 4
+        },
+        {
+          "day": 0,
+          "hour": 20,
+          "value": 5
+        },
+        {
+          "day": 1,
+          "hour": 19,
+          "value": 4
+        },
+        {
+          "day": 3,
+          "hour": 21,
+          "value": 6
+        },
+        {
+          "day": 6,
+          "hour": 21,
+          "value": 3
+        },
+        {
+          "day": 0,
+          "hour": 21,
+          "value": 4
+        },
+        {
+          "day": 1,
+          "hour": 20,
+          "value": 7
+        },
+        {
+          "day": 0,
+          "hour": 22,
+          "value": 5
+        },
+        {
+          "day": 6,
+          "hour": 22,
+          "value": 2
+        },
+        {
+          "day": 4,
+          "hour": 21,
+          "value": 3
+        },
+        {
+          "day": 5,
+          "hour": 23,
+          "value": 3
+        },
+        {
+          "day": 2,
+          "hour": 20,
+          "value": 3
+        },
+        {
+          "day": 6,
+          "hour": 23,
+          "value": 2
+        },
+        {
+          "day": 0,
+          "hour": 23,
+          "value": 3
+        },
+        {
+          "day": 3,
+          "hour": 22,
+          "value": 3
+        },
+        {
+          "day": 4,
+          "hour": 22,
+          "value": 2
+        },
+        {
+          "day": 0,
+          "hour": 0,
+          "value": 2
+        },
+        {
+          "day": 1,
+          "hour": 21,
+          "value": 2
+        },
+        {
+          "day": 2,
+          "hour": 22,
+          "value": 2
+        },
+        {
+          "day": 4,
+          "hour": 23,
+          "value": 2
+        },
+        {
+          "day": 6,
+          "hour": 0,
+          "value": 1
+        },
+        {
+          "day": 2,
+          "hour": 23,
+          "value": 1
+        },
+        {
+          "day": 3,
+          "hour": 23,
+          "value": 1
+        },
+        {
+          "day": 6,
+          "hour": 1,
+          "value": 1
+        },
+        {
+          "day": 5,
+          "hour": 0,
+          "value": 1
+        }
+      ],
+      "parkingRanking": [
+        {
+          "id": "P01",
+          "parkingName": "شهید رجایی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 67,
+          "exits": 64,
+          "stationed": 6,
+          "averageStopMinutes": 2753.6065573770493,
+          "lastEntryAt": "2026-10-07T18:49:00.000Z",
+          "lastExitAt": "2026-10-10T06:10:00.000Z"
+        },
+        {
+          "id": "P04",
+          "parkingName": "بندر چابهار",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 62,
+          "exits": 61,
+          "stationed": 4,
+          "averageStopMinutes": 2755.189655172414,
+          "lastEntryAt": "2026-10-07T18:09:00.000Z",
+          "lastExitAt": "2026-10-10T06:40:00.000Z"
+        },
+        {
+          "id": "P02",
+          "parkingName": "بندر امام خمینی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 27,
+          "exits": 30,
+          "stationed": 0,
+          "averageStopMinutes": 2698.259259259259,
+          "lastEntryAt": "2026-10-05T15:50:00.000Z",
+          "lastExitAt": "2026-10-07T14:10:00.000Z"
+        },
+        {
+          "id": "P05",
+          "parkingName": "بندر انزلی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2699.6521739130435,
+          "lastEntryAt": "2026-10-05T17:03:00.000Z",
+          "lastExitAt": "2026-10-07T15:25:00.000Z"
+        },
+        {
+          "id": "P06",
+          "parkingName": "بندر امیرآباد",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2702.521739130435,
+          "lastEntryAt": "2026-10-05T16:09:00.000Z",
+          "lastExitAt": "2026-10-07T15:00:00.000Z"
+        },
+        {
+          "id": "P03",
+          "parkingName": "بندر بوشهر",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 22,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2703.681818181818,
+          "lastEntryAt": "2026-10-05T14:38:00.000Z",
+          "lastExitAt": "2026-10-07T13:45:00.000Z"
+        }
+      ],
+      "parkedByParking": [
+        {
+          "id": "P01",
+          "parkingName": "شهید رجایی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 67,
+          "exits": 64,
+          "stationed": 6,
+          "averageStopMinutes": 2753.6065573770493,
+          "lastEntryAt": "2026-10-07T18:49:00.000Z",
+          "lastExitAt": "2026-10-10T06:10:00.000Z"
+        },
+        {
+          "id": "P02",
+          "parkingName": "بندر امام خمینی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 27,
+          "exits": 30,
+          "stationed": 0,
+          "averageStopMinutes": 2698.259259259259,
+          "lastEntryAt": "2026-10-05T15:50:00.000Z",
+          "lastExitAt": "2026-10-07T14:10:00.000Z"
+        },
+        {
+          "id": "P03",
+          "parkingName": "بندر بوشهر",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 22,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2703.681818181818,
+          "lastEntryAt": "2026-10-05T14:38:00.000Z",
+          "lastExitAt": "2026-10-07T13:45:00.000Z"
+        },
+        {
+          "id": "P04",
+          "parkingName": "بندر چابهار",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 62,
+          "exits": 61,
+          "stationed": 4,
+          "averageStopMinutes": 2755.189655172414,
+          "lastEntryAt": "2026-10-07T18:09:00.000Z",
+          "lastExitAt": "2026-10-10T06:40:00.000Z"
+        },
+        {
+          "id": "P05",
+          "parkingName": "بندر انزلی",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2699.6521739130435,
+          "lastEntryAt": "2026-10-05T17:03:00.000Z",
+          "lastExitAt": "2026-10-07T15:25:00.000Z"
+        },
+        {
+          "id": "P06",
+          "parkingName": "بندر امیرآباد",
+          "timeZone": "Asia/Tehran",
+          "active": true,
+          "entries": 23,
+          "exits": 25,
+          "stationed": 0,
+          "averageStopMinutes": 2702.521739130435,
+          "lastEntryAt": "2026-10-05T16:09:00.000Z",
+          "lastExitAt": "2026-10-07T15:00:00.000Z"
+        }
+      ],
+      "routeTraffic": [
+        {
+          "id": "P01→P02",
+          "originParkingId": "P01",
+          "destinationParkingId": "P02",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر امام خمینی",
+          "routeName": "شهید رجایی → بندر امام خمینی",
+          "trips": 30,
+          "completedTrips": 27,
+          "averageDurationMinutes": 189.5185185185185,
+          "estimatedMinutes": 168.40740740740742,
+          "delayedTrips": 19
+        },
+        {
+          "id": "P02→P04",
+          "originParkingId": "P02",
+          "destinationParkingId": "P04",
+          "originName": "بندر امام خمینی",
+          "destinationName": "بندر چابهار",
+          "routeName": "بندر امام خمینی → بندر چابهار",
+          "trips": 30,
+          "completedTrips": 30,
+          "averageDurationMinutes": 191.13333333333333,
+          "estimatedMinutes": 172.33333333333334,
+          "delayedTrips": 18
+        },
+        {
+          "id": "P04→P01",
+          "originParkingId": "P04",
+          "destinationParkingId": "P01",
+          "originName": "بندر چابهار",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر چابهار → شهید رجایی",
+          "trips": 27,
+          "completedTrips": 27,
+          "averageDurationMinutes": 184.07407407407408,
+          "estimatedMinutes": 164.92592592592592,
+          "delayedTrips": 17
+        },
+        {
+          "id": "P04→P05",
+          "originParkingId": "P04",
+          "destinationParkingId": "P05",
+          "originName": "بندر چابهار",
+          "destinationName": "بندر انزلی",
+          "routeName": "بندر چابهار → بندر انزلی",
+          "trips": 26,
+          "completedTrips": 23,
+          "averageDurationMinutes": 189.47826086956522,
+          "estimatedMinutes": 173.3913043478261,
+          "delayedTrips": 14
+        },
+        {
+          "id": "P05→P01",
+          "originParkingId": "P05",
+          "destinationParkingId": "P01",
+          "originName": "بندر انزلی",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر انزلی → شهید رجایی",
+          "trips": 25,
+          "completedTrips": 25,
+          "averageDurationMinutes": 186.2,
+          "estimatedMinutes": 167.4,
+          "delayedTrips": 15
+        },
+        {
+          "id": "P01→P04",
+          "originParkingId": "P01",
+          "destinationParkingId": "P04",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر چابهار",
+          "routeName": "شهید رجایی → بندر چابهار",
+          "trips": 22,
+          "completedTrips": 22,
+          "averageDurationMinutes": 187.1818181818182,
+          "estimatedMinutes": 170.9090909090909,
+          "delayedTrips": 12
+        },
+        {
+          "id": "P03→P06",
+          "originParkingId": "P03",
+          "destinationParkingId": "P06",
+          "originName": "بندر بوشهر",
+          "destinationName": "بندر امیرآباد",
+          "routeName": "بندر بوشهر → بندر امیرآباد",
+          "trips": 15,
+          "completedTrips": 15,
+          "averageDurationMinutes": 181.8,
+          "estimatedMinutes": 163,
+          "delayedTrips": 9
+        },
+        {
+          "id": "P06→P01",
+          "originParkingId": "P06",
+          "destinationParkingId": "P01",
+          "originName": "بندر امیرآباد",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر امیرآباد → شهید رجایی",
+          "trips": 15,
+          "completedTrips": 15,
+          "averageDurationMinutes": 194.8,
+          "estimatedMinutes": 176,
+          "delayedTrips": 9
+        },
+        {
+          "id": "P01→P03",
+          "originParkingId": "P01",
+          "destinationParkingId": "P03",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر بوشهر",
+          "routeName": "شهید رجایی → بندر بوشهر",
+          "trips": 12,
+          "completedTrips": 12,
+          "averageDurationMinutes": 183.41666666666666,
+          "estimatedMinutes": 163.83333333333334,
+          "delayedTrips": 7
+        },
+        {
+          "id": "P06→P03",
+          "originParkingId": "P06",
+          "destinationParkingId": "P03",
+          "originName": "بندر امیرآباد",
+          "destinationName": "بندر بوشهر",
+          "routeName": "بندر امیرآباد → بندر بوشهر",
+          "trips": 10,
+          "completedTrips": 10,
+          "averageDurationMinutes": 181.8,
+          "estimatedMinutes": 163,
+          "delayedTrips": 6
+        },
+        {
+          "id": "P03→P04",
+          "originParkingId": "P03",
+          "destinationParkingId": "P04",
+          "originName": "بندر بوشهر",
+          "destinationName": "بندر چابهار",
+          "routeName": "بندر بوشهر → بندر چابهار",
+          "trips": 10,
+          "completedTrips": 10,
+          "averageDurationMinutes": 177.8,
+          "estimatedMinutes": 159,
+          "delayedTrips": 6
+        },
+        {
+          "id": "P04→P06",
+          "originParkingId": "P04",
+          "destinationParkingId": "P06",
+          "originName": "بندر چابهار",
+          "destinationName": "بندر امیرآباد",
+          "routeName": "بندر چابهار → بندر امیرآباد",
+          "trips": 8,
+          "completedTrips": 8,
+          "averageDurationMinutes": 195.625,
+          "estimatedMinutes": 178,
+          "delayedTrips": 5
+        }
+      ],
+      "routeDuration": [
+        {
+          "id": "P01→P02",
+          "originParkingId": "P01",
+          "destinationParkingId": "P02",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر امام خمینی",
+          "routeName": "شهید رجایی → بندر امام خمینی",
+          "trips": 30,
+          "completedTrips": 27,
+          "averageDurationMinutes": 189.5185185185185,
+          "estimatedMinutes": 168.40740740740742,
+          "delayedTrips": 19
+        },
+        {
+          "id": "P02→P04",
+          "originParkingId": "P02",
+          "destinationParkingId": "P04",
+          "originName": "بندر امام خمینی",
+          "destinationName": "بندر چابهار",
+          "routeName": "بندر امام خمینی → بندر چابهار",
+          "trips": 30,
+          "completedTrips": 30,
+          "averageDurationMinutes": 191.13333333333333,
+          "estimatedMinutes": 172.33333333333334,
+          "delayedTrips": 18
+        },
+        {
+          "id": "P04→P01",
+          "originParkingId": "P04",
+          "destinationParkingId": "P01",
+          "originName": "بندر چابهار",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر چابهار → شهید رجایی",
+          "trips": 27,
+          "completedTrips": 27,
+          "averageDurationMinutes": 184.07407407407408,
+          "estimatedMinutes": 164.92592592592592,
+          "delayedTrips": 17
+        },
+        {
+          "id": "P04→P05",
+          "originParkingId": "P04",
+          "destinationParkingId": "P05",
+          "originName": "بندر چابهار",
+          "destinationName": "بندر انزلی",
+          "routeName": "بندر چابهار → بندر انزلی",
+          "trips": 26,
+          "completedTrips": 23,
+          "averageDurationMinutes": 189.47826086956522,
+          "estimatedMinutes": 173.3913043478261,
+          "delayedTrips": 14
+        },
+        {
+          "id": "P03→P06",
+          "originParkingId": "P03",
+          "destinationParkingId": "P06",
+          "originName": "بندر بوشهر",
+          "destinationName": "بندر امیرآباد",
+          "routeName": "بندر بوشهر → بندر امیرآباد",
+          "trips": 15,
+          "completedTrips": 15,
+          "averageDurationMinutes": 181.8,
+          "estimatedMinutes": 163,
+          "delayedTrips": 9
+        },
+        {
+          "id": "P06→P01",
+          "originParkingId": "P06",
+          "destinationParkingId": "P01",
+          "originName": "بندر امیرآباد",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر امیرآباد → شهید رجایی",
+          "trips": 15,
+          "completedTrips": 15,
+          "averageDurationMinutes": 194.8,
+          "estimatedMinutes": 176,
+          "delayedTrips": 9
+        },
+        {
+          "id": "P01→P03",
+          "originParkingId": "P01",
+          "destinationParkingId": "P03",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر بوشهر",
+          "routeName": "شهید رجایی → بندر بوشهر",
+          "trips": 12,
+          "completedTrips": 12,
+          "averageDurationMinutes": 183.41666666666666,
+          "estimatedMinutes": 163.83333333333334,
+          "delayedTrips": 7
+        },
+        {
+          "id": "P05→P01",
+          "originParkingId": "P05",
+          "destinationParkingId": "P01",
+          "originName": "بندر انزلی",
+          "destinationName": "شهید رجایی",
+          "routeName": "بندر انزلی → شهید رجایی",
+          "trips": 25,
+          "completedTrips": 25,
+          "averageDurationMinutes": 186.2,
+          "estimatedMinutes": 167.4,
+          "delayedTrips": 15
+        },
+        {
+          "id": "P01→P04",
+          "originParkingId": "P01",
+          "destinationParkingId": "P04",
+          "originName": "شهید رجایی",
+          "destinationName": "بندر چابهار",
+          "routeName": "شهید رجایی → بندر چابهار",
+          "trips": 22,
+          "completedTrips": 22,
+          "averageDurationMinutes": 187.1818181818182,
+          "estimatedMinutes": 170.9090909090909,
+          "delayedTrips": 12
+        },
+        {
+          "id": "P06→P03",
+          "originParkingId": "P06",
+          "destinationParkingId": "P03",
+          "originName": "بندر امیرآباد",
+          "destinationName": "بندر بوشهر",
+          "routeName": "بندر امیرآباد → بندر بوشهر",
+          "trips": 10,
+          "completedTrips": 10,
+          "averageDurationMinutes": 181.8,
+          "estimatedMinutes": 163,
+          "delayedTrips": 6
+        },
+        {
+          "id": "P03→P04",
+          "originParkingId": "P03",
+          "destinationParkingId": "P04",
+          "originName": "بندر بوشهر",
+          "destinationName": "بندر چابهار",
+          "routeName": "بندر بوشهر → بندر چابهار",
+          "trips": 10,
+          "completedTrips": 10,
+          "averageDurationMinutes": 177.8,
+          "estimatedMinutes": 159,
+          "delayedTrips": 6
+        },
+        {
+          "id": "P04→P06",
+          "originParkingId": "P04",
+          "destinationParkingId": "P06",
+          "originName": "بندر چابهار",
+          "destinationName": "بندر امیرآباد",
+          "routeName": "بندر چابهار → بندر امیرآباد",
+          "trips": 8,
+          "completedTrips": 8,
+          "averageDurationMinutes": 195.625,
+          "estimatedMinutes": 178,
+          "delayedTrips": 5
+        }
+      ],
+      "durationComparison": [
+        {
+          "id": "V001",
+          "vehicleId": "V001",
+          "vehicleTitle": "آذرخش",
+          "registration": "IR-2100",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V002",
+          "vehicleId": "V002",
+          "vehicleTitle": "مروارید",
+          "registration": "IR-2101",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 10
+        },
+        {
+          "id": "V003",
+          "vehicleId": "V003",
+          "vehicleTitle": "دریابان",
+          "registration": "IR-2102",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V004",
+          "vehicleId": "V004",
+          "vehicleTitle": "سپهر",
+          "registration": "IR-2103",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V005",
+          "vehicleId": "V005",
+          "vehicleTitle": "خلیج فارس",
+          "registration": "IR-2104",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V006",
+          "vehicleId": "V006",
+          "vehicleTitle": "آریا",
+          "registration": "IR-2105",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V007",
+          "vehicleId": "V007",
+          "vehicleTitle": "ماهان",
+          "registration": "IR-2106",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 195.78571428571428,
+          "estimatedMinutes": 174.35714285714286,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V008",
+          "vehicleId": "V008",
+          "vehicleTitle": "باران",
+          "registration": "IR-2107",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V009",
+          "vehicleId": "V009",
+          "vehicleTitle": "نیلگون",
+          "registration": "IR-2108",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V010",
+          "vehicleId": "V010",
+          "vehicleTitle": "ساحل",
+          "registration": "IR-2109",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 194.42857142857142,
+          "estimatedMinutes": 176.78571428571428,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V011",
+          "vehicleId": "V011",
+          "vehicleTitle": "مرجان",
+          "registration": "IR-2110",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V012",
+          "vehicleId": "V012",
+          "vehicleTitle": "آفتاب",
+          "registration": "IR-2111",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V013",
+          "vehicleId": "V013",
+          "vehicleTitle": "کارون",
+          "registration": "IR-2112",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V014",
+          "vehicleId": "V014",
+          "vehicleTitle": "دنا",
+          "registration": "IR-2113",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V015",
+          "vehicleId": "V015",
+          "vehicleTitle": "الوند",
+          "registration": "IR-2114",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V016",
+          "vehicleId": "V016",
+          "vehicleTitle": "هما",
+          "registration": "IR-2115",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        }
+      ],
+      "vehicleTrips": [
+        {
+          "id": "V001",
+          "vehicleId": "V001",
+          "vehicleTitle": "آذرخش",
+          "registration": "IR-2100",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V002",
+          "vehicleId": "V002",
+          "vehicleTitle": "مروارید",
+          "registration": "IR-2101",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 10
+        },
+        {
+          "id": "V003",
+          "vehicleId": "V003",
+          "vehicleTitle": "دریابان",
+          "registration": "IR-2102",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V004",
+          "vehicleId": "V004",
+          "vehicleTitle": "سپهر",
+          "registration": "IR-2103",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V005",
+          "vehicleId": "V005",
+          "vehicleTitle": "خلیج فارس",
+          "registration": "IR-2104",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V006",
+          "vehicleId": "V006",
+          "vehicleTitle": "آریا",
+          "registration": "IR-2105",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V007",
+          "vehicleId": "V007",
+          "vehicleTitle": "ماهان",
+          "registration": "IR-2106",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 195.78571428571428,
+          "estimatedMinutes": 174.35714285714286,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V008",
+          "vehicleId": "V008",
+          "vehicleTitle": "باران",
+          "registration": "IR-2107",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V009",
+          "vehicleId": "V009",
+          "vehicleTitle": "نیلگون",
+          "registration": "IR-2108",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V010",
+          "vehicleId": "V010",
+          "vehicleTitle": "ساحل",
+          "registration": "IR-2109",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 194.42857142857142,
+          "estimatedMinutes": 176.78571428571428,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V011",
+          "vehicleId": "V011",
+          "vehicleTitle": "مرجان",
+          "registration": "IR-2110",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V012",
+          "vehicleId": "V012",
+          "vehicleTitle": "آفتاب",
+          "registration": "IR-2111",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V013",
+          "vehicleId": "V013",
+          "vehicleTitle": "کارون",
+          "registration": "IR-2112",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V014",
+          "vehicleId": "V014",
+          "vehicleTitle": "دنا",
+          "registration": "IR-2113",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V015",
+          "vehicleId": "V015",
+          "vehicleTitle": "الوند",
+          "registration": "IR-2114",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V016",
+          "vehicleId": "V016",
+          "vehicleTitle": "هما",
+          "registration": "IR-2115",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        }
+      ],
+      "vehicleRanking": [
+        {
+          "id": "V001",
+          "vehicleId": "V001",
+          "vehicleTitle": "آذرخش",
+          "registration": "IR-2100",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V002",
+          "vehicleId": "V002",
+          "vehicleTitle": "مروارید",
+          "registration": "IR-2101",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 10
+        },
+        {
+          "id": "V003",
+          "vehicleId": "V003",
+          "vehicleTitle": "دریابان",
+          "registration": "IR-2102",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V004",
+          "vehicleId": "V004",
+          "vehicleTitle": "سپهر",
+          "registration": "IR-2103",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V005",
+          "vehicleId": "V005",
+          "vehicleTitle": "خلیج فارس",
+          "registration": "IR-2104",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V006",
+          "vehicleId": "V006",
+          "vehicleTitle": "آریا",
+          "registration": "IR-2105",
+          "trips": 15,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V007",
+          "vehicleId": "V007",
+          "vehicleTitle": "ماهان",
+          "registration": "IR-2106",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 195.78571428571428,
+          "estimatedMinutes": 174.35714285714286,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V008",
+          "vehicleId": "V008",
+          "vehicleTitle": "باران",
+          "registration": "IR-2107",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V009",
+          "vehicleId": "V009",
+          "vehicleTitle": "نیلگون",
+          "registration": "IR-2108",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V010",
+          "vehicleId": "V010",
+          "vehicleTitle": "ساحل",
+          "registration": "IR-2109",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 194.42857142857142,
+          "estimatedMinutes": 176.78571428571428,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V011",
+          "vehicleId": "V011",
+          "vehicleTitle": "مرجان",
+          "registration": "IR-2110",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V012",
+          "vehicleId": "V012",
+          "vehicleTitle": "آفتاب",
+          "registration": "IR-2111",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 183.64285714285714,
+          "estimatedMinutes": 162.21428571428572,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V013",
+          "vehicleId": "V013",
+          "vehicleTitle": "کارون",
+          "registration": "IR-2112",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 187.21428571428572,
+          "estimatedMinutes": 167.07142857142858,
+          "delayedTrips": 9
+        },
+        {
+          "id": "V014",
+          "vehicleId": "V014",
+          "vehicleTitle": "دنا",
+          "registration": "IR-2113",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 191.21428571428572,
+          "estimatedMinutes": 171.92857142857142,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V015",
+          "vehicleId": "V015",
+          "vehicleTitle": "الوند",
+          "registration": "IR-2114",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 182.28571428571428,
+          "estimatedMinutes": 164.64285714285714,
+          "delayedTrips": 8
+        },
+        {
+          "id": "V016",
+          "vehicleId": "V016",
+          "vehicleTitle": "هما",
+          "registration": "IR-2115",
+          "trips": 14,
+          "completedTrips": 14,
+          "averageDurationMinutes": 185,
+          "estimatedMinutes": 169.5,
+          "delayedTrips": 8
+        }
+      ],
+      "sankey": {
+        "nodes": [
+          {
+            "name": "origin:P01",
+            "label": "شهید رجایی",
+            "side": "origin"
+          },
+          {
+            "name": "destination:P02",
+            "label": "بندر امام خمینی",
+            "side": "destination"
+          },
+          {
+            "name": "origin:P02",
+            "label": "بندر امام خمینی",
+            "side": "origin"
+          },
+          {
+            "name": "destination:P04",
+            "label": "بندر چابهار",
+            "side": "destination"
+          },
+          {
+            "name": "origin:P04",
+            "label": "بندر چابهار",
+            "side": "origin"
+          },
+          {
+            "name": "destination:P01",
+            "label": "شهید رجایی",
+            "side": "destination"
+          },
+          {
+            "name": "destination:P05",
+            "label": "بندر انزلی",
+            "side": "destination"
+          },
+          {
+            "name": "origin:P03",
+            "label": "بندر بوشهر",
+            "side": "origin"
+          },
+          {
+            "name": "destination:P06",
+            "label": "بندر امیرآباد",
+            "side": "destination"
+          },
+          {
+            "name": "origin:P06",
+            "label": "بندر امیرآباد",
+            "side": "origin"
+          },
+          {
+            "name": "destination:P03",
+            "label": "بندر بوشهر",
+            "side": "destination"
+          },
+          {
+            "name": "origin:P05",
+            "label": "بندر انزلی",
+            "side": "origin"
+          }
+        ],
+        "links": [
+          {
+            "source": "origin:P01",
+            "target": "destination:P02",
+            "value": 30
+          },
+          {
+            "source": "origin:P02",
+            "target": "destination:P04",
+            "value": 30
+          },
+          {
+            "source": "origin:P04",
+            "target": "destination:P01",
+            "value": 27
+          },
+          {
+            "source": "origin:P04",
+            "target": "destination:P05",
+            "value": 26
+          },
+          {
+            "source": "origin:P03",
+            "target": "destination:P06",
+            "value": 15
+          },
+          {
+            "source": "origin:P06",
+            "target": "destination:P01",
+            "value": 15
+          },
+          {
+            "source": "origin:P01",
+            "target": "destination:P03",
+            "value": 12
+          },
+          {
+            "source": "origin:P05",
+            "target": "destination:P01",
+            "value": 25
+          },
+          {
+            "source": "origin:P01",
+            "target": "destination:P04",
+            "value": 22
+          },
+          {
+            "source": "origin:P06",
+            "target": "destination:P03",
+            "value": 10
+          },
+          {
+            "source": "origin:P03",
+            "target": "destination:P04",
+            "value": 10
+          },
+          {
+            "source": "origin:P04",
+            "target": "destination:P06",
+            "value": 8
+          }
+        ]
+      }
+    },
+    "items": [
+      {
+        "id": "P01",
+        "parkingName": "شهید رجایی",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 67,
+        "exits": 64,
+        "stationed": 6,
+        "averageStopMinutes": 2753.6065573770493,
+        "lastEntryAt": "2026-10-07T18:49:00.000Z",
+        "lastExitAt": "2026-10-10T06:10:00.000Z"
+      },
+      {
+        "id": "P04",
+        "parkingName": "بندر چابهار",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 62,
+        "exits": 61,
+        "stationed": 4,
+        "averageStopMinutes": 2755.189655172414,
+        "lastEntryAt": "2026-10-07T18:09:00.000Z",
+        "lastExitAt": "2026-10-10T06:40:00.000Z"
+      },
+      {
+        "id": "P02",
+        "parkingName": "بندر امام خمینی",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 27,
+        "exits": 30,
+        "stationed": 0,
+        "averageStopMinutes": 2698.259259259259,
+        "lastEntryAt": "2026-10-05T15:50:00.000Z",
+        "lastExitAt": "2026-10-07T14:10:00.000Z"
+      },
+      {
+        "id": "P05",
+        "parkingName": "بندر انزلی",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 23,
+        "exits": 25,
+        "stationed": 0,
+        "averageStopMinutes": 2699.6521739130435,
+        "lastEntryAt": "2026-10-05T17:03:00.000Z",
+        "lastExitAt": "2026-10-07T15:25:00.000Z"
+      },
+      {
+        "id": "P06",
+        "parkingName": "بندر امیرآباد",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 23,
+        "exits": 25,
+        "stationed": 0,
+        "averageStopMinutes": 2702.521739130435,
+        "lastEntryAt": "2026-10-05T16:09:00.000Z",
+        "lastExitAt": "2026-10-07T15:00:00.000Z"
+      },
+      {
+        "id": "P03",
+        "parkingName": "بندر بوشهر",
+        "timeZone": "Asia/Tehran",
+        "active": true,
+        "entries": 22,
+        "exits": 25,
+        "stationed": 0,
+        "averageStopMinutes": 2703.681818181818,
+        "lastEntryAt": "2026-10-05T14:38:00.000Z",
+        "lastExitAt": "2026-10-07T13:45:00.000Z"
+      }
+    ],
+    "vehicles": [
+      {
+        "id": "V001",
+        "title": "آذرخش",
+        "registration": "IR-2100",
+        "active": true,
+        "initialParkingId": "P01",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V002",
+        "title": "مروارید",
+        "registration": "IR-2101",
+        "active": true,
+        "initialParkingId": "P02",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V003",
+        "title": "دریابان",
+        "registration": "IR-2102",
+        "active": true,
+        "initialParkingId": "P03",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V004",
+        "title": "سپهر",
+        "registration": "IR-2103",
+        "active": true,
+        "initialParkingId": "P04",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V005",
+        "title": "خلیج فارس",
+        "registration": "IR-2104",
+        "active": true,
+        "initialParkingId": "P05",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V006",
+        "title": "آریا",
+        "registration": "IR-2105",
+        "active": true,
+        "initialParkingId": "P06",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V007",
+        "title": "ماهان",
+        "registration": "IR-2106",
+        "active": true,
+        "initialParkingId": "P01",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V008",
+        "title": "باران",
+        "registration": "IR-2107",
+        "active": true,
+        "initialParkingId": "P02",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V009",
+        "title": "نیلگون",
+        "registration": "IR-2108",
+        "active": true,
+        "initialParkingId": "P03",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V010",
+        "title": "ساحل",
+        "registration": "IR-2109",
+        "active": true,
+        "initialParkingId": "P04",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V011",
+        "title": "مرجان",
+        "registration": "IR-2110",
+        "active": true,
+        "initialParkingId": "P05",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V012",
+        "title": "آفتاب",
+        "registration": "IR-2111",
+        "active": true,
+        "initialParkingId": "P06",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V013",
+        "title": "کارون",
+        "registration": "IR-2112",
+        "active": true,
+        "initialParkingId": "P01",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V014",
+        "title": "دنا",
+        "registration": "IR-2113",
+        "active": true,
+        "initialParkingId": "P02",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V015",
+        "title": "الوند",
+        "registration": "IR-2114",
+        "active": true,
+        "initialParkingId": "P03",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V016",
+        "title": "هما",
+        "registration": "IR-2115",
+        "active": true,
+        "initialParkingId": "P04",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V017",
+        "title": "پارس",
+        "registration": "IR-2116",
+        "active": false,
+        "initialParkingId": "P05",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      },
+      {
+        "id": "V018",
+        "title": "آرمان",
+        "registration": "IR-2117",
+        "active": false,
+        "initialParkingId": "P06",
+        "vessel_type": "Cargo",
+        "flag": "IR"
+      }
+    ],
+    "parkings": [
+      {
+        "id": "P01",
+        "name": "شهید رجایی",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      },
+      {
+        "id": "P02",
+        "name": "بندر امام خمینی",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      },
+      {
+        "id": "P03",
+        "name": "بندر بوشهر",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      },
+      {
+        "id": "P04",
+        "name": "بندر چابهار",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      },
+      {
+        "id": "P05",
+        "name": "بندر انزلی",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      },
+      {
+        "id": "P06",
+        "name": "بندر امیرآباد",
+        "active": true,
+        "timezone": "Asia/Tehran"
+      }
+    ],
+    "trips": [
+      {
+        "id": "T0001",
+        "vehicleId": "V001",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-11T08:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T09:25:00.000Z",
+        "actualArrivalAt": "2026-09-11T09:07:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0002",
+        "vehicleId": "V001",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T09:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T10:48:00.000Z",
+        "actualArrivalAt": "2026-09-13T10:48:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0003",
+        "vehicleId": "V001",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-15T10:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T12:11:00.000Z",
+        "actualArrivalAt": "2026-09-15T12:23:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0004",
+        "vehicleId": "V001",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-17T11:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T13:34:00.000Z",
+        "actualArrivalAt": "2026-09-17T14:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0005",
+        "vehicleId": "V001",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T08:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T10:17:00.000Z",
+        "actualArrivalAt": "2026-09-19T11:22:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0006",
+        "vehicleId": "V001",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-21T09:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T11:40:00.000Z",
+        "actualArrivalAt": "2026-09-21T11:22:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0007",
+        "vehicleId": "V001",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-23T10:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T13:03:00.000Z",
+        "actualArrivalAt": "2026-09-23T13:03:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0008",
+        "vehicleId": "V001",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T11:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T14:26:00.000Z",
+        "actualArrivalAt": "2026-09-25T14:38:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0009",
+        "vehicleId": "V001",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-27T08:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T11:09:00.000Z",
+        "actualArrivalAt": "2026-09-27T11:44:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0010",
+        "vehicleId": "V001",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-29T09:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T12:32:00.000Z",
+        "actualArrivalAt": "2026-09-29T13:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0011",
+        "vehicleId": "V001",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T10:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T13:55:00.000Z",
+        "actualArrivalAt": "2026-10-01T13:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0012",
+        "vehicleId": "V001",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-03T11:30:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T15:18:00.000Z",
+        "actualArrivalAt": "2026-10-03T15:18:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0013",
+        "vehicleId": "V001",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-05T08:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T12:01:00.000Z",
+        "actualArrivalAt": "2026-10-05T12:13:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0014",
+        "vehicleId": "V001",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T09:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T13:24:00.000Z",
+        "actualArrivalAt": "2026-10-07T13:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV001",
+        "vehicleId": "V001",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-10T06:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T11:40:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0016",
+        "vehicleId": "V002",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-11T08:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T10:07:00.000Z",
+        "actualArrivalAt": "2026-09-11T10:07:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0017",
+        "vehicleId": "V002",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T09:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T11:30:00.000Z",
+        "actualArrivalAt": "2026-09-13T11:42:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0018",
+        "vehicleId": "V002",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-15T10:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T12:53:00.000Z",
+        "actualArrivalAt": "2026-09-15T13:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0019",
+        "vehicleId": "V002",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-17T11:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T14:16:00.000Z",
+        "actualArrivalAt": "2026-09-17T15:21:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0020",
+        "vehicleId": "V002",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T08:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T10:59:00.000Z",
+        "actualArrivalAt": "2026-09-19T10:41:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0021",
+        "vehicleId": "V002",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-21T09:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T12:22:00.000Z",
+        "actualArrivalAt": "2026-09-21T12:22:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0022",
+        "vehicleId": "V002",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-23T10:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T13:45:00.000Z",
+        "actualArrivalAt": "2026-09-23T13:57:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0023",
+        "vehicleId": "V002",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T11:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T15:08:00.000Z",
+        "actualArrivalAt": "2026-09-25T15:43:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0024",
+        "vehicleId": "V002",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-27T08:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T11:51:00.000Z",
+        "actualArrivalAt": "2026-09-27T12:56:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0025",
+        "vehicleId": "V002",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-29T09:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T13:14:00.000Z",
+        "actualArrivalAt": "2026-09-29T12:56:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0026",
+        "vehicleId": "V002",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T10:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T14:37:00.000Z",
+        "actualArrivalAt": "2026-10-01T14:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0027",
+        "vehicleId": "V002",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-03T11:55:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T16:00:00.000Z",
+        "actualArrivalAt": "2026-10-03T16:12:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0028",
+        "vehicleId": "V002",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-05T08:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T09:53:00.000Z",
+        "actualArrivalAt": "2026-10-05T10:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0029",
+        "vehicleId": "V002",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T09:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T11:16:00.000Z",
+        "actualArrivalAt": "2026-10-07T12:21:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV002",
+        "vehicleId": "V002",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-10T06:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T07:50:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0031",
+        "vehicleId": "V003",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-11T08:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T10:49:00.000Z",
+        "actualArrivalAt": "2026-09-11T11:01:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0032",
+        "vehicleId": "V003",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T10:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T12:12:00.000Z",
+        "actualArrivalAt": "2026-09-13T12:47:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0033",
+        "vehicleId": "V003",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-15T11:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T13:35:00.000Z",
+        "actualArrivalAt": "2026-09-15T14:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0034",
+        "vehicleId": "V003",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-17T12:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T14:58:00.000Z",
+        "actualArrivalAt": "2026-09-17T14:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0035",
+        "vehicleId": "V003",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T08:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T11:41:00.000Z",
+        "actualArrivalAt": "2026-09-19T11:41:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0036",
+        "vehicleId": "V003",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-21T10:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T13:04:00.000Z",
+        "actualArrivalAt": "2026-09-21T13:16:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0037",
+        "vehicleId": "V003",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-23T11:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T14:27:00.000Z",
+        "actualArrivalAt": "2026-09-23T15:02:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0038",
+        "vehicleId": "V003",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T12:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T15:50:00.000Z",
+        "actualArrivalAt": "2026-09-25T16:55:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0039",
+        "vehicleId": "V003",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-27T08:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T12:33:00.000Z",
+        "actualArrivalAt": "2026-09-27T12:15:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0040",
+        "vehicleId": "V003",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-29T10:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T13:56:00.000Z",
+        "actualArrivalAt": "2026-09-29T13:56:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0041",
+        "vehicleId": "V003",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T11:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T15:19:00.000Z",
+        "actualArrivalAt": "2026-10-01T15:31:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0042",
+        "vehicleId": "V003",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-10-03T12:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T13:52:00.000Z",
+        "actualArrivalAt": "2026-10-03T14:27:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0043",
+        "vehicleId": "V003",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-10-05T08:50:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T10:35:00.000Z",
+        "actualArrivalAt": "2026-10-05T11:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0044",
+        "vehicleId": "V003",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T10:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T11:58:00.000Z",
+        "actualArrivalAt": "2026-10-07T11:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV003",
+        "vehicleId": "V003",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-10T05:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T10:40:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0046",
+        "vehicleId": "V004",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-11T09:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T11:31:00.000Z",
+        "actualArrivalAt": "2026-09-11T12:06:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0047",
+        "vehicleId": "V004",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T10:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T12:54:00.000Z",
+        "actualArrivalAt": "2026-09-13T13:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0048",
+        "vehicleId": "V004",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-15T11:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T14:17:00.000Z",
+        "actualArrivalAt": "2026-09-15T13:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0049",
+        "vehicleId": "V004",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-17T12:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T15:40:00.000Z",
+        "actualArrivalAt": "2026-09-17T15:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0050",
+        "vehicleId": "V004",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T09:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T12:23:00.000Z",
+        "actualArrivalAt": "2026-09-19T12:35:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0051",
+        "vehicleId": "V004",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-21T10:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T13:46:00.000Z",
+        "actualArrivalAt": "2026-09-21T14:21:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0052",
+        "vehicleId": "V004",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-23T11:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T15:09:00.000Z",
+        "actualArrivalAt": "2026-09-23T16:14:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0053",
+        "vehicleId": "V004",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T12:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T16:32:00.000Z",
+        "actualArrivalAt": "2026-09-25T16:14:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0054",
+        "vehicleId": "V004",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-27T09:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T13:15:00.000Z",
+        "actualArrivalAt": "2026-09-27T13:15:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0055",
+        "vehicleId": "V004",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-29T10:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T14:38:00.000Z",
+        "actualArrivalAt": "2026-09-29T14:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0056",
+        "vehicleId": "V004",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T11:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T13:11:00.000Z",
+        "actualArrivalAt": "2026-10-01T13:46:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0057",
+        "vehicleId": "V004",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-03T12:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T14:34:00.000Z",
+        "actualArrivalAt": "2026-10-03T15:39:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0058",
+        "vehicleId": "V004",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-05T09:15:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T11:17:00.000Z",
+        "actualArrivalAt": "2026-10-05T10:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0059",
+        "vehicleId": "V004",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T10:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T12:40:00.000Z",
+        "actualArrivalAt": "2026-10-07T12:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV004",
+        "vehicleId": "V004",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-10T05:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T06:50:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0061",
+        "vehicleId": "V005",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-11T09:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T12:13:00.000Z",
+        "actualArrivalAt": "2026-09-11T13:18:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0062",
+        "vehicleId": "V005",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T10:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T13:36:00.000Z",
+        "actualArrivalAt": "2026-09-13T13:18:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0063",
+        "vehicleId": "V005",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-15T12:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T14:59:00.000Z",
+        "actualArrivalAt": "2026-09-15T14:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0064",
+        "vehicleId": "V005",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-17T13:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T16:22:00.000Z",
+        "actualArrivalAt": "2026-09-17T16:34:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0065",
+        "vehicleId": "V005",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T09:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T13:05:00.000Z",
+        "actualArrivalAt": "2026-09-19T13:40:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0066",
+        "vehicleId": "V005",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-21T10:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T14:28:00.000Z",
+        "actualArrivalAt": "2026-09-21T15:33:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0067",
+        "vehicleId": "V005",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-23T12:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T15:51:00.000Z",
+        "actualArrivalAt": "2026-09-23T15:33:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0068",
+        "vehicleId": "V005",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T13:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T17:14:00.000Z",
+        "actualArrivalAt": "2026-09-25T17:14:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0069",
+        "vehicleId": "V005",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-27T09:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T11:07:00.000Z",
+        "actualArrivalAt": "2026-09-27T11:19:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0070",
+        "vehicleId": "V005",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-29T10:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T12:30:00.000Z",
+        "actualArrivalAt": "2026-09-29T13:05:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0071",
+        "vehicleId": "V005",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T12:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T13:53:00.000Z",
+        "actualArrivalAt": "2026-10-01T14:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0072",
+        "vehicleId": "V005",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-03T13:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T15:16:00.000Z",
+        "actualArrivalAt": "2026-10-03T14:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0073",
+        "vehicleId": "V005",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-05T09:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T11:59:00.000Z",
+        "actualArrivalAt": "2026-10-05T11:59:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0074",
+        "vehicleId": "V005",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T10:50:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T13:22:00.000Z",
+        "actualArrivalAt": "2026-10-07T13:34:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV005",
+        "vehicleId": "V005",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-10T04:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T09:40:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0076",
+        "vehicleId": "V006",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-11T10:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T12:55:00.000Z",
+        "actualArrivalAt": "2026-09-11T12:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0077",
+        "vehicleId": "V006",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T11:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T14:18:00.000Z",
+        "actualArrivalAt": "2026-09-13T14:18:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0078",
+        "vehicleId": "V006",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-15T12:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T15:41:00.000Z",
+        "actualArrivalAt": "2026-09-15T15:53:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0079",
+        "vehicleId": "V006",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-17T13:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T17:04:00.000Z",
+        "actualArrivalAt": "2026-09-17T17:39:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0080",
+        "vehicleId": "V006",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T10:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T13:47:00.000Z",
+        "actualArrivalAt": "2026-09-19T14:52:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0081",
+        "vehicleId": "V006",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-21T11:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T15:10:00.000Z",
+        "actualArrivalAt": "2026-09-21T14:52:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0082",
+        "vehicleId": "V006",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-23T12:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T16:33:00.000Z",
+        "actualArrivalAt": "2026-09-23T16:33:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0083",
+        "vehicleId": "V006",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T13:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T15:06:00.000Z",
+        "actualArrivalAt": "2026-09-25T15:18:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0084",
+        "vehicleId": "V006",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-27T10:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T11:49:00.000Z",
+        "actualArrivalAt": "2026-09-27T12:24:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0085",
+        "vehicleId": "V006",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-29T11:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T13:12:00.000Z",
+        "actualArrivalAt": "2026-09-29T14:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0086",
+        "vehicleId": "V006",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T12:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T14:35:00.000Z",
+        "actualArrivalAt": "2026-10-01T14:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0087",
+        "vehicleId": "V006",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-10-03T13:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T15:58:00.000Z",
+        "actualArrivalAt": "2026-10-03T15:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0088",
+        "vehicleId": "V006",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-10-05T10:05:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T12:41:00.000Z",
+        "actualArrivalAt": "2026-10-05T12:53:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0089",
+        "vehicleId": "V006",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T11:15:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T14:04:00.000Z",
+        "actualArrivalAt": "2026-10-07T14:39:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "LV006",
+        "vehicleId": "V006",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-10T04:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-10T05:50:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0091",
+        "vehicleId": "V007",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-11T10:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T13:37:00.000Z",
+        "actualArrivalAt": "2026-09-11T13:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0092",
+        "vehicleId": "V007",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T11:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T15:00:00.000Z",
+        "actualArrivalAt": "2026-09-13T15:12:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0093",
+        "vehicleId": "V007",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-15T12:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T16:23:00.000Z",
+        "actualArrivalAt": "2026-09-15T16:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0094",
+        "vehicleId": "V007",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-17T14:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T17:46:00.000Z",
+        "actualArrivalAt": "2026-09-17T18:51:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0095",
+        "vehicleId": "V007",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T10:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T14:29:00.000Z",
+        "actualArrivalAt": "2026-09-19T14:11:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0096",
+        "vehicleId": "V007",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-21T11:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T15:52:00.000Z",
+        "actualArrivalAt": "2026-09-21T15:52:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0097",
+        "vehicleId": "V007",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-23T12:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T14:25:00.000Z",
+        "actualArrivalAt": "2026-09-23T14:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0098",
+        "vehicleId": "V007",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T14:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T15:48:00.000Z",
+        "actualArrivalAt": "2026-09-25T16:23:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0099",
+        "vehicleId": "V007",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-27T10:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T12:31:00.000Z",
+        "actualArrivalAt": "2026-09-27T13:36:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0100",
+        "vehicleId": "V007",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-29T11:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T13:54:00.000Z",
+        "actualArrivalAt": "2026-09-29T13:36:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0101",
+        "vehicleId": "V007",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T12:50:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T15:17:00.000Z",
+        "actualArrivalAt": "2026-10-01T15:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0102",
+        "vehicleId": "V007",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-03T14:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T16:40:00.000Z",
+        "actualArrivalAt": "2026-10-03T16:52:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0103",
+        "vehicleId": "V007",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-05T10:30:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T13:23:00.000Z",
+        "actualArrivalAt": "2026-10-05T13:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0104",
+        "vehicleId": "V007",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T11:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T14:46:00.000Z",
+        "actualArrivalAt": "2026-10-07T15:51:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0105",
+        "vehicleId": "V008",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-11T10:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T14:19:00.000Z",
+        "actualArrivalAt": "2026-09-11T14:31:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0106",
+        "vehicleId": "V008",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T12:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T15:42:00.000Z",
+        "actualArrivalAt": "2026-09-13T16:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0107",
+        "vehicleId": "V008",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-15T13:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T17:05:00.000Z",
+        "actualArrivalAt": "2026-09-15T18:10:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0108",
+        "vehicleId": "V008",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-17T14:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T18:28:00.000Z",
+        "actualArrivalAt": "2026-09-17T18:10:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0109",
+        "vehicleId": "V008",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T10:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T12:21:00.000Z",
+        "actualArrivalAt": "2026-09-19T12:21:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0110",
+        "vehicleId": "V008",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-21T12:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T13:44:00.000Z",
+        "actualArrivalAt": "2026-09-21T13:56:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0111",
+        "vehicleId": "V008",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-23T13:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T15:07:00.000Z",
+        "actualArrivalAt": "2026-09-23T15:42:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0112",
+        "vehicleId": "V008",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T14:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T16:30:00.000Z",
+        "actualArrivalAt": "2026-09-25T17:35:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0113",
+        "vehicleId": "V008",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-27T10:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T13:13:00.000Z",
+        "actualArrivalAt": "2026-09-27T12:55:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0114",
+        "vehicleId": "V008",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-29T12:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T14:36:00.000Z",
+        "actualArrivalAt": "2026-09-29T14:36:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0115",
+        "vehicleId": "V008",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T13:15:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T15:59:00.000Z",
+        "actualArrivalAt": "2026-10-01T16:11:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0116",
+        "vehicleId": "V008",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-03T14:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T17:22:00.000Z",
+        "actualArrivalAt": "2026-10-03T17:57:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0117",
+        "vehicleId": "V008",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-05T10:55:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T14:05:00.000Z",
+        "actualArrivalAt": "2026-10-05T15:10:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0118",
+        "vehicleId": "V008",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T12:05:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T15:28:00.000Z",
+        "actualArrivalAt": "2026-10-07T15:10:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0119",
+        "vehicleId": "V009",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-11T11:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T15:01:00.000Z",
+        "actualArrivalAt": "2026-09-11T15:36:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0120",
+        "vehicleId": "V009",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T12:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T16:24:00.000Z",
+        "actualArrivalAt": "2026-09-13T17:29:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0121",
+        "vehicleId": "V009",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-15T13:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T17:47:00.000Z",
+        "actualArrivalAt": "2026-09-15T17:29:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0122",
+        "vehicleId": "V009",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-17T14:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T16:20:00.000Z",
+        "actualArrivalAt": "2026-09-17T16:20:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0123",
+        "vehicleId": "V009",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T11:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T13:03:00.000Z",
+        "actualArrivalAt": "2026-09-19T13:15:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0124",
+        "vehicleId": "V009",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-21T12:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T14:26:00.000Z",
+        "actualArrivalAt": "2026-09-21T15:01:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0125",
+        "vehicleId": "V009",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-23T13:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T15:49:00.000Z",
+        "actualArrivalAt": "2026-09-23T16:54:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0126",
+        "vehicleId": "V009",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T14:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T17:12:00.000Z",
+        "actualArrivalAt": "2026-09-25T16:54:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0127",
+        "vehicleId": "V009",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-27T11:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T13:55:00.000Z",
+        "actualArrivalAt": "2026-09-27T13:55:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0128",
+        "vehicleId": "V009",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-29T12:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T15:18:00.000Z",
+        "actualArrivalAt": "2026-09-29T15:30:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0129",
+        "vehicleId": "V009",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T13:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T16:41:00.000Z",
+        "actualArrivalAt": "2026-10-01T17:16:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0130",
+        "vehicleId": "V009",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-10-03T14:50:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T18:04:00.000Z",
+        "actualArrivalAt": "2026-10-03T19:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0131",
+        "vehicleId": "V009",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-10-05T11:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T14:47:00.000Z",
+        "actualArrivalAt": "2026-10-05T14:29:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0132",
+        "vehicleId": "V009",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T12:30:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T16:10:00.000Z",
+        "actualArrivalAt": "2026-10-07T16:10:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0133",
+        "vehicleId": "V010",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-11T11:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T15:43:00.000Z",
+        "actualArrivalAt": "2026-09-11T16:48:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0134",
+        "vehicleId": "V010",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T12:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T17:06:00.000Z",
+        "actualArrivalAt": "2026-09-13T16:48:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0135",
+        "vehicleId": "V010",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-15T14:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T15:39:00.000Z",
+        "actualArrivalAt": "2026-09-15T15:39:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0136",
+        "vehicleId": "V010",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-17T15:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T17:02:00.000Z",
+        "actualArrivalAt": "2026-09-17T17:14:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0137",
+        "vehicleId": "V010",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T11:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T13:45:00.000Z",
+        "actualArrivalAt": "2026-09-19T14:20:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0138",
+        "vehicleId": "V010",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-21T12:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T15:08:00.000Z",
+        "actualArrivalAt": "2026-09-21T16:13:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0139",
+        "vehicleId": "V010",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-23T14:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T16:31:00.000Z",
+        "actualArrivalAt": "2026-09-23T16:13:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0140",
+        "vehicleId": "V010",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T15:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T17:54:00.000Z",
+        "actualArrivalAt": "2026-09-25T17:54:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0141",
+        "vehicleId": "V010",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-27T11:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T14:37:00.000Z",
+        "actualArrivalAt": "2026-09-27T14:49:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0142",
+        "vehicleId": "V010",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-29T12:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T16:00:00.000Z",
+        "actualArrivalAt": "2026-09-29T16:35:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0143",
+        "vehicleId": "V010",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T14:05:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T17:23:00.000Z",
+        "actualArrivalAt": "2026-10-01T18:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0144",
+        "vehicleId": "V010",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-03T15:15:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T18:46:00.000Z",
+        "actualArrivalAt": "2026-10-03T18:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0145",
+        "vehicleId": "V010",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-05T11:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T15:29:00.000Z",
+        "actualArrivalAt": "2026-10-05T15:29:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0146",
+        "vehicleId": "V010",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T12:55:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T16:52:00.000Z",
+        "actualArrivalAt": "2026-10-07T17:04:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0147",
+        "vehicleId": "V011",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-11T12:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T13:35:00.000Z",
+        "actualArrivalAt": "2026-09-11T13:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0148",
+        "vehicleId": "V011",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T13:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T14:58:00.000Z",
+        "actualArrivalAt": "2026-09-13T14:58:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0149",
+        "vehicleId": "V011",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-15T14:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T16:21:00.000Z",
+        "actualArrivalAt": "2026-09-15T16:33:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0150",
+        "vehicleId": "V011",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-17T15:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T17:44:00.000Z",
+        "actualArrivalAt": "2026-09-17T18:19:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0151",
+        "vehicleId": "V011",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T12:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T14:27:00.000Z",
+        "actualArrivalAt": "2026-09-19T15:32:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0152",
+        "vehicleId": "V011",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-21T13:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T15:50:00.000Z",
+        "actualArrivalAt": "2026-09-21T15:32:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0153",
+        "vehicleId": "V011",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-23T14:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T17:13:00.000Z",
+        "actualArrivalAt": "2026-09-23T17:13:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0154",
+        "vehicleId": "V011",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T15:40:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T18:36:00.000Z",
+        "actualArrivalAt": "2026-09-25T18:48:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0155",
+        "vehicleId": "V011",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-27T12:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T15:19:00.000Z",
+        "actualArrivalAt": "2026-09-27T15:54:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0156",
+        "vehicleId": "V011",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-29T13:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T16:42:00.000Z",
+        "actualArrivalAt": "2026-09-29T17:47:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0157",
+        "vehicleId": "V011",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T14:30:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T18:05:00.000Z",
+        "actualArrivalAt": "2026-10-01T17:47:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0158",
+        "vehicleId": "V011",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-03T15:40:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T19:28:00.000Z",
+        "actualArrivalAt": "2026-10-03T19:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0159",
+        "vehicleId": "V011",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-05T12:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T16:11:00.000Z",
+        "actualArrivalAt": "2026-10-05T16:23:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0160",
+        "vehicleId": "V011",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T13:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T17:34:00.000Z",
+        "actualArrivalAt": "2026-10-07T18:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0161",
+        "vehicleId": "V012",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-11T12:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T14:17:00.000Z",
+        "actualArrivalAt": "2026-09-11T14:17:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0162",
+        "vehicleId": "V012",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T13:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T15:40:00.000Z",
+        "actualArrivalAt": "2026-09-13T15:52:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0163",
+        "vehicleId": "V012",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-15T14:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T17:03:00.000Z",
+        "actualArrivalAt": "2026-09-15T17:38:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0164",
+        "vehicleId": "V012",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-17T16:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T18:26:00.000Z",
+        "actualArrivalAt": "2026-09-17T19:31:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0165",
+        "vehicleId": "V012",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T12:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T15:09:00.000Z",
+        "actualArrivalAt": "2026-09-19T14:51:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0166",
+        "vehicleId": "V012",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-21T13:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T16:32:00.000Z",
+        "actualArrivalAt": "2026-09-21T16:32:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0167",
+        "vehicleId": "V012",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-23T14:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T17:55:00.000Z",
+        "actualArrivalAt": "2026-09-23T18:07:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0168",
+        "vehicleId": "V012",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T16:05:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T19:18:00.000Z",
+        "actualArrivalAt": "2026-09-25T19:53:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0169",
+        "vehicleId": "V012",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-27T12:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T16:01:00.000Z",
+        "actualArrivalAt": "2026-09-27T17:06:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0170",
+        "vehicleId": "V012",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-29T13:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T17:24:00.000Z",
+        "actualArrivalAt": "2026-09-29T17:06:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0171",
+        "vehicleId": "V012",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T14:55:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T18:47:00.000Z",
+        "actualArrivalAt": "2026-10-01T18:47:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0172",
+        "vehicleId": "V012",
+        "originParkingId": "P04",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-10-03T16:05:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T20:10:00.000Z",
+        "actualArrivalAt": "2026-10-03T20:22:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0173",
+        "vehicleId": "V012",
+        "originParkingId": "P06",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-10-05T12:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T14:03:00.000Z",
+        "actualArrivalAt": "2026-10-05T14:38:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0174",
+        "vehicleId": "V012",
+        "originParkingId": "P03",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T13:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T15:26:00.000Z",
+        "actualArrivalAt": "2026-10-07T16:31:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0175",
+        "vehicleId": "V013",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-11T13:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T14:59:00.000Z",
+        "actualArrivalAt": "2026-09-11T15:11:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0176",
+        "vehicleId": "V013",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-13T14:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T16:22:00.000Z",
+        "actualArrivalAt": "2026-09-13T16:57:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0177",
+        "vehicleId": "V013",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-15T15:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T17:45:00.000Z",
+        "actualArrivalAt": "2026-09-15T18:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0178",
+        "vehicleId": "V013",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-17T16:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T19:08:00.000Z",
+        "actualArrivalAt": "2026-09-17T18:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0179",
+        "vehicleId": "V013",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-19T13:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T15:51:00.000Z",
+        "actualArrivalAt": "2026-09-19T15:51:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0180",
+        "vehicleId": "V013",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-21T14:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T17:14:00.000Z",
+        "actualArrivalAt": "2026-09-21T17:26:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0181",
+        "vehicleId": "V013",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-23T15:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T18:37:00.000Z",
+        "actualArrivalAt": "2026-09-23T19:12:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0182",
+        "vehicleId": "V013",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-25T16:30:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T20:00:00.000Z",
+        "actualArrivalAt": "2026-09-25T21:05:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0183",
+        "vehicleId": "V013",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-27T13:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T16:43:00.000Z",
+        "actualArrivalAt": "2026-09-27T16:25:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0184",
+        "vehicleId": "V013",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-29T14:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T18:06:00.000Z",
+        "actualArrivalAt": "2026-09-29T18:06:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0185",
+        "vehicleId": "V013",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-01T15:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T19:29:00.000Z",
+        "actualArrivalAt": "2026-10-01T19:41:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0186",
+        "vehicleId": "V013",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-03T16:30:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T18:02:00.000Z",
+        "actualArrivalAt": "2026-10-03T18:37:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0187",
+        "vehicleId": "V013",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-05T13:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T14:45:00.000Z",
+        "actualArrivalAt": "2026-10-05T15:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0188",
+        "vehicleId": "V013",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-07T14:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T16:08:00.000Z",
+        "actualArrivalAt": "2026-10-07T15:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0189",
+        "vehicleId": "V014",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-11T13:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T15:41:00.000Z",
+        "actualArrivalAt": "2026-09-11T16:16:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0190",
+        "vehicleId": "V014",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T14:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T17:04:00.000Z",
+        "actualArrivalAt": "2026-09-13T18:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0191",
+        "vehicleId": "V014",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-15T15:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T18:27:00.000Z",
+        "actualArrivalAt": "2026-09-15T18:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0192",
+        "vehicleId": "V014",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-17T16:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T19:50:00.000Z",
+        "actualArrivalAt": "2026-09-17T19:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0193",
+        "vehicleId": "V014",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T13:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T16:33:00.000Z",
+        "actualArrivalAt": "2026-09-19T16:45:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0194",
+        "vehicleId": "V014",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-21T14:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T17:56:00.000Z",
+        "actualArrivalAt": "2026-09-21T18:31:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0195",
+        "vehicleId": "V014",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-23T15:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T19:19:00.000Z",
+        "actualArrivalAt": "2026-09-23T20:24:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0196",
+        "vehicleId": "V014",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T16:55:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T20:42:00.000Z",
+        "actualArrivalAt": "2026-09-25T20:24:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0197",
+        "vehicleId": "V014",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-09-27T13:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T17:25:00.000Z",
+        "actualArrivalAt": "2026-09-27T17:25:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0198",
+        "vehicleId": "V014",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-29T14:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T18:48:00.000Z",
+        "actualArrivalAt": "2026-09-29T19:00:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0199",
+        "vehicleId": "V014",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T15:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T17:21:00.000Z",
+        "actualArrivalAt": "2026-10-01T17:56:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0200",
+        "vehicleId": "V014",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": "2026-10-03T16:55:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T18:44:00.000Z",
+        "actualArrivalAt": "2026-10-03T19:49:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0201",
+        "vehicleId": "V014",
+        "originParkingId": "P02",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-05T13:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T15:27:00.000Z",
+        "actualArrivalAt": "2026-10-05T15:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0202",
+        "vehicleId": "V014",
+        "originParkingId": "P04",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T14:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T16:50:00.000Z",
+        "actualArrivalAt": "2026-10-07T16:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0203",
+        "vehicleId": "V015",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-11T13:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T16:23:00.000Z",
+        "actualArrivalAt": "2026-09-11T17:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0204",
+        "vehicleId": "V015",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T15:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T17:46:00.000Z",
+        "actualArrivalAt": "2026-09-13T17:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0205",
+        "vehicleId": "V015",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-15T16:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T19:09:00.000Z",
+        "actualArrivalAt": "2026-09-15T19:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0206",
+        "vehicleId": "V015",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-17T17:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T20:32:00.000Z",
+        "actualArrivalAt": "2026-09-17T20:44:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0207",
+        "vehicleId": "V015",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T13:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T17:15:00.000Z",
+        "actualArrivalAt": "2026-09-19T17:50:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0208",
+        "vehicleId": "V015",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-21T15:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T18:38:00.000Z",
+        "actualArrivalAt": "2026-09-21T19:43:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0209",
+        "vehicleId": "V015",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-23T16:10:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T20:01:00.000Z",
+        "actualArrivalAt": "2026-09-23T19:43:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0210",
+        "vehicleId": "V015",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T17:20:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T21:24:00.000Z",
+        "actualArrivalAt": "2026-09-25T21:24:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0211",
+        "vehicleId": "V015",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-09-27T13:50:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T15:17:00.000Z",
+        "actualArrivalAt": "2026-09-27T15:29:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0212",
+        "vehicleId": "V015",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-09-29T15:00:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T16:40:00.000Z",
+        "actualArrivalAt": "2026-09-29T17:15:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0213",
+        "vehicleId": "V015",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T16:10:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T18:03:00.000Z",
+        "actualArrivalAt": "2026-10-01T19:08:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0214",
+        "vehicleId": "V015",
+        "originParkingId": "P01",
+        "destinationParkingId": "P03",
+        "actualDepartureAt": "2026-10-03T17:20:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T19:26:00.000Z",
+        "actualArrivalAt": "2026-10-03T19:08:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0215",
+        "vehicleId": "V015",
+        "originParkingId": "P03",
+        "destinationParkingId": "P06",
+        "actualDepartureAt": "2026-10-05T13:50:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T16:09:00.000Z",
+        "actualArrivalAt": "2026-10-05T16:09:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0216",
+        "vehicleId": "V015",
+        "originParkingId": "P06",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T15:00:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T17:32:00.000Z",
+        "actualArrivalAt": "2026-10-07T17:44:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "SV015",
+        "vehicleId": "V015",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": null,
+        "estimatedArrivalAt": "2026-10-10T11:20:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0218",
+        "vehicleId": "V016",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-11T14:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-11T17:05:00.000Z",
+        "actualArrivalAt": "2026-09-11T16:47:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0219",
+        "vehicleId": "V016",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-13T15:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-13T18:28:00.000Z",
+        "actualArrivalAt": "2026-09-13T18:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0220",
+        "vehicleId": "V016",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-15T16:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-15T19:51:00.000Z",
+        "actualArrivalAt": "2026-09-15T20:03:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0221",
+        "vehicleId": "V016",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-17T17:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-17T21:14:00.000Z",
+        "actualArrivalAt": "2026-09-17T21:49:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0222",
+        "vehicleId": "V016",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-19T14:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-19T17:57:00.000Z",
+        "actualArrivalAt": "2026-09-19T19:02:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0223",
+        "vehicleId": "V016",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-21T15:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-21T19:20:00.000Z",
+        "actualArrivalAt": "2026-09-21T19:02:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0224",
+        "vehicleId": "V016",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-23T16:35:00.000Z",
+        "estimatedArrivalAt": "2026-09-23T20:43:00.000Z",
+        "actualArrivalAt": "2026-09-23T20:43:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0225",
+        "vehicleId": "V016",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-09-25T17:45:00.000Z",
+        "estimatedArrivalAt": "2026-09-25T19:16:00.000Z",
+        "actualArrivalAt": "2026-09-25T19:28:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0226",
+        "vehicleId": "V016",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-09-27T14:15:00.000Z",
+        "estimatedArrivalAt": "2026-09-27T15:59:00.000Z",
+        "actualArrivalAt": "2026-09-27T16:34:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0227",
+        "vehicleId": "V016",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-09-29T15:25:00.000Z",
+        "estimatedArrivalAt": "2026-09-29T17:22:00.000Z",
+        "actualArrivalAt": "2026-09-29T18:27:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0228",
+        "vehicleId": "V016",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-01T16:35:00.000Z",
+        "estimatedArrivalAt": "2026-10-01T18:45:00.000Z",
+        "actualArrivalAt": "2026-10-01T18:27:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0229",
+        "vehicleId": "V016",
+        "originParkingId": "P01",
+        "destinationParkingId": "P04",
+        "actualDepartureAt": "2026-10-03T17:45:00.000Z",
+        "estimatedArrivalAt": "2026-10-03T20:08:00.000Z",
+        "actualArrivalAt": "2026-10-03T20:08:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0230",
+        "vehicleId": "V016",
+        "originParkingId": "P04",
+        "destinationParkingId": "P05",
+        "actualDepartureAt": "2026-10-05T14:15:00.000Z",
+        "estimatedArrivalAt": "2026-10-05T16:51:00.000Z",
+        "actualArrivalAt": "2026-10-05T17:03:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "T0231",
+        "vehicleId": "V016",
+        "originParkingId": "P05",
+        "destinationParkingId": "P01",
+        "actualDepartureAt": "2026-10-07T15:25:00.000Z",
+        "estimatedArrivalAt": "2026-10-07T18:14:00.000Z",
+        "actualArrivalAt": "2026-10-07T18:49:00.000Z",
+        "timeZone": "Asia/Tehran"
+      },
+      {
+        "id": "SV016",
+        "vehicleId": "V016",
+        "originParkingId": "P01",
+        "destinationParkingId": "P02",
+        "actualDepartureAt": null,
+        "estimatedArrivalAt": "2026-10-10T11:20:00.000Z",
+        "actualArrivalAt": null,
+        "timeZone": "Asia/Tehran"
+      }
+    ],
+    "options": {
+      "vehicles": [
+        {
+          "id": "V001",
+          "title": "آذرخش",
+          "registration": "IR-2100",
+          "active": true,
+          "initialParkingId": "P01",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V002",
+          "title": "مروارید",
+          "registration": "IR-2101",
+          "active": true,
+          "initialParkingId": "P02",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V003",
+          "title": "دریابان",
+          "registration": "IR-2102",
+          "active": true,
+          "initialParkingId": "P03",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V004",
+          "title": "سپهر",
+          "registration": "IR-2103",
+          "active": true,
+          "initialParkingId": "P04",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V005",
+          "title": "خلیج فارس",
+          "registration": "IR-2104",
+          "active": true,
+          "initialParkingId": "P05",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V006",
+          "title": "آریا",
+          "registration": "IR-2105",
+          "active": true,
+          "initialParkingId": "P06",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V007",
+          "title": "ماهان",
+          "registration": "IR-2106",
+          "active": true,
+          "initialParkingId": "P01",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V008",
+          "title": "باران",
+          "registration": "IR-2107",
+          "active": true,
+          "initialParkingId": "P02",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V009",
+          "title": "نیلگون",
+          "registration": "IR-2108",
+          "active": true,
+          "initialParkingId": "P03",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V010",
+          "title": "ساحل",
+          "registration": "IR-2109",
+          "active": true,
+          "initialParkingId": "P04",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V011",
+          "title": "مرجان",
+          "registration": "IR-2110",
+          "active": true,
+          "initialParkingId": "P05",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V012",
+          "title": "آفتاب",
+          "registration": "IR-2111",
+          "active": true,
+          "initialParkingId": "P06",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V013",
+          "title": "کارون",
+          "registration": "IR-2112",
+          "active": true,
+          "initialParkingId": "P01",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V014",
+          "title": "دنا",
+          "registration": "IR-2113",
+          "active": true,
+          "initialParkingId": "P02",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V015",
+          "title": "الوند",
+          "registration": "IR-2114",
+          "active": true,
+          "initialParkingId": "P03",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V016",
+          "title": "هما",
+          "registration": "IR-2115",
+          "active": true,
+          "initialParkingId": "P04",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V017",
+          "title": "پارس",
+          "registration": "IR-2116",
+          "active": false,
+          "initialParkingId": "P05",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        },
+        {
+          "id": "V018",
+          "title": "آرمان",
+          "registration": "IR-2117",
+          "active": false,
+          "initialParkingId": "P06",
+          "vessel_type": "Cargo",
+          "flag": "IR"
+        }
+      ],
+      "parkings": [
+        {
+          "id": "P01",
+          "name": "شهید رجایی",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        },
+        {
+          "id": "P02",
+          "name": "بندر امام خمینی",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        },
+        {
+          "id": "P03",
+          "name": "بندر بوشهر",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        },
+        {
+          "id": "P04",
+          "name": "بندر چابهار",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        },
+        {
+          "id": "P05",
+          "name": "بندر انزلی",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        },
+        {
+          "id": "P06",
+          "name": "بندر امیرآباد",
+          "active": true,
+          "timezone": "Asia/Tehran"
+        }
+      ],
+      "statuses": [
+        "completed",
+        "completed_delayed",
+        "in_transit",
+        "delayed_in_transit",
+        "scheduled"
+      ]
+    }
+  },
+  "meta": {
+    "referenceAt": "2026-10-10T08:00:00.000Z",
+    "timeZone": "Asia/Tehran",
+    "filters": {},
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "totalItems": 6,
+      "totalPages": 1
+    },
+    "generatedAt": "2026-10-10T08:00:00.000Z"
+  }
+}
