@@ -1,0 +1,789 @@
+.vessel-detail-page {
+  height:100%;
+  overflow-y:auto;
+  background:#fff;
+  color:#102740;
+  font-family:"Inter Variable",Arial,sans-serif;
+  font-size:12px;
+  line-height:1.5;
+  color-scheme:light;
+}
+.vessel-detail-page * {
+  box-sizing:border-box;
+}
+.vessel-page-header {
+  border-bottom:1px solid #dfe5eb;
+  background:#fff;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.vessel-title-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:10px 24px 0;
+}
+.vessel-identity {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.vessel-identity h1 {
+  font-size:18px;
+  line-height:1.2;
+  font-weight:750;
+  margin:0;
+  color:#25313e;
+}
+.vessel-subtitle {
+  font-size:13px;
+  color:#718198;
+  font-style:italic;
+  display:flex;
+  gap:8px;
+}
+.vessel-type-badge {
+  background:#0aa286;
+  border-radius:2px;
+  color:#fff;
+  padding:2px;
+  display:flex;
+}
+.vessel-demo-badge {
+  background:#e8f1fe;
+  color:#1c62aa;
+  border-radius:3px;
+  padding:2px 6px;
+  font-size:10px;
+  font-weight:600;
+}
+.vessel-bahamas-flag {
+  display:inline-block;
+  position:relative;
+  width:25px;
+  height:17px;
+  flex-shrink:0;
+  background:linear-gradient(#00abc9 33.33%,#ffdf00 33.33% 66.66%,#00abc9 66.66%);
+}
+.vessel-bahamas-flag:after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:#111;
+  clip-path:polygon(0 0,56% 50%,0 100%);
+}
+.vessel-header-actions {
+  display:flex;
+  gap:5px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.vessel-button,.vessel-icon-button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+  border:1px solid #cfd7e1;
+  border-radius:4px;
+  background:#fff;
+  color:#23364c;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:600;
+  min-height:31px;
+  padding:6px 10px;
+  box-shadow:0 1px 2px #1429440a;
+  white-space:nowrap;
+}
+.vessel-button:hover,.vessel-icon-button:hover {
+  background:#edf4fb;
+}
+.vessel-button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+.vessel-header-actions .vessel-button,.vessel-copy-button {
+  background:#f3f4f6;
+  border-color:#f3f4f6;
+  box-shadow:none;
+  color:#4b4f58;
+}
+.vessel-button-selected {
+  color:#0868c4!important;
+  background:#e9f3ff!important;
+}
+.vessel-icon-button {
+  padding:6px;
+  border-color:transparent;
+  box-shadow:none;
+  min-width:30px;
+}
+.vessel-button-primary {
+  background:#0d70db;
+  color:white;
+  border-color:#0d70db;
+  border-radius:5px;
+}
+.vessel-button-primary:hover {
+  background:#095ebd;
+}
+.vessel-tabs {
+  display:flex;
+  align-items:center;
+  gap:0;
+  overflow-x:auto;
+  padding:0 24px;
+  scrollbar-width:thin;
+}
+.vessel-tabs>button,.vessel-original-link {
+  padding:14px 16px 10px;
+  white-space:nowrap;
+  border:0;
+  border-bottom:2px solid transparent;
+  background:none;
+  color:#708098;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+}
+.vessel-tabs>button.active {
+  border-bottom-color:#263d53;
+  color:#192c41;
+}
+.vessel-tabs>button:hover {
+  color:#0b6dd0;
+}
+.vessel-original-link {
+  margin-left:auto;
+  color:#1373c6;
+  font-size:11px;
+  text-decoration:none;
+}
+.vessel-page-content {
+  padding:24px;
+  max-width:1920px;
+  margin:auto;
+}
+.vessel-overview-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:24px;
+  align-items:start;
+}
+.vessel-left-column,.vessel-right-column {
+  min-width:0;
+}
+.vessel-card {
+  border:1px solid #e0e7ee;
+  border-radius:7px;
+  padding:12px 16px 16px;
+  background:#fff;
+  min-width:0;
+}
+.vessel-card>h2,.vessel-business-section>h2 {
+  font-size:12px;
+  font-weight:700;
+  margin:0 0 9px;
+  line-height:1.5;
+}
+.vessel-card>h2 {
+  border-bottom:1px solid #e1e7ed;
+  padding-bottom:8px;
+}
+.vessel-voyage-card>h2 {
+  border:0;
+  padding-bottom:0;
+}
+.vessel-information-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:24px;
+  align-items:start;
+  margin-top:24px;
+}
+.vessel-ais-column {
+  display:grid;
+  gap:16px;
+}
+.vessel-summary h3 {
+  font-size:12px;
+  font-weight:700;
+  margin:5px 0 0;
+}
+.vessel-summary p {
+  margin:1px 0 9px;
+  font-size:12px;
+  line-height:1.75;
+}
+.vessel-summary p:last-child {
+  margin-bottom:0;
+}
+.vessel-summary-extra {
+  color:#758397;
+}
+.vessel-map-wrap {
+  position:relative;
+}
+.vessel-voyage-map {
+  height:202px;
+  background:#f0f3f5;
+  position:relative;
+  border-radius:3px;
+  overflow:hidden;
+}
+.vessel-map-canvas {
+  position:absolute;
+  inset:0;
+}
+.vessel-map-canvas .maplibregl-canvas {
+  filter:saturate(.45);
+}
+.vessel-map-canvas .maplibregl-ctrl-attrib {
+  font:9px Arial,sans-serif;
+}
+.vessel-map-canvas .maplibregl-ctrl-bottom-right {
+  bottom:0;
+}
+.vessel-map-link {
+  position:absolute;
+  right:10px;
+  top:10px;
+  z-index:2;
+}
+.vessel-map-marker {
+  width:16px;
+  height:26px;
+  background:#56df44;
+  border:1px solid #216822;
+  clip-path:polygon(50% 0,95% 90%,50% 75%,5% 90%);
+  filter:drop-shadow(0 1px 2px #0006);
+}
+.vessel-map-coordinate {
+  position:absolute;
+  bottom:9px;
+  left:9px;
+  font-size:10px;
+  background:#ffffffe6;
+  padding:2px 5px;
+  border-radius:3px;
+  pointer-events:none;
+}
+.vessel-map-empty {
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-content:center;
+  color:#75859a;
+  background:linear-gradient(45deg,#eef2f5,#f8fafc);
+}
+.vessel-map-warning {
+  position:absolute;
+  left:9px;
+  top:9px;
+  background:#fff;
+  padding:3px 5px;
+  color:#805b26;
+  font-size:9px;
+  max-width:55%;
+}
+.vessel-voyage-ports,.vessel-voyage-times {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  margin-top:7px;
+}
+.vessel-voyage-ports>div,.vessel-voyage-times>div {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  max-width:48%;
+}
+.vessel-voyage-ports>div:last-child,.vessel-voyage-times>div:last-child {
+  text-align:right;
+}
+.vessel-voyage-ports small,.vessel-voyage-times small {
+  color:#778aa2;
+  font-size:10px;
+  overflow-wrap:anywhere;
+}
+.vessel-voyage-ports strong {
+  font-size:11px;
+}
+.vessel-voyage-times span {
+  font-size:10px;
+}
+.vessel-voyage-progress {
+  display:flex;
+  align-items:center;
+  gap:3px;
+  color:#1376dc;
+  margin:10px 0 5px;
+  height:15px;
+}
+.vessel-departure-dot {
+  height:14px;
+  width:14px;
+  border:4px solid #1376dc;
+  background:white;
+  border-radius:50%;
+  flex-shrink:0;
+}
+.vessel-progress-line {
+  position:relative;
+  flex:1;
+  border-top:3px dotted #1376dc;
+}
+.vessel-progress-line>span {
+  display:block;
+  position:absolute;
+  top:-3px;
+  left:0;
+  border-top:3px solid #1376dc;
+}
+.vessel-progress-ship {
+  position:absolute;
+  top:-10px;
+  transform:translateX(-50%) rotate(45deg);
+  fill:#1376dc;
+  background:white;
+}
+.vessel-voyage-actions {
+  display:flex;
+  justify-content:space-between;
+  margin-top:16px;
+  margin-bottom:16px;
+}
+.vessel-route-info {
+  border:1px solid #e4eaf1;
+  background:#f7f8fa;
+  min-height:150px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+  color:#78879a;
+  padding:18px;
+}
+.vessel-route-info>svg {
+  color:#1276db;
+}
+.vessel-route-info strong {
+  color:#60758e;
+  font-size:13px;
+}
+.vessel-route-info small {
+  font-size:10px;
+}
+.vessel-business-section {
+  margin-top:24px;
+}
+.vessel-business-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.vessel-business-grid .vessel-card {
+  min-height:265px;
+}
+.vessel-companies {
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.vessel-companies li {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 0;
+  border-bottom:1px solid #e0e6ed;
+  min-height:43px;
+}
+.vessel-company-icon {
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  width:30px;
+  height:30px;
+  border:1px solid #d3dce7;
+  border-radius:50%;
+  color:#526984;
+  background:#f8fafc;
+}
+.vessel-companies li span:not(.vessel-company-icon) {
+  color:#1373d2;
+  font-size:11px;
+}
+.vessel-companies small {
+  display:block;
+  font-size:10px;
+  color:#73859e;
+}
+.vessel-text-button {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  border:0;
+  background:none;
+  padding:14px 0 0;
+  font-size:11px;
+  font-weight:600;
+  color:#1d4d7b;
+  cursor:pointer;
+}
+.vessel-empty {
+  background:#f7f8fa;
+  display:grid;
+  place-content:center;
+  min-height:180px;
+  text-align:center;
+  padding:22px;
+  color:#7c8ba0;
+  font-size:12px;
+  border:1px solid #edf0f4;
+}
+.vessel-photo {
+  height:238px;
+  position:relative;
+  overflow:hidden;
+  border-radius:3px;
+  background:#d9e1e7;
+  margin-bottom:15px;
+}
+.vessel-photo>img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.vessel-photo-empty {
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:12px;
+  color:#788aa0;
+  background:linear-gradient(135deg,#e9eef2,#d4dee7);
+}
+.vessel-photo-action {
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+}
+.vessel-photo-credit {
+  position:absolute;
+  bottom:3px;
+  left:7px;
+  font-size:8px;
+  color:#fff;
+  text-shadow:0 1px 3px #000;
+}
+.vessel-fields {
+  margin:0;
+}
+.vessel-fields>div {
+  display:grid;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:12px;
+  padding:8px 0;
+  min-height:33px;
+  border-bottom:1px solid #e0e5ec;
+  font-size:10px;
+}
+.vessel-fields>div:last-child {
+  border:0;
+}
+.vessel-fields dt {
+  color:#8594a9;
+  font-weight:400;
+}
+.vessel-fields dd {
+  margin:0;
+  color:#102d49;
+  font-weight:600;
+  overflow-wrap:anywhere;
+}
+.vessel-flag-value {
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.vessel-flag-value .vessel-bahamas-flag {
+  width:23px;
+  height:16px;
+}
+.vessel-ais-footnote {
+  margin:12px 0 0;
+  color:#8290a3;
+  font-size:9px;
+}
+.vessel-notes-content {
+  background:#f7f8fa;
+  border:1px solid #e4eaf1;
+  min-height:155px;
+  padding:22px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+  color:#77889c;
+}
+.vessel-notes-content>svg {
+  color:#8b9caf;
+}
+.vessel-notes-content p {
+  margin:0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  max-width:100%;
+}
+.vessel-notes-content small,.vessel-notes-card form small {
+  color:#8b98a8;
+  font-size:9px;
+}
+.vessel-notes-card label {
+  display:block;
+  font-weight:600;
+  margin-bottom:8px;
+}
+.vessel-notes-card textarea {
+  width:100%;
+  resize:vertical;
+  border:1px solid #cdd7e3;
+  border-radius:4px;
+  padding:10px;
+  font-family:inherit;
+  font-size:12px;
+  line-height:1.5;
+}
+.vessel-note-actions {
+  display:flex;
+  gap:6px;
+  margin-top:12px;
+}
+.vessel-status {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:9px 24px;
+  background:#eff6ff;
+  border-bottom:1px solid #dbeafe;
+  color:#245b93;
+  font-size:11px;
+}
+.vessel-secondary-view {
+  max-width:1000px;
+  margin:auto;
+}
+.vessel-secondary-view .vessel-fields>div {
+  font-size:12px;
+  padding:12px 0;
+}
+.vessel-section-description {
+  font-size:11px;
+  line-height:1.6;
+  color:#798aa0;
+  margin:14px 0;
+}
+.vessel-table-wrap {
+  overflow-x:auto;
+}
+.vessel-table-wrap table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  text-align:left;
+}
+.vessel-table-wrap th,.vessel-table-wrap td {
+  padding:12px;
+  border-bottom:1px solid #e2e8f0;
+}
+.vessel-table-wrap th {
+  background:#f7f9fb;
+  color:#74849a;
+  font-weight:600;
+}
+.vessel-modal {
+  position:fixed;
+  inset:0;
+  margin:auto;
+  padding:20px;
+  width:min(720px,calc(100vw - 32px));
+  max-height:85dvh;
+  overflow:auto;
+  border:1px solid #dce4ee;
+  border-radius:8px;
+  box-shadow:0 20px 80px #09264244;
+  color:#102740;
+  background:#fff;
+  font-family:"Inter Variable",Arial,sans-serif;
+}
+.vessel-modal::backdrop {
+  background:#14253877;
+  backdrop-filter:blur(2px);
+}
+.vessel-modal>header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.vessel-modal h2 {
+  font-size:15px;
+  font-weight:700;
+  margin:0;
+}
+.vessel-full-photo {
+  width:100%;
+  max-height:60dvh;
+  object-fit:contain;
+  border-radius:4px;
+}
+.vessel-detail-page button:focus-visible,.vessel-detail-page a:focus-visible,.vessel-detail-page textarea:focus-visible,.vessel-modal button:focus-visible {
+  outline:2px solid #167be8;
+  outline-offset:3px;
+}
+@media(min-width:1600px) {
+  .vessel-voyage-map {
+    height:220px;
+  }
+  .vessel-photo {
+    height:268px;
+  }
+  .vessel-fields>div {
+    font-size:11px;
+  }
+}
+@media(max-width:1180px) {
+  .vessel-overview-grid {
+    grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+    gap:18px;
+  }
+  .vessel-information-grid {
+    gap:16px;
+  }
+  .vessel-title-row {
+    align-items:flex-start;
+  }
+  .vessel-header-actions {
+    justify-content:flex-end;
+  }
+  .vessel-photo {
+    height:185px;
+  }
+  .vessel-card {
+    padding:12px;
+  }
+  .vessel-business-grid {
+    grid-template-columns:1fr;
+  }
+  .vessel-fields>div {
+    grid-template-columns:1fr 1.1fr;
+    gap:8px;
+  }
+  .vessel-tabs {
+    padding:0 16px;
+  }
+  .vessel-tabs>button {
+    padding-left:12px;
+    padding-right:12px;
+  }
+}
+@media(max-width:900px) {
+  .vessel-overview-grid {
+    grid-template-columns:1fr;
+  }
+  .vessel-title-row {
+    flex-direction:column;
+    gap:10px;
+    padding:14px 18px 0;
+  }
+  .vessel-header-actions {
+    justify-content:flex-start;
+  }
+  .vessel-page-content {
+    padding:18px;
+  }
+  .vessel-business-grid {
+    grid-template-columns:1fr 1fr;
+  }
+  .vessel-business-grid .vessel-card {
+    min-height:240px;
+  }
+  .vessel-information-grid {
+    gap:18px;
+  }
+  .vessel-photo {
+    height:260px;
+  }
+  .vessel-voyage-map {
+    height:240px;
+  }
+  .vessel-original-link {
+    margin-left:0;
+  }
+  .vessel-fields>div {
+    font-size:11px;
+  }
+}
+@media(max-width:520px) {
+  .vessel-page-content {
+    padding:12px;
+  }
+  .vessel-information-grid,.vessel-business-grid {
+    grid-template-columns:1fr;
+  }
+  .vessel-identity {
+    gap:7px;
+    padding-left:18px;
+  }
+  .vessel-subtitle {
+    font-size:11px;
+  }
+  .vessel-tabs {
+    padding:0 8px;
+  }
+  .vessel-tabs>button {
+    font-size:11px;
+  }
+  .vessel-header-actions {
+    padding-left:18px;
+  }
+  .vessel-header-actions .vessel-button {
+    font-size:10px;
+    padding:5px 7px;
+  }
+  .vessel-photo {
+    height:240px;
+  }
+  .vessel-title-row {
+    padding:14px 8px 0;
+  }
+  .vessel-voyage-map {
+    height:205px;
+  }
+  .vessel-voyage-ports small {
+    font-size:9px;
+  }
+  .vessel-voyage-ports strong {
+    font-size:10px;
+  }
+  .vessel-map-link {
+    font-size:10px;
+  }
+  .vessel-page-header {
+    position:relative;
+  }
+  .vessel-status {
+    padding:8px 12px;
+  }
+}

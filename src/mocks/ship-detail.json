@@ -1,0 +1,71 @@
+{
+  "ship": {
+    "id": "demo",
+    "name": "ANGARA",
+    "imo": "9136890",
+    "mmsi": "311001953",
+    "vessel_type": "Reefer",
+    "general_vessel_type": "Cargo",
+    "flag": "BAHAMAS",
+    "flag_code": "BS",
+    "call_sign": "C6JR5",
+    "loa": 93.36,
+    "width": 16.6,
+    "draft": 6.5,
+    "yob": 1996,
+    "ais_class": "Class A"
+  },
+  "position": {
+    "latitude": -11.7,
+    "longitude": 49.3,
+    "speed": 7.5,
+    "course": 170,
+    "navigational_status": "Underway using Engine",
+    "region": "East Africa",
+    "received_at": "2026-10-10T11:05:00Z",
+    "source": "Roaming"
+  },
+  "voyage": {
+    "origin_name": "PORT VICTORIA ANCH",
+    "destination": "MU PLU",
+    "departure": "2026-10-09T15:32:00Z",
+    "eta": "2026-10-13T01:00:00Z",
+    "status": "In transit",
+    "timeZone": "Indian/Mauritius"
+  },
+  "port": {
+    "name": "Port Louis",
+    "country": "MAURITIUS",
+    "unlocode": "MU PLU"
+  },
+  "summary": {
+    "location": "East Africa"
+  },
+  "companies": [
+    {
+      "id": "C01",
+      "name": "PAS (Mauritius) Ltd",
+      "type": "Port Agents"
+    },
+    {
+      "id": "C02",
+      "name": "Immersub & Co. Ltd",
+      "type": "Diving and Underwater Services"
+    },
+    {
+      "id": "C03",
+      "name": "RENAISSANCE MARITIME",
+      "type": "Port Agents"
+    },
+    {
+      "id": "C04",
+      "name": "Dive Solutions Ltd",
+      "type": "Diving and Underwater Services"
+    },
+    {
+      "id": "C05",
+      "name": "Southbond Shipping Agency Ltd",
+      "type": "Port Agents"
+    }
+  ]
+}

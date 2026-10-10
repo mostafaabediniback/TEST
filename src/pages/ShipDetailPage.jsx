@@ -1,65 +1,14 @@
 import ShipRow from "@/components/ships/ShipRow";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useShipPreview } from "@/hooks/useShipPreview";
-import { getShipSummary, getShipCompanies } from "@/api/shipApi";
-import {
-  getDetailsReturnTarget,
-  getShipCoordinates,
-} from "@/lib/shipNavigation";
+import { Link } from "react-router-dom";
 import { useLocale } from "@/context/LocaleContext";
+import { useShipDetailData } from "@/hooks/useShipDetailData";
 
 export default function ShipDetailPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();
   const { t } = useLocale();
-  const seed =
-    String(location.state?.ship?.id) === id ? location.state.ship : { id };
-  const isMock =
-    new URLSearchParams(location.search).get("mock") === "dashboard";
-  const mock = isMock ? (location.state?.dashboardMock ?? {}) : {};
-  const preview = useShipPreview(seed, !isMock);
-  const ship = isMock ? seed : { ...seed, ...preview.ship };
-  const position = isMock ? {} : (preview.position ?? {});
-  const voyage = isMock ? (mock.voyage ?? {}) : (preview.voyage ?? {});
-  const port = isMock ? (mock.port ?? {}) : (preview.port ?? {});
-  const summaryQuery = useQuery({
-    queryKey: ["ship", seed.id, "summary"],
-    queryFn: () => getShipSummary(seed.id),
-    enabled: !isMock,
-    staleTime: 5 * 60 * 1000,
-  });
-  const companiesQuery = useQuery({
-    queryKey: ["ship", seed.id, "companies"],
-    queryFn: () => getShipCompanies(seed.id),
-    enabled: !isMock,
-    staleTime: 5 * 60 * 1000,
-  });
-  const summary = isMock ? (mock.summary ?? {}) : (summaryQuery.data ?? {});
-  const companyData = isMock ? mock.companies : companiesQuery.data;
-  const companies = Array.isArray(companyData)
-    ? companyData
-    : (companyData?.items ?? companyData?.companies ?? []);
-  const coordinates = getShipCoordinates(position) ?? getShipCoordinates(ship);
+  const { id, ship, position, voyage, port, summary, companies, coordinates, imageUrl, preview, returnTo, handleBack, location } = useShipDetailData();
   const latitude = coordinates?.[1];
   const longitude = coordinates?.[0];
-  const imageUrl = isMock
-    ? null
-    : (preview.photo?.url ??
-      preview.photo?.photo_url ??
-      preview.photo?.image_url);
-  const returnTo = getDetailsReturnTarget(location.search, location.state);
   const fromMap = returnTo.startsWith("/dashboard/");
-  function handleBack() {
-    if (location.state?.returnTo === returnTo && window.history.state?.idx > 0)
-      navigate(-1);
-    else
-      navigate(returnTo, {
-        replace: true,
-        state: { tableState: location.state?.tableState },
-      });
-  }
 
   return (
     <main className="h-full overflow-y-auto bg-slate-50 text-slate-800">
@@ -72,7 +21,7 @@ export default function ShipDetailPage() {
           >
             ← {t(fromMap ? "backToMap" : "backToTable")}
           </button>
-          <span className="text-sm text-slate-500">Ship details</span>
+          <Link to={`/ships/${encodeURIComponent(id)}/overview${location.search}`} state={location.state} className="text-sm font-medium text-blue-700 hover:underline">Preview new layout ↗</Link>
         </div>
       </header>
 
