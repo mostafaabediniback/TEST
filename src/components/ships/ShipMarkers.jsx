@@ -3,7 +3,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  useSyncExternalStore,
 } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { PolygonLayer } from "@deck.gl/layers";
@@ -13,6 +12,7 @@ import { useFilters } from "@/context/FilterContext";
 import { matchesVesselTypes } from "@/lib/vesselTypes";
 import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
+import { useMapZoom } from "@/hooks/useMapZoom";
 import {
   getShipCoordinates,
   getShipDetailsNavigation,
@@ -50,14 +50,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
       getShipCoordinates(preview.ship),
     [selected, preview.position, preview.ship],
   );
-  const subscribeToZoom = useCallback(
-    (onChange) => {
-      map.on("zoomend", onChange);
-      return () => map.off("zoomend", onChange);
-    },
-    [map],
-  );
-  const zoom = useSyncExternalStore(subscribeToZoom, () => map.getZoom());
+  const zoom = useMapZoom(map);
   const selectedMarker = useMemo(
     () =>
       selectedCoordinates && selectedVisible

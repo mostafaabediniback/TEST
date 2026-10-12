@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createMapLayerManager } from "../src/lib/mapOverlayLayers.js";
 import { getShipMarker } from "../src/lib/shipMarkers.js";
 import { mergePortTiles, readPortTileData } from "../src/lib/portMarkers.js";
+import { getMapMarkerScale } from "../src/lib/mapMarkerScale.js";
 
 function setup() {
   let props = {};
@@ -74,4 +75,35 @@ test("Port tiles accept list wrappers and merge duplicates while excluding inval
   assert.deepEqual(readPortTileData({ ports: [] }), []);
   assert.throws(() => readPortTileData({ count: 0 }), /Unexpected ports tile response/);
   assert.deepEqual(mergePortTiles([[port], [port, { id: 8, lat: "", lon: 0 }, { id: 9, lat: 91, lon: 0 }], undefined]), [port]);
+});
+
+test("Zoom changes ship geometry and port size within readable bounds", () => {
+  function shipPixelSize(zoom) {
+    const { polygon, radius, selectionPolygon } = getShipMarker({ lat: 31, lon: 121, heading: 0 }, zoom);
+    const worldSize = 512 * 2 ** zoom;
+    function project(points) {
+      return points.map(([lon, lat]) => [
+        (lon + 180) / 360 * worldSize,
+        (1 - Math.asinh(Math.tan(lat * Math.PI / 180)) / Math.PI) / 2 * worldSize,
+      ]);
+    }
+    const points = project(polygon);
+    const width = Math.max(...points.map(([x]) => x)) - Math.min(...points.map(([x]) => x));
+    const height = Math.max(...points.map(([, y]) => y)) - Math.min(...points.map(([, y]) => y));
+    const outline = project(selectionPolygon);
+    const outlineWidth = Math.max(...outline.map(([x]) => x)) - Math.min(...outline.map(([x]) => x));
+    assert.ok(Math.abs(outlineWidth - width - 12) < 0.00001);
+    assert.ok(Math.abs(radius - Math.hypot(width, height) / 2) < 0.00001);
+    return height;
+  }
+  const close = (actual, expected) => assert.ok(Math.abs(actual - expected) < 0.00001);
+  close(shipPixelSize(2), 12);
+  close(shipPixelSize(6), 12);
+  close(shipPixelSize(10), 24);
+  close(shipPixelSize(19), 38.4);
+  assert.ok(shipPixelSize(10.5) > shipPixelSize(10));
+  assert.ok(shipPixelSize(10.5) < shipPixelSize(11));
+  close(30 * getMapMarkerScale(2), 15);
+  close(30 * getMapMarkerScale(10), 30);
+  close(30 * getMapMarkerScale(19), 48);
 });

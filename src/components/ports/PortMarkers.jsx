@@ -4,6 +4,8 @@ import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { Anchor, X } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import { getPortCoordinates, getPortKey } from "@/lib/portMarkers";
+import { getMapMarkerScale } from "@/lib/mapMarkerScale";
+import { useMapZoom } from "@/hooks/useMapZoom";
 import anchorIcon from "@/assets/port-anchor.svg";
 import MapPopup from "../map/MapPopup";
 import ShipRow from "../ships/ShipRow";
@@ -12,6 +14,10 @@ const PORT_ICON = { url: anchorIcon, width: 64, height: 64, anchorX: 32, anchorY
 
 export default function PortMarkers({ ports = [], map, layerManager }) {
   const { t, direction } = useLocale();
+  const zoom = useMapZoom(map);
+  const iconSize = 30 * getMapMarkerScale(zoom);
+  const iconRadius = iconSize / 2;
+  const selectionRadius = iconRadius + 4;
   const [search, setSearch] = useSearchParams();
   const selectedId = search.get("portId");
   const [selectedPort, setSelectedPort] = useState(null);
@@ -43,7 +49,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
           data: selected ? [{ coordinates: getPortCoordinates(selected) }] : [],
           getPosition: (marker) => marker.coordinates,
           radiusUnits: "pixels",
-          getRadius: 19,
+          getRadius: selectionRadius,
           filled: false,
           stroked: true,
           lineWidthUnits: "pixels",
@@ -56,7 +62,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
           data: markers,
           getPosition: (marker) => marker.coordinates,
           getIcon: () => PORT_ICON,
-          getSize: 30,
+          getSize: iconSize,
           sizeUnits: "pixels",
           billboard: true,
           pickable: true,
@@ -80,16 +86,16 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
         }),
       ],
     });
-  }, [markers, selected, selectedId, layerManager, setSearch, closeSelection]);
+  }, [markers, selected, selectedId, layerManager, setSearch, closeSelection, iconSize, selectionRadius]);
   useEffect(() => () => layerManager.removeGroup("ports"), [layerManager]);
   const hoverCoordinates = getPortCoordinates(hoveredPort);
   return <>
-    {hoverCoordinates && getPortKey(hoveredPort) !== selectedId && <MapPopup map={map} coordinates={hoverCoordinates} markerRadius={15} hover>
+    {hoverCoordinates && getPortKey(hoveredPort) !== selectedId && <MapPopup map={map} coordinates={hoverCoordinates} markerRadius={iconRadius} hover>
       <div dir={direction} className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-teal-800">
         <Anchor size={16} />{hoveredPort.name || t("unnamedPort")}
       </div>
     </MapPopup>}
-    {selected && selectedCoordinates && <MapPopup map={map} coordinates={selectedCoordinates} markerRadius={19}>
+    {selected && selectedCoordinates && <MapPopup map={map} coordinates={selectedCoordinates} markerRadius={selectionRadius}>
       <div dir={direction} className="relative min-w-[230px] p-3 text-slate-800">
         <button type="button" aria-label={t("closePortSelection")} onClick={closeSelection} className="absolute end-2 top-2 rounded-full p-1 text-slate-600 hover:bg-slate-100"><X size={16} /></button>
         <h3 className="mb-3 flex items-center gap-2 pe-6 text-sm font-semibold"><Anchor size={18} className="text-teal-700" />{selected.name || t("unnamedPort")}</h3>

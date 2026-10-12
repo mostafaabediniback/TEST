@@ -1,4 +1,5 @@
 import { getShipCoordinates } from "./shipNavigation.js";
+import { getMapMarkerScale } from "./mapMarkerScale.js";
 
 const ARROW = [[0, 0.5], [0.5, -0.5], [0, -0.25], [-0.5, -0.5]];
 
@@ -25,9 +26,9 @@ export function getShipMarker(ship, zoom, position) {
   const worldSize = 512 * 2 ** zoom;
   const centerX = (coordinates[0] + 180) / 360 * worldSize;
   const centerY = (1 - Math.log(Math.tan(Math.PI / 4 + latitudeRadians / 2)) / Math.PI) / 2 * worldSize;
-  // A filled arrow stays readable at every zoom, including ships without dimensions.
-  const displayedLength = 24;
-  const displayedWidth = 18;
+  const scale = getMapMarkerScale(zoom);
+  const displayedLength = 24 * scale;
+  const displayedWidth = 18 * scale;
   const direction = getShipDirection(ship, position);
   const angle = (direction ?? 0) * Math.PI / 180;
   const shape = ARROW;

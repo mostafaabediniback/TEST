@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Popup } from "maplibre-gl";
 import { getMapPopupPlacement } from "@/lib/mapPopupPlacement";
@@ -6,6 +6,12 @@ import { getMapPopupPlacement } from "@/lib/mapPopupPlacement";
 export default function MapPopup({ map, coordinates, hover = false, markerRadius = 7, children }) {
   const [container] = useState(() => document.createElement("div"));
   const [longitude, latitude] = coordinates;
+  const radius = useRef(markerRadius);
+  const reposition = useRef(null);
+  useEffect(() => {
+    radius.current = markerRadius;
+    reposition.current?.();
+  }, [markerRadius]);
   useEffect(() => {
     const lng = longitude + 360 * Math.round((map.getCenter().lng - longitude) / 360);
     const popup = new Popup({
@@ -44,13 +50,15 @@ export default function MapPopup({ map, coordinates, hover = false, markerRadius
       const placement = getMapPopupPlacement(point, {
         width: element.offsetWidth,
         height: element.offsetHeight,
-      }, bounds, markerRadius + (hover ? 7 : 13));
+      }, bounds, radius.current + (hover ? 7 : 13));
       element.dataset.side = placement.side;
       element.style.setProperty("--ship-popup-tip-x", `${placement.tipX}px`);
       element.style.setProperty("--ship-popup-tip-y", `${placement.tipY}px`);
       popup.setOffset(placement.offset);
     }
 
+    // Resizing a marker only repositions its popup; keep the popup mounted while zooming.
+    reposition.current = updatePosition;
     const resizeObserver = new ResizeObserver(updatePosition);
     resizeObserver.observe(container);
     resizeObserver.observe(mapContainer);
@@ -60,6 +68,7 @@ export default function MapPopup({ map, coordinates, hover = false, markerRadius
     window.addEventListener("scroll", updatePosition, true);
     updatePosition();
     return () => {
+      reposition.current = null;
       resizeObserver.disconnect();
       map.off("move", updatePosition);
       map.off("resize", updatePosition);
@@ -67,6 +76,6 @@ export default function MapPopup({ map, coordinates, hover = false, markerRadius
       window.removeEventListener("scroll", updatePosition, true);
       popup.remove();
     };
-  }, [map, longitude, latitude, hover, markerRadius, container]);
+  }, [map, longitude, latitude, hover, container]);
   return createPortal(children, container);
 }
