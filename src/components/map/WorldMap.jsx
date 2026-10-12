@@ -6,7 +6,7 @@ import { MapLibreOverlay } from "@deck.gl/maplibre";
 import { useMapController } from "@/context/MapControllerContext";
 import { tileToLngLat } from "@/lib/mapTiles";
 import MapInstance from "./MapInstance";
-import MapShipsLayer from "./MapShipsLayer";
+import MapDataLayers from "./MapDataLayers";
 
 setWorkerUrl(maplibreWorkerUrl);
 
@@ -61,7 +61,7 @@ export default function WorldMap({ geoData }) {
     <div ref={container} className="h-full w-full" />
     {engine && <>
       <MapInstance map={engine.map} />
-      <MapShipsLayer map={engine.map} overlay={engine.overlay} />
+      <MapDataLayers map={engine.map} overlay={engine.overlay} />
     </>}
   </div>;
 }

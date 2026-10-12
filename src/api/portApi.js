@@ -1,6 +1,12 @@
 // api/ports.js
 
 import axiosClient from "./axiosClient";
+import { readPortTileData } from "@/lib/portMarkers";
+
+export async function getPortsInTile({ z, x, y, signal }) {
+  const response = await axiosClient.get(`/ports/${z}/${x}/${y}/tile`, { signal });
+  return readPortTileData(response.data);
+}
 
 export async function getPorts({
   page = 1,

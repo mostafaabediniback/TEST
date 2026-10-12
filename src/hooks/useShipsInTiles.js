@@ -1,55 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { getVisibleTiles } from "@/lib/mapTiles";
+import { useMemo } from "react";
+import { useVisibleMapTiles } from "./useVisibleMapTiles";
 import { useQueries } from "@tanstack/react-query";
 import { getShipsInTile } from "@/api/shipApi";
 import { useFilters } from "@/context/FilterContext";
 import { getVesselTypeFilter } from "@/lib/vesselTypes";
 
-function getTileKeys(tiles) {
-  return tiles
-    .map(({ z, x, y }) => `${z}/${x}/${y}`)
-    .sort()
-    .join("|");
-}
-
 export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
-  const [tiles, setTiles] = useState([]);
+  const tiles = useVisibleMapTiles(map);
   const { vesselTypes } = useFilters();
   const type = useMemo(() => getVesselTypeFilter(vesselTypes), [vesselTypes]);
-
-  useEffect(() => {
-    let timeoutId;
-    let previousTileKeys = "";
-
-    function updateTiles() {
-      clearTimeout(timeoutId);
-
-      timeoutId = setTimeout(() => {
-        const nextTiles = getVisibleTiles(map);
-        const nextTileKeys = getTileKeys(nextTiles);
-
-        // Do not update React state if the visible tiles did not change.
-        if (nextTileKeys === previousTileKeys) {
-          return;
-        }
-
-        previousTileKeys = nextTileKeys;
-        setTiles(nextTiles);
-      }, 200);
-    }
-
-    updateTiles();
-
-    map.on("moveend", updateTiles);
-    map.on("resize", updateTiles);
-
-    return () => {
-      clearTimeout(timeoutId);
-
-      map.off("moveend", updateTiles);
-      map.off("resize", updateTiles);
-    };
-  }, [map]);
 
   const queries = useQueries({
     queries: (type?.length === 0 ? [] : tiles).map(({ z, x, y }) => ({

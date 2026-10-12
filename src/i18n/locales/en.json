@@ -226,5 +226,7 @@
     "details": "View details",
     "sankeyHint": "Origins on the left and destinations on the right; reverse routes are independent.",
     "weekdays": "Sat,Sun,Mon,Tue,Wed,Thu,Fri"
-  }
+  },
+  "unnamedPort": "Unnamed port",
+  "closePortSelection": "Close port details"
 }
