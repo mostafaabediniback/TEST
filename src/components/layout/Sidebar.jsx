@@ -20,7 +20,6 @@ import { SidebarProfile } from "./SidebarProfile";
 import { Ship } from "lucide-react";
 import { Anchor } from "lucide-react";
 import { Navigation } from "lucide-react";
-import NavigationIcone from "../../../public/projectIcon.jpg";
 
 const items = [
   {
@@ -32,6 +31,7 @@ const items = [
     label: "Map",
     icon: PanelsTopLeft,
     to: "/dashboard/0/0/0",
+    activePaths: ["/dashboard"],
   },
   {
     label: "Ships",
@@ -47,6 +47,7 @@ const items = [
     label: "Port",
     icon: Anchor,
     to: "/port",
+    activePaths: ["/port", "/ports"],
   },
 ];
 
@@ -112,20 +113,25 @@ export function Sidebar() {
           <SidebarGroupContent>
             <nav aria-label={t("Navigation")}>
               <SidebarMenu>
-                {items.map(({ label, icon: Icon, to }) => (
-                  <SidebarMenuItem key={to}>
-                    <SidebarMenuButton
-                      render={<Link to={to} />}
-                      isActive={pathname === to}
-                      aria-current={pathname === to ? "page" : undefined}
-                      tooltip={t(label)}
-                      onClick={closeMobile}
-                    >
-                      <Icon />
-                      <span>{t(label)}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map(({ label, icon: Icon, to, activePaths = [to] }) => {
+                  const isActive = activePaths.some(
+                    (path) => pathname === path || (path !== "/" && pathname.startsWith(path + "/")),
+                  );
+                  return (
+                    <SidebarMenuItem key={to}>
+                      <SidebarMenuButton
+                        render={<Link to={to} />}
+                        isActive={isActive}
+                        aria-current={isActive ? "page" : undefined}
+                        tooltip={t(label)}
+                        onClick={closeMobile}
+                      >
+                        <Icon />
+                        <span>{t(label)}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </nav>
           </SidebarGroupContent>
