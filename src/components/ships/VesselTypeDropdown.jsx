@@ -75,7 +75,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 text-left text-sm"
+        className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
       >
         <span>{label}</span>
         <span aria-hidden="true">▾</span>
@@ -93,9 +93,10 @@ export default function VesselTypeDropdown({ selected, onChange }) {
 
               return (
                 <fieldset key={group.id} className="mb-2 last:mb-0">
-                  <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm font-medium hover:bg-muted">
+                  <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors">
                     <input
                       type="checkbox"
+                      className="accent-primary"
                       checked={state.checked}
                       ref={(element) => {
                         if (element) {
@@ -119,10 +120,11 @@ export default function VesselTypeDropdown({ selected, onChange }) {
                     {group.types.map((type) => (
                       <label
                         key={type}
-                        className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-muted"
+                        className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors"
                       >
                         <input
                           type="checkbox"
+                          className="accent-primary"
                           checked={selected.includes(type)}
                           onChange={(event) =>
                             toggleType(type, event.target.checked)

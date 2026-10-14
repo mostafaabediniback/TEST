@@ -39,7 +39,7 @@ export default function ShipsColumnsMenu({
             {columns.map((column) => (
               <label
                 key={column.key}
-                className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 hover:bg-muted"
+                className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors"
               >
                 <input
                   type="checkbox"

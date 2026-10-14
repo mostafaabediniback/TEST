@@ -29,7 +29,7 @@ function FilterCheckbox({ checked, indeterminate = false, label, onChange }) {
       aria-checked={indeterminate ? "mixed" : checked}
       aria-label={label}
       onChange={(event) => onChange(event.target.checked)}
-      className="size-3.5 shrink-0 cursor-pointer accent-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="size-3.5 shrink-0 cursor-pointer accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     />
   );
 }
@@ -113,7 +113,7 @@ export function VesselTypeFilter() {
             const groupId = `${contentId}-${group.id}`;
             return (
               <div key={group.id} className="py-0.5">
-                <div className="flex items-center gap-2 rounded px-1 py-1 hover:bg-muted/60">
+                <div className="flex items-center gap-2 rounded px-1 py-1 hover:bg-accent/70 has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors">
                   <FilterCheckbox
                     checked={checked}
                     indeterminate={indeterminate}
@@ -150,7 +150,7 @@ export function VesselTypeFilter() {
                     {group.types.map((type) => (
                       <label
                         key={type}
-                        className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-[11px] text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                        className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-[11px] text-muted-foreground hover:bg-accent/70 has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors hover:text-accent-foreground"
                       >
                         <FilterCheckbox
                           checked={selected.has(type)}
