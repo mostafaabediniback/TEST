@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import StartupIntro from "./components/layout/StartupIntro";
 
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
@@ -20,32 +21,34 @@ function App() {
   return (
     <BrowserRouter>
       <LocaleProvider>
-        <FilterProvider>
-          <MapInfoProvider>
-            <DirectionProvider>
-              <MapControllerProvider>
-                <Routes>
-                  <Route element={<DashboardLayout />}>
-                    <Route path="/" element={<Home />} />
+        <StartupIntro>
+          <FilterProvider>
+            <MapInfoProvider>
+              <DirectionProvider>
+                <MapControllerProvider>
+                  <Routes>
+                    <Route element={<DashboardLayout />}>
+                      <Route path="/" element={<Home />} />
 
-                    <Route path="/ships" element={<Ships />} />
-                    <Route path="/ships/:id" element={<ShipDetails />} />
+                      <Route path="/ships" element={<Ships />} />
+                      <Route path="/ships/:id" element={<ShipDetails />} />
 
-                    <Route path="/voyage" element={<Voyages />} />
-                    <Route path="/port" element={<Ports />} />
-                      <Route path="/ports/:id" element={<PortDetails />} />
+                      <Route path="/voyage" element={<Voyages />} />
+                      <Route path="/port" element={<Ports />} />
+                        <Route path="/ports/:id" element={<PortDetails />} />
 
 
-                    <Route
-                      path="/dashboard/:z/:x/:y"
-                      element={<Dashboard />}
-                    />
-                  </Route>
-                </Routes>
-              </MapControllerProvider>
-            </DirectionProvider>
-          </MapInfoProvider>
-        </FilterProvider>
+                      <Route
+                        path="/dashboard/:z/:x/:y"
+                        element={<Dashboard />}
+                      />
+                    </Route>
+                  </Routes>
+                </MapControllerProvider>
+              </DirectionProvider>
+            </MapInfoProvider>
+          </FilterProvider>
+        </StartupIntro>
       </LocaleProvider>
     </BrowserRouter>
   );
