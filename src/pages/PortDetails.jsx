@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Anchor,
   ArrowLeft,
@@ -13,6 +13,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePortDetails } from "@/hooks/usePortDetails";
+import { useMapController } from "@/context/MapControllerContext";
+import { useLocale } from "@/context/LocaleContext";
+import { getPortCoordinates } from "@/lib/map/portMarkers";
+import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
 import {
   ExpectedArrivalsTab,
   InPortTab,
@@ -66,7 +70,8 @@ function LockedContent() {
   );
 }
 
-function PortMap({ port }) {
+function PortMap({ port, onShowOnMap, canShowOnMap }) {
+  const { t } = useLocale();
   const hasCoordinates =
     port.lat != null &&
     port.lon != null &&
@@ -83,7 +88,6 @@ function PortMap({ port }) {
 
   const lat = Number(port.lat);
   const lon = Number(port.lon);
-  const zoom = 12;
 
   // OpenStreetMap embed centered on the port coordinates.
   const delta = 0.08;
@@ -99,14 +103,16 @@ function PortMap({ port }) {
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
       />
-      {/* <a
-        href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=${zoom}/${lat}/${lon}`}
-        target="_blank"
-        rel="noreferrer"
-        className="absolute right-2 top-2 rounded bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow hover:bg-slate-50"
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={onShowOnMap}
+        disabled={!canShowOnMap}
+        className="absolute end-3 top-3 bg-background/95 shadow-sm"
       >
-        View on live map
-      </a> */}
+        <MapPin aria-hidden="true" />
+        {t("viewOnMap")}
+      </Button>
     </div>
   );
 }
@@ -163,7 +169,7 @@ function BusinessesCard({ companies }) {
   );
 }
 
-function PortOverview({ port }) {
+function PortOverview({ port, onShowOnMap, canShowOnMap }) {
   const alternativeNames = port.alternativeNames ?? [];
   const companies =
     port.businesses ?? port.companies ?? port.relations?.businesses ?? [];
@@ -176,7 +182,11 @@ function PortOverview({ port }) {
     <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-5">
         <PortCard title="Live map preview">
-          <PortMap port={port} />
+          <PortMap
+            port={port}
+            onShowOnMap={onShowOnMap}
+            canShowOnMap={canShowOnMap}
+          />
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-slate-500">
               Port coordinates: {port.lat ?? "—"}, {port.lon ?? "—"}
@@ -258,10 +268,26 @@ function PortOverview({ port }) {
 }
 
 export default function PortDetails() {
+  const navigate = useNavigate();
+  const { setSelectedShip, setSelectedPort } = useMapController();
   const { id } = useParams();
   const { data, isPending, isError, error } = usePortDetails(id);
   const port = data?.body;
   const [activeTab, setActiveTab] = useState("Overview");
+  const coordinates = getPortCoordinates(port);
+  const mapTarget = getMapSelectionNavigation("port", port?.id ?? id, coordinates);
+
+  function handleShowOnMap() {
+    if (!mapTarget) return;
+    setSelectedShip(null);
+    setSelectedPort({
+      ...port,
+      id: port.id ?? id,
+      lon: coordinates[0],
+      lat: coordinates[1],
+    });
+    navigate(mapTarget.to);
+  }
 
   if (isPending) {
     return (
@@ -359,7 +385,11 @@ export default function PortDetails() {
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <div className="mx-auto max-w-[1600px] p-4 md:p-6">
           {activeTab === "Overview" ? (
-            <PortOverview port={port} />
+            <PortOverview
+              port={port}
+              onShowOnMap={handleShowOnMap}
+              canShowOnMap={Boolean(mapTarget)}
+            />
           ) : (
             (() => {
               const ActiveTabPage = tabPages[activeTab];

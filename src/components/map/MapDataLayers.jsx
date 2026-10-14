@@ -4,9 +4,12 @@ import { useSearchParams } from "react-router-dom";
 import { createMapLayerManager } from "@/lib/map/mapOverlayLayers";
 import MapShipsLayer from "./MapShipsLayer";
 import MapPortsLayer from "./MapPortsLayer";
+import { useMapController } from "@/context/MapControllerContext";
+import { clearMapSelection } from "@/lib/map/mapSelection";
 
 export default function MapDataLayers({ map, overlay }) {
   const [search, setSearch] = useSearchParams();
+  const { setSelectedShip, setSelectedPort } = useMapController();
   const hasSelection = search.has("shipId") || search.has("portId");
 
   const layerManager = useMemo(
@@ -16,17 +19,14 @@ export default function MapDataLayers({ map, overlay }) {
 
   const clearSelections = useCallback(() => {
     if (!hasSelection) return;
+    setSelectedShip(null);
+    setSelectedPort(null);
 
     setSearch(
-      (current) => {
-        const next = new URLSearchParams(current);
-        next.delete("shipId");
-        next.delete("portId");
-        return next;
-      },
+      (current) => clearMapSelection(current),
       { replace: true },
     );
-  }, [hasSelection, setSearch]);
+  }, [hasSelection, setSearch, setSelectedShip, setSelectedPort]);
 
   useEffect(() => {
     layerManager.setGroup("selection", {

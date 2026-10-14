@@ -147,6 +147,7 @@
 }
 
 /* Ship popups share the map's translucent control surface. */
+.ship-map-popup { z-index: 1000; }
 .ship-map-popup .maplibregl-popup-content {
   min-width: 0;
   overflow: auto;
@@ -159,7 +160,7 @@
   box-shadow: 0 8px 28px rgb(15 23 42 / 18%);
   font-family: inherit;
 }
-.ship-map-popup:not(.ship-map-hover) .maplibregl-popup-content { width: 600px; }
+.ship-map-popup:not(.ship-map-hover) .maplibregl-popup-content { width: 600px; max-width: 100%; }
 .ship-map-popup .maplibregl-popup-content .ship-details { min-width: 0; }
 .ship-map-popup .maplibregl-popup-tip {
   position: absolute;

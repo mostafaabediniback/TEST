@@ -64,5 +64,14 @@
   "backToTable": "بازگشت به جدول",
   "unnamedShip": "کشتی بدون نام",
   "closeSelection": "بستن اطلاعات کشتی",
-  "partialShipData": "بخشی از اطلاعات کشتی دریافت نشد."
+  "partialShipData": "بخشی از اطلاعات کشتی دریافت نشد.",
+  "viewOnMap": "نمایش روی نقشه",
+  "unnamedPort": "بندر بدون نام",
+  "closePortSelection": "بستن اطلاعات بندر",
+  "partialPortData": "بخشی از اطلاعات بندر دریافت نشد.",
+  "port": "بندر",
+  "localTime": "زمان محلی",
+  "shipsInPort": "کشتی‌های داخل بندر",
+  "expectedArrivals": "ورودی‌های مورد انتظار",
+  "recentPortCalls": "ترددهای اخیر بندر"
 }

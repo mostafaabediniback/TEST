@@ -4,6 +4,7 @@ import {
   ChevronRight,
   MessageSquarePlus,
   Ship,
+  MapPin,
 } from "lucide-react";
 
 import ShipPositionMap from "@/components/map/ShipPositionMap";
@@ -12,6 +13,8 @@ import DetailCard from "../detail/DetailCard";
 import DetailEmpty from "../detail/DetailEmpty";
 import DetailFields from "../detail/DetailFields";
 import formatTime from "@/lib/formatTime";
+import { Button } from "@/components/ui/button";
+import { useLocale } from "@/context/LocaleContext";
 
 function getCompanies(companyData) {
   if (Array.isArray(companyData)) return companyData;
@@ -190,7 +193,10 @@ export default function VesselOverview({
   companies,
   coordinates,
   imageUrl,
+  onShowOnMap,
+  canShowOnMap = false,
 }) {
+  const { t } = useLocale();
   const details = summary ?? ship;
   const name = ship.name || details.name || "Unnamed vessel";
   const vesselType = ship.vessel_type || details.vessel_type || "Vessel";
@@ -298,6 +304,17 @@ const aisRows = [
                   coordinates={mapCoordinates}
                   name={name}
                 />
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={onShowOnMap}
+                  disabled={!canShowOnMap}
+                  className="absolute end-3 top-3 bg-background/95 shadow-sm"
+                >
+                  <MapPin aria-hidden="true" />
+                  {t("viewOnMap")}
+                </Button>
 
                 <div className="absolute bottom-3 left-3 z-10 rounded bg-slate-900/90 px-3 py-2 text-xs text-white">
                   {lat.toFixed(5)}, {lon.toFixed(5)}

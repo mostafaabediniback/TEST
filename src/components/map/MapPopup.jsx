@@ -18,7 +18,7 @@ export default function MapPopup({
     const popup = new Popup({
       // Position from the top-left corner; the measured offset chooses a side.
       anchor: "top-left",
-      maxWidth: hover ? "240px" : "320px",
+      maxWidth: hover ? "240px" : "600px",
       closeButton: false,
       closeOnClick: false,
       className: hover ? "ship-map-popup ship-map-hover" : "ship-map-popup",
@@ -50,7 +50,7 @@ export default function MapPopup({
         element.style.visibility = "hidden";
         return;
       }
-      popup.setMaxWidth(`${Math.min(hover ? 240 : 320, availableWidth)}px`);
+      popup.setMaxWidth(`${Math.min(hover ? 240 : 600, availableWidth)}px`);
       content.style.maxHeight = `${availableHeight}px`;
       const point = map.project(popup.getLngLat());
       element.style.visibility =

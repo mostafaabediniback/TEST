@@ -20,6 +20,11 @@ import {
 import { getShipMarker } from "@/lib/map/shipMarkers";
 import MapPopup from "./MapPopup";
 import ShipPreview from "../ships/ShipPreview";
+import {
+  clearMapSelection,
+  getMapSelectionCoordinates,
+  getMapSelectionSearch,
+} from "@/lib/map/mapSelection";
 
 export default function ShipMarkers({ ships = [], map, layerManager }) {
   const navigate = useNavigate();
@@ -44,14 +49,15 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
 
   const preview = useShipPreview(selected, selectedId !== null);
   const displayedShip = { ...(selected ?? {}), ...(preview.ship ?? {}) };
-  const selectedVisible = matchesVesselTypes(displayedShip, vesselTypes);
+  const selectedVisible = matchesVesselTypes(displayedShip, vesselTypes) || Boolean(getMapSelectionCoordinates(search));
 
   const selectedCoordinates = useMemo(
     () =>
       getShipCoordinates(selected) ??
       getShipCoordinates(preview.position) ??
-      getShipCoordinates(preview.ship),
-    [selected, preview.position, preview.ship],
+      getShipCoordinates(preview.ship) ??
+      getMapSelectionCoordinates(search),
+    [selected, preview.position, preview.ship, search],
   );
 
   const subscribeToZoom = useCallback(
@@ -93,25 +99,26 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
   ]);
 
   const markers = useMemo(
-    () =>
-      ships
+    () => {
+      const visibleMarkers = ships
         .filter((ship) => matchesVesselTypes(ship, vesselTypes))
         .map((ship) =>
           String(ship.id) === selectedId && selectedMarker
             ? selectedMarker
             : getShipMarker(ship, zoom),
         )
-        .filter((marker) => marker?.polygon),
+        .filter((marker) => marker?.polygon);
+      if (selectedMarker && !visibleMarkers.some((marker) => String(marker.ship.id) === selectedId)) {
+        visibleMarkers.push(selectedMarker);
+      }
+      return visibleMarkers;
+    },
     [ships, vesselTypes, selectedId, selectedMarker, zoom],
   );
 
   const closeSelection = useCallback(() => {
     setSearch(
-      (current) => {
-        const next = new URLSearchParams(current);
-        next.delete("shipId");
-        return next;
-      },
+      (current) => clearMapSelection(current),
       { replace: true },
     );
 
@@ -129,9 +136,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
         setSearch(
           (current) => {
             if (!current.has("shipId")) return current;
-            const next = new URLSearchParams(current);
-            next.delete("shipId");
-            return next;
+            return clearMapSelection(current);
           },
           { replace: true },
         );
@@ -169,12 +174,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
             setHoveredShip(null);
 
             setSearch(
-              (current) => {
-                const next = new URLSearchParams(current);
-                next.set("shipId", String(ship.id));
-                next.delete("portId");
-                return next;
-              },
+              (current) => getMapSelectionSearch("ship", ship.id, getShipCoordinates(ship), current),
               { replace: true },
             );
 

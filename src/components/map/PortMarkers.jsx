@@ -5,13 +5,19 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { Anchor, X } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import anchorIcon from "@/assets/port-anchor.svg";
 import MapPopup from "./MapPopup";
-import DetailRow from "../detail/DetailRow";
+import { useMapController } from "@/context/MapControllerContext";
+import { usePortDetails } from "@/hooks/usePortDetails";
+import {
+  clearMapSelection,
+  getMapSelectionCoordinates,
+  getMapSelectionSearch,
+} from "@/lib/map/mapSelection";
 import { getPortCoordinates, getPortKey } from "@/lib/map/portMarkers";
 
 const PORT_ICON = {
@@ -24,11 +30,13 @@ const PORT_ICON = {
 };
 
 export default function PortMarkers({ ports = [], map, layerManager }) {
+  const navigate = useNavigate();
   const { t, direction } = useLocale();
   const [search, setSearch] = useSearchParams();
   const selectedId = search.get("portId");
 
-  const [selectedPort, setSelectedPort] = useState(null);
+  const { selectedPort, setSelectedPort } = useMapController();
+  const portQuery = usePortDetails(selectedId, { enabled: selectedId !== null });
   const [hoveredPort, setHoveredPort] = useState(null);
 
   const subscribeToZoom = useCallback(
@@ -57,40 +65,47 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
   const selected = useMemo(() => {
     if (selectedId === null) return null;
 
-    return (
-      ports.find((port) => getPortKey(port) === selectedId) ??
-      (selectedPort && getPortKey(selectedPort) === selectedId
-        ? selectedPort
-        : null)
-    );
-  }, [ports, selectedId, selectedPort]);
+    const seed = ports.find((port) => getPortKey(port) === selectedId) ??
+      (selectedPort && getPortKey(selectedPort) === selectedId ? selectedPort : null);
+    const details = portQuery.data?.body ?? portQuery.data;
+    const matchingDetails =
+      details && typeof details === "object" && !Array.isArray(details) &&
+      (details.id == null || String(details.id) === selectedId)
+        ? details
+        : {};
+    return { ...(seed ?? { id: selectedId }), ...matchingDetails };
+  }, [ports, selectedId, selectedPort, portQuery.data]);
 
-  const selectedCoordinates = getPortCoordinates(selected);
+  const selectedCoordinates = useMemo(
+    () => getPortCoordinates(selected) ?? getMapSelectionCoordinates(search),
+    [selected, search],
+  );
 
   const markers = useMemo(
-    () =>
-      ports
+    () => {
+      const visiblePorts = [...ports];
+      if (selected && selectedCoordinates && !visiblePorts.some((port) => getPortKey(port) === selectedId)) {
+        visiblePorts.push({ ...selected, lon: selectedCoordinates[0], lat: selectedCoordinates[1] });
+      }
+      return visiblePorts
         .map((port) => ({
           port,
           coordinates: getPortCoordinates(port),
         }))
-        .filter((marker) => marker.coordinates),
-    [ports],
+        .filter((marker) => marker.coordinates);
+    },
+    [ports, selected, selectedId, selectedCoordinates],
   );
 
   const closeSelection = useCallback(() => {
     setSearch(
-      (current) => {
-        const next = new URLSearchParams(current);
-        next.delete("portId");
-        return next;
-      },
+      (current) => clearMapSelection(current),
       { replace: true },
     );
 
     setSelectedPort(null);
     setHoveredPort(null);
-  }, [setSearch]);
+  }, [setSearch, setSelectedPort]);
 
   useEffect(() => {
     layerManager.setGroup("ports", {
@@ -102,9 +117,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
         setSearch(
           (current) => {
             if (!current.has("portId")) return current;
-            const next = new URLSearchParams(current);
-            next.delete("portId");
-            return next;
+            return clearMapSelection(current);
           },
           { replace: true },
         );
@@ -157,12 +170,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
             setHoveredPort(null);
 
             setSearch(
-              (current) => {
-                const next = new URLSearchParams(current);
-                next.set("portId", id);
-                next.delete("shipId");
-                return next;
-              },
+              (current) => getMapSelectionSearch("port", id, getPortCoordinates(port), current),
               { replace: true },
             );
 
@@ -179,6 +187,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     layerManager,
     setSearch,
     closeSelection,
+    setSelectedPort,
     portIconSize,
   ]);
 
@@ -216,41 +225,124 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
         >
           <div
             dir={direction}
-            className="relative min-w-[230px] p-3 text-slate-800"
+            className="relative p-3 text-slate-800"
           >
             <button
               type="button"
               aria-label={t("closePortSelection")}
               onClick={closeSelection}
-              className="absolute end-2 top-2 rounded-full p-1 text-slate-600 hover:bg-slate-100"
+              className="absolute end-2 top-2 z-10 rounded-full p-1 text-slate-600 hover:bg-white/70"
             >
               <X size={16} />
             </button>
 
-            <h3 className="mb-3 flex items-center gap-2 pe-6 text-sm font-semibold">
-              <Anchor size={18} className="text-teal-700" />
-              {selected.name || t("unnamedPort")}
-            </h3>
-
-            <DetailRow
-              label={t("country")}
-              value={selected.country_name ?? selected.country}
+            <PortPreview
+              port={selected}
+              onDetailsClick={selected.id != null ? () => {
+                setSelectedPort(selected);
+                navigate("/ports/" + encodeURIComponent(selected.id));
+              } : undefined}
             />
-            <DetailRow
-              label={t("unloCode")}
-              value={selected.unlo_code ?? selected.unlocode}
-            />
-            <DetailRow
-              label={t("latitude")}
-              value={selectedCoordinates[1].toFixed(5)}
-            />
-            <DetailRow
-              label={t("longitude")}
-              value={selectedCoordinates[0].toFixed(5)}
-            />
+            {portQuery.isError && (
+              <p role="status" className="mt-2 text-xs text-amber-700">{t("partialPortData")}</p>
+            )}
           </div>
         </MapPopup>
       )}
     </>
+  );
+}
+// Port content is kept here; its visual layout follows the ship popup.
+function PortPreview({ port, onDetailsClick }) {
+  const { locale, t, formatNumber } = useLocale();
+  const [now, setNow] = useState(() => Date.now());
+  const [failedImage, setFailedImage] = useState(null);
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const name = port.name || t("unnamedPort");
+  const country = (typeof port.country === "object" ? port.country?.name : port.country) ??
+    port.country_name ?? port.countryName;
+  const photo = port.main_image ?? port.mainImage ?? port.gallery_url ??
+    port.galleryUrl ?? port.image_url ?? port.imageUrl;
+  const imageUrl = typeof photo === "string" && photo.trim() ? photo : null;
+  const timezone = port.timezone ?? port.timeZone;
+  let localTime = port.local_time ?? port.localTime ?? "—";
+  if (timezone) {
+    try {
+      localTime = new Intl.DateTimeFormat(locale, {
+        dateStyle: "short", timeStyle: "short", timeZone: timezone,
+      }).format(now);
+    } catch {
+      // Keep the reported local time for unsupported server time-zone names.
+    }
+  }
+  function formatCount(value) {
+    if (Array.isArray(value)) return formatNumber(value.length);
+    if (value == null || typeof value === "boolean" || String(value).trim() === "") return "—";
+    const count = Number(value);
+    return Number.isFinite(count) && count >= 0 ? formatNumber(count) : "—";
+  }
+  const activity = [
+    [t("shipsInPort"), port.ships_in_port ?? port.shipsInPort],
+    [t("expectedArrivals"), port.expected_arrivals ?? port.expectedArrivals],
+    [t("recentPortCalls"), port.recent_port_calls ?? port.recentPortCalls],
+  ];
+  return (
+    <article className="w-full font-sans">
+      {imageUrl && imageUrl !== failedImage ? (
+        <div className="relative h-52">
+          <img
+            src={imageUrl}
+            alt={name}
+            onError={() => setFailedImage(imageUrl)}
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-3 pt-10 text-white">
+            <h2 className="text-lg font-bold">{name}</h2>
+            <p className="text-xs">{port.type || t("port")}{country ? " · " + country : ""}</p>
+          </div>
+        </div>
+      ) : (
+        <div className="p-3">
+          <h2 className="text-lg font-bold">{name}</h2>
+          <p className="text-xs">{port.type || t("port")}{country ? " · " + country : ""}</p>
+        </div>
+      )}
+      <div className="my-4 grid grid-cols-2 divide-x rounded-md border text-xs rtl:divide-x-reverse">
+        <div className="min-w-0 p-2">
+          <p className="text-slate-500">{t("unloCode")}</p>
+          <p className="break-words font-semibold">{port.unlo_code ?? port.unlocode ?? "—"}</p>
+        </div>
+        <div className="min-w-0 p-2">
+          <p className="text-slate-500">{t("timezone")}</p>
+          <p className="break-words font-semibold">{timezone ?? "—"}</p>
+        </div>
+      </div>
+      {onDetailsClick && (
+        <div className="mb-3 flex gap-2">
+          <button
+            type="button"
+            onClick={onDetailsClick}
+            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          >
+            {t("viewDetails")}
+          </button>
+        </div>
+      )}
+      <div className="grid grid-cols-3 divide-x rounded-md border text-xs rtl:divide-x-reverse">
+        {activity.map(([label, value]) => (
+          <div key={label} className="min-w-0 p-2">
+            <p className="text-slate-500">{label}</p>
+            <p className="font-semibold">{formatCount(value)}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 border-t pt-2 text-xs text-slate-500">
+        {t("localTime")}: {String(localTime)}
+      </div>
+    </article>
   );
 }

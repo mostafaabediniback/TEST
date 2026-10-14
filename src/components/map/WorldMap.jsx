@@ -5,6 +5,7 @@ import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&ur
 import { MapLibreOverlay } from "@deck.gl/maplibre";
 import { useMapController } from "@/context/MapControllerContext";
 import { tileToLngLat } from "@/lib/map/mapTiles";
+import { getMapSelectionCoordinates } from "@/lib/map/mapSelection";
 import MapInstance from "./MapInstance";
 import MapDataLayers from "./MapDataLayers";
 
@@ -13,13 +14,16 @@ setWorkerUrl(maplibreWorkerUrl);
 export default function WorldMap({ geoData }) {
   const container = useRef(null);
   const { z, x, y } = useParams();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const { mapView } = useMapController();
 
   const [initialView] = useState(() => {
-    if (mapView?.pathname === pathname) return mapView;
-
     const zoom = Number(z);
+    const selectionCoordinates = getMapSelectionCoordinates(search);
+    if (selectionCoordinates && Number.isInteger(zoom) && zoom >= 2 && zoom <= 19) {
+      return { center: selectionCoordinates, zoom };
+    }
+    if (mapView?.pathname === pathname) return mapView;
     const tileX = Number(x);
     const tileY = Number(y);
 

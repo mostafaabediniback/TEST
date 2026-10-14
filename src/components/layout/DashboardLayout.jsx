@@ -29,7 +29,7 @@ export function DashboardLayout() {
       >
         <Sidebar />
 
-        <SidebarInset className="relative h-dvh min-w-0 overflow-hidden">
+        <SidebarInset className="relative isolate h-dvh min-w-0 overflow-hidden">
           <header className="pointer-events-none absolute inset-x-0 top-0 z-[9999] flex h-16 items-center gap-2 border-b border-white/20 bg-transparent px-3 shadow-none backdrop-blur-0 sm:gap-3 sm:px-4">
             <SidebarTrigger
               label={t("Toggle sidebar")}
@@ -47,7 +47,7 @@ export function DashboardLayout() {
 
           <div className="relative h-full w-full">
             {isDashboard ? (
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0">
                 <Outlet />
               </div>
             ) : (

@@ -102,5 +102,14 @@
     "Tug": "Tug",
     "Other": "Other",
     "Unknown": "Unknown"
-  }
+  },
+  "viewOnMap": "View on map",
+  "unnamedPort": "Unnamed port",
+  "closePortSelection": "Close port information",
+  "partialPortData": "Some port information could not be loaded.",
+  "port": "Port",
+  "localTime": "Local time",
+  "shipsInPort": "Vessels in port",
+  "expectedArrivals": "Expected arrivals",
+  "recentPortCalls": "Recent port calls"
 }

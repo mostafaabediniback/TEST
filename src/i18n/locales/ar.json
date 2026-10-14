@@ -52,5 +52,14 @@
   "backToTable": "العودة إلى الجدول",
   "unnamedShip": "سفينة بلا اسم",
   "closeSelection": "إغلاق معلومات السفينة",
-  "partialShipData": "تعذر تحميل بعض معلومات السفينة."
+  "partialShipData": "تعذر تحميل بعض معلومات السفينة.",
+  "viewOnMap": "عرض على الخريطة",
+  "unnamedPort": "ميناء بلا اسم",
+  "closePortSelection": "إغلاق معلومات الميناء",
+  "partialPortData": "تعذر تحميل بعض معلومات الميناء.",
+  "port": "ميناء",
+  "localTime": "التوقيت المحلي",
+  "shipsInPort": "السفن في الميناء",
+  "expectedArrivals": "الوصول المتوقع",
+  "recentPortCalls": "زيارات الميناء الأخيرة"
 }

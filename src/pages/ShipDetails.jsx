@@ -7,6 +7,8 @@ import {
   getShipCoordinates,
 } from "@/lib/shipNavigation";
 import { useLocale } from "@/context/LocaleContext";
+import { useMapController } from "@/context/MapControllerContext";
+import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
 
 import VesselDetailHeader from "@/components/ships/VesselDetailHeader";
 import VesselOverview from "@/components/ships/VesselOverview";
@@ -32,6 +34,7 @@ export default function ShipDetails() {
   const location = useLocation();
   const { id } = useParams();
   const { t } = useLocale();
+  const { setSelectedShip, setSelectedPort } = useMapController();
 
   const seed =
     String(location.state?.ship?.id) === id ? location.state.ship : { id };
@@ -46,6 +49,21 @@ export default function ShipDetails() {
 
   const coordinates =
     getShipCoordinates(position) ?? getShipCoordinates(ship);
+
+  const mapTarget = getMapSelectionNavigation("ship", ship.id ?? id, coordinates);
+
+  function handleShowOnMap() {
+    if (!mapTarget) return;
+    setSelectedPort(null);
+    setSelectedShip({
+      ...ship,
+      id: ship.id ?? id,
+      lon: coordinates[0],
+      lat: coordinates[1],
+      position,
+    });
+    navigate(mapTarget.to);
+  }
 
   const imageUrl =
     preview.photo?.url ??
@@ -115,6 +133,8 @@ return (
             companies={companies}
             coordinates={coordinates}
             imageUrl={imageUrl}
+            onShowOnMap={handleShowOnMap}
+            canShowOnMap={Boolean(mapTarget)}
           />
         ) : (
           <VesselSecondaryTab
