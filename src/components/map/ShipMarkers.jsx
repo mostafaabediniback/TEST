@@ -19,11 +19,15 @@ import {
 } from "@/lib/shipNavigation";
 import { getShipMarker } from "@/lib/map/shipMarkers";
 import MapPopup from "./MapPopup";
+import ShipTrackLayer from "./ShipTrackLayer";
+import ShipTrackControls from "./ShipTrackControls";
+import { useShipTrack } from "@/hooks/useShipTrack";
 import ShipPreview from "../ships/ShipPreview";
 import {
   clearMapSelection,
   getMapSelectionCoordinates,
   getMapSelectionSearch,
+  toggleShipTrack,
 } from "@/lib/map/mapSelection";
 
 export default function ShipMarkers({ ships = [], map, layerManager }) {
@@ -51,13 +55,24 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
   const displayedShip = { ...(selected ?? {}), ...(preview.ship ?? {}) };
   const selectedVisible = matchesVesselTypes(displayedShip, vesselTypes) || Boolean(getMapSelectionCoordinates(search));
 
+  const isPastTrackActive = selectedId !== null && search.get("pastTrack") === selectedId;
+  const track = useShipTrack(selectedId, isPastTrackActive && selectedVisible);
+  const togglePastTrack = useCallback(() => {
+    setSearch((current) => toggleShipTrack(current, selectedId), { replace: true });
+  }, [setSearch, selectedId]);
+
   const selectedCoordinates = useMemo(
-    () =>
-      getShipCoordinates(selected) ??
-      getShipCoordinates(preview.position) ??
-      getShipCoordinates(preview.ship) ??
-      getMapSelectionCoordinates(search),
-    [selected, preview.position, preview.ship, search],
+    () => {
+      if (selectedId === null) return null;
+
+      return (
+        getShipCoordinates(selected) ??
+        getShipCoordinates(preview.position) ??
+        getShipCoordinates(preview.ship) ??
+        getMapSelectionCoordinates(search)
+      );
+    },
+    [selectedId, selected, preview.position, preview.ship, search],
   );
 
   const subscribeToZoom = useCallback(
@@ -115,6 +130,15 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     },
     [ships, vesselTypes, selectedId, selectedMarker, zoom],
   );
+
+  function showShipDetails() {
+    setSelectedShip(displayedShip);
+    const target = getShipDetailsNavigation(displayedShip, {
+      source: "map",
+      returnTo: location.pathname + location.search,
+    });
+    navigate(target.to, { state: target.state });
+  }
 
   const closeSelection = useCallback(() => {
     setSearch(
@@ -220,6 +244,21 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
 
   return (
     <>
+      <ShipTrackLayer
+        map={map}
+        layerManager={layerManager}
+        path={track.path}
+        visible={isPastTrackActive && selectedVisible}
+      />
+      {isPastTrackActive && selectedVisible && (
+        <ShipTrackControls
+          shipName={displayedShip.name || t("unnamedShip")}
+          track={track}
+          onHide={togglePastTrack}
+          onDetails={showShipDetails}
+          onClose={closeSelection}
+        />
+      )}
       {hoverCoordinates && String(hoveredShip.id) !== selectedId && (
         <MapPopup
           map={map}
@@ -237,6 +276,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
       )}
 
       {selectedId !== null &&
+        !isPastTrackActive &&
         selectedCoordinates &&
         selectedVisible &&
         selectedMarker && (
@@ -263,16 +303,9 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
                 port={preview.port}
                 isLoading={preview.isLoading}
                 detailsLabel={t("viewDetails")}
-                onDetailsClick={() => {
-                  setSelectedShip(displayedShip);
-
-                  const target = getShipDetailsNavigation(displayedShip, {
-                    source: "map",
-                    returnTo: location.pathname + location.search,
-                  });
-
-                  navigate(target.to, { state: target.state });
-                }}
+                onPastTrackClick={togglePastTrack}
+                isPastTrackActive={isPastTrackActive}
+                onDetailsClick={showShipDetails}
               />
 
               {preview.isError && (

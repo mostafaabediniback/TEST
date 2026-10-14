@@ -111,5 +111,11 @@
   "localTime": "Local time",
   "shipsInPort": "Vessels in port",
   "expectedArrivals": "Expected arrivals",
-  "recentPortCalls": "Recent port calls"
+  "recentPortCalls": "Recent port calls",
+  "pastTrack": "Past track",
+  "hidePastTrack": "Hide track",
+  "loadingPastTrack": "Loading past track...",
+  "loadPastTrackError": "Could not load the past track.",
+  "noPastTrack": "Not enough historical positions to draw a track.",
+  "retryPastTrack": "Retry"
 }

@@ -1,6 +1,6 @@
 // ShipPreview.jsx
 import VoyageTimeline from "./VoyageTimeline";
-import DetailRow from "../detail/DetailRow";
+import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
 
 function formatTimestamp(value) {
@@ -29,7 +29,10 @@ export default function ShipPreview({
   ship,
   onDetailsClick,
   detailsLabel = "Vessel details",
+  onPastTrackClick,
+  isPastTrackActive = false,
 }) {
+  const { t } = useLocale();
   const preview = useShipPreview(ship, Boolean(ship?.id));
 
   const shipData = preview.ship ?? ship;
@@ -41,9 +44,6 @@ export default function ShipPreview({
   const speed = position?.speed ?? shipData?.speed;
   const course = position?.course ?? shipData?.course;
   const draught = shipData?.draft ?? position?.draught;
-
-  const departureTime = formatTimestamp(voyage?.departure_time);
-  const arrivalTime = formatTimestamp(voyage?.arrival_time);
 
   return (
     <article className="w-full  font-sans">
@@ -95,9 +95,12 @@ export default function ShipPreview({
         <div className="mb-3 flex gap-2">
           <button
             type="button"
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50"
+            onClick={onPastTrackClick}
+            disabled={!onPastTrackClick || shipData?.id == null}
+            aria-pressed={isPastTrackActive}
+            className={`flex-1 rounded-md border px-3 py-2 text-sm font-semibold disabled:opacity-50 ${isPastTrackActive ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 hover:bg-slate-50"}`}
           >
-            Past track
+            {t(isPastTrackActive ? "hidePastTrack" : "pastTrack")}
           </button>
 
           <button

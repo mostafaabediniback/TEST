@@ -45,6 +45,11 @@ export async function getShipPosition(id) {
   return response.data;
 }
 
+export async function getShipPositions(id, { signal } = {}) {
+  const response = await axiosClient.get(`/mersad/ship/${encodeURIComponent(id)}/positions`, { signal });
+  return response.data;
+}
+
 export async function getShipVoyage(id) {
   const response = await axiosClient.get(`/mersad/ship/${id}/voyage`);
   return response.data;
@@ -85,38 +90,37 @@ export async function getShips({
   sort_by = "id",
   sort_order = "desc",
 } = {}) {
-  const response = await axiosClient.get("/mersad/ships", {
-    params: {
-      page,
-      page_size,
-      name,
-      flag,
-      vessel_class,
-      vessel_maker,
-      vessel_type,
-      gallery_url,
-      id,
-      imo,
-      yob,
-      dwt,
-      yob_from,
-      yob_to,
-      loa_min,
-      loa_max,
-      width_min,
-      width_max,
-      draft_min,
-      draft_max,
-      dwt_min,
-      dwt_max,
-      create_time_from,
-      create_time_to,
-      update_time_from,
-      update_time_to,
-      sort_by,
-      sort_order,
-    },
-  });
+  const params = {
+    page,
+    page_size,
+    name,
+    flag,
+    vessel_class,
+    vessel_maker,
+    vessel_type,
+    gallery_url,
+    id,
+    imo,
+    yob,
+    dwt,
+    yob_from,
+    yob_to,
+    loa_min,
+    loa_max,
+    width_min,
+    width_max,
+    draft_min,
+    draft_max,
+    dwt_min,
+    dwt_max,
+    create_time_from,
+    create_time_to,
+    update_time_from,
+    update_time_to,
+    sort_by,
+    sort_order,
+  };
+  const response = await axiosClient.get("/mersad/ships", { params });
 
   return response.data;
 }

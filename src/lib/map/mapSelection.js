@@ -1,9 +1,9 @@
-import { getPortCoordinates } from "./portMarkers";
-import { lngLatToTile } from "./mapTiles";
+import { getPortCoordinates } from "./portMarkers.js";
+import { lngLatToTile } from "./mapTiles.js";
 
 export function clearMapSelection(current) {
   const search = new URLSearchParams(current);
-  for (const key of ["shipId", "portId", "lng", "lat"]) search.delete(key);
+  for (const key of ["shipId", "portId", "lng", "lat", "pastTrack"]) search.delete(key);
   return search;
 }
 
@@ -36,4 +36,12 @@ export function getMapSelectionNavigation(kind, id, coordinates) {
   const { z, x, y } = lngLatToTile(point[0], point[1], 12);
   const search = getMapSelectionSearch(kind, id, point);
   return { to: "/dashboard/" + z + "/" + x + "/" + y + "?" + search };
+}
+
+export function toggleShipTrack(current, id) {
+  const search = new URLSearchParams(current);
+  if (id == null || search.get("shipId") !== String(id)) return search;
+  if (search.get("pastTrack") === String(id)) search.delete("pastTrack");
+  else search.set("pastTrack", String(id));
+  return search;
 }
