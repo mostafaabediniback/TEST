@@ -164,8 +164,10 @@ function Sidebar({
   onPointerOver,
   ...props
 }) {
-  const { isMobile, state, openMobile, setOpenMobile, sidebarId, triggerRef, hoverToOpen, setHovered } =
+  const { isMobile, state, openMobile, setOpenMobile, sidebarId, triggerRef, hoverToOpen, isPinned, setHovered } =
     useSidebar();
+  // Hover and portalled menus expand the panel without reserving more page space.
+  const layoutState = hoverToOpen && !isPinned ? "collapsed" : state;
   if (collapsible === "none") {
     return (
       <div
@@ -224,6 +226,8 @@ function Sidebar({
       dir={dir}
       className="group peer hidden text-sidebar-foreground md:block"
       data-state={state}
+      data-layout-state={layoutState}
+      data-layout-collapsible={layoutState === "collapsed" ? collapsible : ""}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
       data-side={side}
@@ -234,11 +238,11 @@ function Sidebar({
         data-slot="sidebar-gap"
         className={cn(
           "relative w-[var(--sidebar-width)] bg-transparent transition-[width] duration-200 ease-linear",
-          "group-data-[collapsible=offcanvas]:w-0",
+          "group-data-[layout-collapsible=offcanvas]:w-0",
           "group-data-[side=right]:rotate-180",
           variant === "floating" || variant === "inset"
-            ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(1rem))]"
-            : "group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)]",
+            ? "group-data-[layout-collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(1rem))]"
+            : "group-data-[layout-collapsible=icon]:w-[var(--sidebar-width-icon)]",
         )}
       />
       <div
@@ -343,7 +347,7 @@ function SidebarInset({ className, ...props }) {
     <main
       data-slot="sidebar-inset"
       className={cn(
-        "relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2",
+        "relative isolate flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[layout-state=collapsed]:ms-2",
         className,
       )}
       {...props}

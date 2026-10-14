@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import { ChevronsUpDown, Languages, Settings, UserRound } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ChevronsUpDown, Languages, UserRound } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -44,7 +42,7 @@ function ProfileAvatar({ user }) {
 
 export function SidebarProfile({ user }) {
   const { locale, setLocale, direction, isRtl, t } = useLocale();
-  const { isMobile, setOpenMobile, menuOpen, setMenuOpen } = useSidebar();
+  const { isMobile, menuOpen, setMenuOpen } = useSidebar();
   const name = user?.name || t("Your profile");
   const subtitle = user?.email || t("Settings and language");
 
@@ -97,7 +95,7 @@ export function SidebarProfile({ user }) {
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               render={<Link to="/settings" />}
               onClick={() => {
                 if (isMobile) setOpenMobile(false);
@@ -105,7 +103,7 @@ export function SidebarProfile({ user }) {
             >
               <Settings aria-hidden="true" />
               {t("Settings")}
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSub>
               <DropdownMenuSubTrigger
                 aria-label={t("Language")}

@@ -1,13 +1,28 @@
-import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useTranslation } from "react-i18next";
 import { DirectionProvider } from "@base-ui/react/direction-provider";
-import { translate } from "@/i18n/messages";
+import i18n from "@/i18n/config";
 
-const STORAGE_KEY = "layout-starter-locale";
 const LocaleContext = createContext(null);
 
+const SUPPORTED_LOCALES = ["fa", "en", "ar"];
+
 function readLocale() {
+  if (typeof window === "undefined") {
+    return "fa";
+  }
+
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "fa";
+    const savedLocale = window.localStorage.getItem("language");
+
+    return SUPPORTED_LOCALES.includes(savedLocale) ? savedLocale : "fa";
   } catch {
     return "fa";
   }
@@ -15,32 +30,51 @@ function readLocale() {
 
 export function LocaleProvider({ children }) {
   const [locale, updateLocale] = useState(readLocale);
-  const isRtl = locale === "fa";
+  const { t } = useTranslation();
+
+  const isRtl = locale === "fa" || locale === "ar";
   const direction = isRtl ? "rtl" : "ltr";
 
-  const setLocale = useCallback((nextLocale) => {
-    if (nextLocale === "fa" || nextLocale === "en") updateLocale(nextLocale);
+  const setLocale = useCallback(async (nextLocale) => {
+    if (!SUPPORTED_LOCALES.includes(nextLocale)) {
+      return;
+    }
+
+    await i18n.changeLanguage(nextLocale);
+    updateLocale(nextLocale);
+
+    try {
+      window.localStorage.setItem("language", nextLocale);
+    } catch {
+      // Language switching still works if storage is unavailable.
+    }
   }, []);
 
-  const t = useCallback((key, params) => translate(locale, key, params), [locale]);
   const formatNumber = useCallback(
-    (value, options) => new Intl.NumberFormat(locale === "fa" ? "fa-IR" : "en-US", options).format(value),
+    (value, options) => {
+      const numberLocale =
+        locale === "fa" ? "fa-IR" : locale === "ar" ? "ar" : "en-US";
+
+      return new Intl.NumberFormat(numberLocale, options).format(value);
+    },
     [locale],
   );
 
   useLayoutEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = direction;
-    document.title = t("Starter layout");
-    try {
-      window.localStorage.setItem(STORAGE_KEY, locale);
-    } catch {
-      // Language switching still works when browser storage is unavailable.
-    }
+    document.title = t("welcome");
   }, [locale, direction, t]);
 
   const value = useMemo(
-    () => ({ locale, setLocale, direction, isRtl, t, formatNumber }),
+    () => ({
+      locale,
+      setLocale,
+      direction,
+      isRtl,
+      t,
+      formatNumber,
+    }),
     [locale, setLocale, direction, isRtl, t, formatNumber],
   );
 
@@ -53,6 +87,10 @@ export function LocaleProvider({ children }) {
 
 export function useLocale() {
   const context = useContext(LocaleContext);
-  if (!context) throw new Error("useLocale must be used within LocaleProvider");
+
+  if (!context) {
+    throw new Error("useLocale must be used within LocaleProvider");
+  }
+
   return context;
 }

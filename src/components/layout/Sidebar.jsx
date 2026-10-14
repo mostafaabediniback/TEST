@@ -1,4 +1,4 @@
-import { LayoutDashboard, PanelsTopLeft, Pin, Settings } from "lucide-react";
+import { LayoutDashboard, PanelsTopLeft, Pin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar as SidebarRoot,
@@ -17,11 +17,37 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useLocale } from "@/context/LocaleContext";
 import { SidebarProfile } from "./SidebarProfile";
+import { Ship } from "lucide-react";
+import { Anchor } from "lucide-react";
+import { Navigation } from "lucide-react";
+import NavigationIcone from "../../../public/projectIcon.jpg";
 
 const items = [
-  { label: "Test menu 1", icon: LayoutDashboard, to: "/" },
-  { label: "Test menu 2", icon: PanelsTopLeft, to: "/test-2" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    to: "/",
+  },
+  {
+    label: "Map",
+    icon: PanelsTopLeft,
+    to: "/dashboard/0/0/0",
+  },
+  {
+    label: "Ships",
+    icon: Ship,
+    to: "/ships",
+  },
+  {
+    label: "Voyage",
+    icon: Navigation,
+    to: "/voyage",
+  },
+  {
+    label: "Port",
+    icon: Anchor,
+    to: "/port",
+  },
 ];
 
 export function Sidebar() {
@@ -51,15 +77,17 @@ export function Sidebar() {
               tooltip={t("Application")}
             >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <LayoutDashboard className="size-5" />
+                {/* <LayoutDashboard className="size-5" /> */}
+                <img src="/projectIcon.jpg" alt="Application logo" />
               </span>
               <span className="grid min-w-0 gap-0.5 text-start group-data-[collapsible=icon]:hidden">
                 <span className="truncate text-sm font-semibold">
-                  {t("Application")}
+                  {/* {t("Application")} */}
+                  Touba
                 </span>
-                <span className="truncate text-xs text-muted-foreground">
+                {/* <span className="truncate text-xs text-muted-foreground">
                   {t("Starter layout")}
-                </span>
+                </span> */}
               </span>
             </SidebarMenuButton>
             {!isMobile && (
