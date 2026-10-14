@@ -4,13 +4,13 @@ import { Card } from "@/components/ui/card";
 import { useLocale } from "@/context/LocaleContext";
 import { usePorts } from "@/hooks/usePorts";
 
-import PortsFilters from "@/components/portPage/PortsFilters";
-import PortsColumnsMenu from "@/components/portPage/PortsColumnsMenu";
-import PortsTable from "@/components/portPage/PortsTable";
-import PortsPagination from "@/components/portPage/PortsPagination";
-import { columns, emptyFilters, optionalValue } from "@/components/portPage/portsConstants";
+import PortsFilters from "@/components/ports/PortsFilters";
+import PortsColumnsMenu from "@/components/ports/PortsColumnsMenu";
+import PortsTable from "@/components/ports/PortsTable";
+import PortsPagination from "@/components/ports/PortsPagination";
+import { columns, emptyFilters, optionalValue } from "@/components/ports/portsConstants";
 
-export default function Port() {
+export default function Ports() {
   const { t, direction } = useLocale();
 
   const [filters, setFilters] = useState({ ...emptyFilters });

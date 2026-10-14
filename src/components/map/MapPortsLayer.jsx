@@ -1,7 +1,7 @@
 // MapPortsLayer.jsx
 import { useLocale } from "@/context/LocaleContext";
-import { usePortsInVisibleTiles } from "@/hooks/usePortsInTiles";
-import PortMarkers from "../ports/PortMarkers";
+import { usePortsInVisibleTiles } from "@/hooks/usePortsInVisibleTiles";
+import PortMarkers from "./PortMarkers";
 
 export default function MapPortsLayer({ map, layerManager }) {
   const { t } = useLocale();

@@ -1,4 +1,4 @@
-export default function ShipRow({ label, value }) {
+export default function DetailRow({ label, value }) {
   return (
     <div className="flex items-center justify-between gap-6 border-b border-slate-100 py-2 last:border-0">
       <span className="text-xs font-medium text-slate-500">

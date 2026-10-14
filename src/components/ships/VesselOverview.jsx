@@ -7,10 +7,10 @@ import {
 } from "lucide-react";
 
 import ShipPositionMap from "@/components/map/ShipPositionMap";
-import VoyageTimeline from "@/components/map/VoyageTimeline";
-import DetailCard from "./DetailCard";
-import DetailEmpty from "./DetailEmpty";
-import DetailFields from "./DetailFields";
+import VoyageTimeline from "@/components/ships/VoyageTimeline";
+import DetailCard from "../detail/DetailCard";
+import DetailEmpty from "../detail/DetailEmpty";
+import DetailFields from "../detail/DetailFields";
 import formatTime from "@/lib/formatTime";
 
 function getCompanies(companyData) {

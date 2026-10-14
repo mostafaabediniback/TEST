@@ -12,7 +12,7 @@ function formatTimestamp(timestamp) {
   return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
 }
 
-export function ArrivalsDeparturesPage({ port, portId }) {
+export function ArrivalsDeparturesTab({ port, portId }) {
   const [movementType, setMovementType] = useState("All");
   const [search, setSearch] = useState("");
   const [date, setDate] = useState("");

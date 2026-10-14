@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMapController } from "@/context/MapControllerContext";
 import { useMapInfo } from "@/context/MapInfoContext";
-import { getMapView, lngLatToTile } from "@/lib/mapTiles";
+import { getMapView, lngLatToTile } from "@/lib/map/mapTiles";
 
 export default function MapInstance({ map }) {
   const navigate = useNavigate();

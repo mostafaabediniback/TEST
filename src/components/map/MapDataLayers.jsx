@@ -1,7 +1,7 @@
 // MapDataLayers.jsx
 import { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { createMapLayerManager } from "@/lib/mapOverlayLayers";
+import { createMapLayerManager } from "@/lib/map/mapOverlayLayers";
 import MapShipsLayer from "./MapShipsLayer";
 import MapPortsLayer from "./MapPortsLayer";
 

@@ -1,4 +1,4 @@
-// api/shipApi.js
+// api/ships.js
 
 import axiosClient from "./axiosClient";
 

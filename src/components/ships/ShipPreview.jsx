@@ -1,6 +1,6 @@
-// ShipDetails.jsx
-import VoyageTimeline from "../map/VoyageTimeline";
-import ShipRow from "./ShipRow";
+// ShipPreview.jsx
+import VoyageTimeline from "./VoyageTimeline";
+import DetailRow from "../detail/DetailRow";
 import { useShipPreview } from "@/hooks/useShipPreview";
 
 function formatTimestamp(value) {
@@ -25,7 +25,7 @@ function formatTimestamp(value) {
   });
 }
 
-export default function ShipDetails({
+export default function ShipPreview({
   ship,
   onDetailsClick,
   detailsLabel = "Vessel details",

@@ -1,6 +1,6 @@
-import { useShipsInVisibleTiles } from "@/hooks/useShipsInTiles";
+import { useShipsInVisibleTiles } from "@/hooks/useShipsInVisibleTiles";
 import { useLocale } from "@/context/LocaleContext";
-import ShipMarkers from "../ships/ShipMarkers";
+import ShipMarkers from "./ShipMarkers";
 
 export default function MapShipsLayer({ map, layerManager }) {
   const { t } = useLocale();

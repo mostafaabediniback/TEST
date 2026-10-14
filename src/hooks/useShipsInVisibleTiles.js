@@ -1,9 +1,9 @@
-// hooks/useShipsInTiles.js
+// hooks/useShipsInVisibleTiles.js
 
 import { useEffect, useMemo, useState } from "react";
-import { getVisibleTiles } from "@/lib/mapTiles";
+import { getVisibleTiles } from "@/lib/map/mapTiles";
 import { useQueries } from "@tanstack/react-query";
-import { getShipsInTile } from "@/api/shipApi";
+import { getShipsInTile } from "@/api/ships";
 import { useFilters } from "@/context/FilterContext";
 import { getVesselTypeFilter } from "@/lib/vesselTypes";
 

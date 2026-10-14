@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPortArrivalVoyages, getPortDepartureVoyages } from "@/api/portApi";
+import { getPortArrivalVoyages, getPortDepartureVoyages } from "@/api/ports";
 
 export function usePortVoyages(id, options = {}) {
   return useQuery({

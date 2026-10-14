@@ -3,10 +3,10 @@ import "./App.css";
 
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import ShipDetailPage from "./pages/ShipDetailPage";
+import ShipDetails from "./pages/ShipDetails";
 import Ships from "./pages/Ships";
-import Voyage from "./pages/Voyage";
-import Port from "./pages/Port";
+import Voyages from "./pages/Voyages";
+import Ports from "./pages/Ports";
 
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { DirectionProvider } from "./context/DirectionContext";
@@ -29,10 +29,10 @@ function App() {
                     <Route path="/" element={<Home />} />
 
                     <Route path="/ships" element={<Ships />} />
-                    <Route path="/ships/:id" element={<ShipDetailPage />} />
+                    <Route path="/ships/:id" element={<ShipDetails />} />
 
-                    <Route path="/voyage" element={<Voyage />} />
-                    <Route path="/port" element={<Port />} />
+                    <Route path="/voyage" element={<Voyages />} />
+                    <Route path="/port" element={<Ports />} />
                       <Route path="/ports/:id" element={<PortDetails />} />
 
 

@@ -1,23 +1,23 @@
 import { Ship } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-export function InPortPage() {
+export function InPortTab() {
   return <TabPlaceholder title="In port" />;
 }
 
-export function ExpectedArrivalsPage() {
+export function ExpectedArrivalsTab() {
   return <TabPlaceholder title="Expected arrivals" />;
 }
 
-export function PortCongestionPage() {
+export function PortCongestionTab() {
   return <TabPlaceholder title="Port congestion" />;
 }
 
-export function StatisticsPage() {
+export function StatisticsTab() {
   return <TabPlaceholder title="Statistics" />;
 }
 
-export function InTheNewsPage() {
+export function InTheNewsTab() {
   return <TabPlaceholder title="In the news" />;
 }
 

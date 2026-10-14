@@ -10,9 +10,9 @@ import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { Anchor, X } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import anchorIcon from "@/assets/port-anchor.svg";
-import MapPopup from "../map/MapPopup";
-import ShipRow from "../ships/ShipRow";
-import { getPortCoordinates, getPortKey } from "@/lib/portMarkers";
+import MapPopup from "./MapPopup";
+import DetailRow from "../detail/DetailRow";
+import { getPortCoordinates, getPortKey } from "@/lib/map/portMarkers";
 
 const PORT_ICON = {
   url: anchorIcon,
@@ -232,19 +232,19 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
               {selected.name || t("unnamedPort")}
             </h3>
 
-            <ShipRow
+            <DetailRow
               label={t("country")}
               value={selected.country_name ?? selected.country}
             />
-            <ShipRow
+            <DetailRow
               label={t("unloCode")}
               value={selected.unlo_code ?? selected.unlocode}
             />
-            <ShipRow
+            <DetailRow
               label={t("latitude")}
               value={selectedCoordinates[1].toFixed(5)}
             />
-            <ShipRow
+            <DetailRow
               label={t("longitude")}
               value={selectedCoordinates[0].toFixed(5)}
             />

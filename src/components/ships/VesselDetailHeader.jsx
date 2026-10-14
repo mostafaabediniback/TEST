@@ -4,7 +4,7 @@ import {
   Ship
 } from "lucide-react";
 
-export default function DetailHeader({
+export default function VesselDetailHeader({
   name,
   vesselType,
   imo,

@@ -14,13 +14,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePortDetails } from "@/hooks/usePortDetails";
 import {
-  ExpectedArrivalsPage,
-  InPortPage,
-  InTheNewsPage,
-  PortCongestionPage,
-  StatisticsPage,
-} from "./port/tabs/PortTabPages";
-import { ArrivalsDeparturesPage } from "./port/tabs/ArrivalsDeparturesPage";
+  ExpectedArrivalsTab,
+  InPortTab,
+  InTheNewsTab,
+  PortCongestionTab,
+  StatisticsTab,
+} from "../components/ports/PortPlaceholderTabs";
+import { ArrivalsDeparturesTab } from "../components/ports/ArrivalsDeparturesTab";
 
 const tabs = [
   "Overview",
@@ -33,12 +33,12 @@ const tabs = [
 ];
 
 const tabPages = {
-  "In port": InPortPage,
-  "Expected arrivals": ExpectedArrivalsPage,
-  "Arrivals and departures": ArrivalsDeparturesPage,
-  "Port congestion": PortCongestionPage,
-  Statistics: StatisticsPage,
-  "In the news": InTheNewsPage,
+  "In port": InPortTab,
+  "Expected arrivals": ExpectedArrivalsTab,
+  "Arrivals and departures": ArrivalsDeparturesTab,
+  "Port congestion": PortCongestionTab,
+  Statistics: StatisticsTab,
+  "In the news": InTheNewsTab,
 };
 function PortCard({ title, children, className = "" }) {
   return (

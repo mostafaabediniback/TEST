@@ -7,11 +7,11 @@ import { Card } from "@/components/ui/card";
 import { useLocale } from "@/context/LocaleContext";
 import { useShips } from "@/hooks/useShips";
 
-import ShipsFilters from "@/components/shipsPage/ShipsFilters";
-import ShipsColumnsMenu from "@/components/shipsPage/ShipsColumnsMenu";
-import ShipsTable from "@/components/shipsPage/ShipsTable";
-import ShipsPagination from "@/components/shipsPage/ShipsPagination";
-import { columns, emptyFilters, filtersToValue } from "@/components/shipsPage/shipsConstants";
+import ShipsFilters from "@/components/ships/ShipsFilters";
+import ShipsColumnsMenu from "@/components/ships/ShipsColumnsMenu";
+import ShipsTable from "@/components/ships/ShipsTable";
+import ShipsPagination from "@/components/ships/ShipsPagination";
+import { columns, emptyFilters, filtersToValue } from "@/components/ships/shipsConstants";
 
 export default function Ships() {
   const { t, direction } = useLocale();

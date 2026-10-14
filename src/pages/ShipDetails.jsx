@@ -8,9 +8,9 @@ import {
 } from "@/lib/shipNavigation";
 import { useLocale } from "@/context/LocaleContext";
 
-import DetailHeader from "@/components/detail/DetailHeader";
-import VesselOverview from "@/components/detail/VesselOverview";
-import VesselSecondaryTab from "@/components/detail/VesselSecondaryTab";
+import VesselDetailHeader from "@/components/ships/VesselDetailHeader";
+import VesselOverview from "@/components/ships/VesselOverview";
+import VesselSecondaryTab from "@/components/ships/VesselSecondaryTab";
 
 const tabs = [
   "Overview",
@@ -27,7 +27,7 @@ function getCompanies(companyData) {
   return companyData?.items ?? companyData?.companies ?? [];
 }
 
-export default function ShipDetailPage() {
+export default function ShipDetails() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -80,7 +80,7 @@ export default function ShipDetailPage() {
 
 return (
   <main className="flex h-full min-h-0 flex-col overflow-hidden bg-slate-50 text-slate-800">
-    <DetailHeader
+    <VesselDetailHeader
       name={ship.name || t("unnamedShip")}
       vesselType={ship.vessel_type || "Vessel"}
       imo={ship.imo}

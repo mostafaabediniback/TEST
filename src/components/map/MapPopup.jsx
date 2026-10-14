@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Popup } from "maplibre-gl";
-import { getMapPopupPlacement } from "@/lib/mapPopupPlacement";
+import { getMapPopupPlacement } from "@/lib/map/mapPopupPlacement";
 
 export default function MapPopup({
   map,

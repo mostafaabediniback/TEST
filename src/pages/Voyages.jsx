@@ -67,7 +67,7 @@ function toOptionalNumber(value) {
   return Number.isFinite(number) ? number : undefined;
 }
 
-export default function Voyage() {
+export default function Voyages() {
   const { t, formatNumber, direction } = useLocale();
   const navigate = useNavigate();
   const location = useLocation();

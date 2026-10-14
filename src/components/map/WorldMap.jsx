@@ -4,7 +4,7 @@ import { Map as MapLibreMap, setWorkerUrl } from "maplibre-gl";
 import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { MapLibreOverlay } from "@deck.gl/maplibre";
 import { useMapController } from "@/context/MapControllerContext";
-import { tileToLngLat } from "@/lib/mapTiles";
+import { tileToLngLat } from "@/lib/map/mapTiles";
 import MapInstance from "./MapInstance";
 import MapDataLayers from "./MapDataLayers";
 

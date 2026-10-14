@@ -7,7 +7,7 @@ import {
   getShipPosition,
   getShipSummary,
   getShipVoyage,
-} from "@/api/shipApi";
+} from "@/api/ships";
 
 export function useShipPreview(ship, enabled = true) {
   const shipId = ship?.id;

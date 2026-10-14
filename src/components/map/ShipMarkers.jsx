@@ -17,9 +17,9 @@ import {
   getShipCoordinates,
   getShipDetailsNavigation,
 } from "@/lib/shipNavigation";
-import { getShipMarker } from "@/lib/shipMarkers";
-import MapPopup from "../map/MapPopup";
-import ShipDetails from "./ShipDetails";
+import { getShipMarker } from "@/lib/map/shipMarkers";
+import MapPopup from "./MapPopup";
+import ShipPreview from "../ships/ShipPreview";
 
 export default function ShipMarkers({ ships = [], map, layerManager }) {
   const navigate = useNavigate();
@@ -255,7 +255,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
                 <X size={16} />
               </button>
 
-              <ShipDetails
+              <ShipPreview
                 ship={displayedShip}
                 photo={preview.photo}
                 position={preview.position}

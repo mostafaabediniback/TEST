@@ -1,7 +1,7 @@
-// hooks/usePortsInTiles.js
+// hooks/usePortsInVisibleTiles.js
 import { useCallback, useMemo, useSyncExternalStore } from "react";
 import { useQueries } from "@tanstack/react-query";
-import { getPortsInTile } from "@/api/ports";
+import { getPortsInTile } from "@/api/portTiles";
 
 function getVisibleTiles(map) {
   const zoom = Math.floor(map.getZoom());

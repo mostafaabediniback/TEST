@@ -1,4 +1,4 @@
-import { getShipCoordinates } from "./shipNavigation.js";
+import { getShipCoordinates } from "../shipNavigation.js";
 
 const EARTH_CIRCUMFERENCE = 40075016.68557849;
 const ELLIPSE_SEGMENTS = 32;

@@ -1,7 +1,7 @@
 import formatTime from "@/lib/formatTime";
-import DetailCard from "./DetailCard";
-import DetailEmpty from "./DetailEmpty";
-import DetailFields from "./DetailFields";
+import DetailCard from "../detail/DetailCard";
+import DetailEmpty from "../detail/DetailEmpty";
+import DetailFields from "../detail/DetailFields";
 
 export default function VesselSecondaryTab({
   activeTab,

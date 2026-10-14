@@ -1,4 +1,4 @@
-import { getShips } from "@/api/shipApi";
+import { getShips } from "@/api/ships";
 import { useQuery } from "@tanstack/react-query";
 
 export function useShips({
