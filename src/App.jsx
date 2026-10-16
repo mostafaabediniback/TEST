@@ -1,24 +1,58 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import TemplatePage from "@/pages/TemplatePage";
-import Settings from "@/pages/Settings";
-import MapPage from "@/pages/Map";
-import { FilterProvider } from "@/context/FilterContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import "flag-icons/css/flag-icons.min.css";
+import StartupIntro from "./components/layout/StartupIntro";
 
-export default function App() {
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import ShipDetails from "./pages/ShipDetails";
+import Ships from "./pages/Ships";
+import Voyages from "./pages/Voyages";
+import Ports from "./pages/Ports";
+
+import { DashboardLayout } from "./components/layout/DashboardLayout";
+import { DirectionProvider } from "./context/DirectionContext";
+import { FilterProvider } from "./context/FilterContext";
+import { LocaleProvider } from "./context/LocaleContext";
+import { MapControllerProvider } from "./context/MapControllerContext";
+import { MapInfoProvider } from "./context/MapInfoContext";
+import PortDetails from "./pages/PortDetails";
+
+function App() {
   return (
-    <FilterProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<DashboardLayout />}>
-            <Route index element={<TemplatePage title="Test menu 1" />} />
-            <Route path="test-2" element={<TemplatePage title="Test menu 2" />} />
-            <Route path="map" element={<MapPage />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </FilterProvider>
+    <BrowserRouter>
+      <LocaleProvider>
+        <StartupIntro>
+          <FilterProvider>
+            <MapInfoProvider>
+              <DirectionProvider>
+                <MapControllerProvider>
+                  <Routes>
+                    <Route element={<DashboardLayout />}>
+                      <Route path="/" element={<Home />} />
+
+                      <Route path="/ships" element={<Ships />} />
+                      <Route path="/ships/:id" element={<ShipDetails />} />
+
+                      <Route path="/voyage" element={<Voyages />} />
+                      <Route path="/port" element={<Ports />} />
+                        <Route path="/ports/:id" element={<PortDetails />} />
+
+
+                      <Route
+                        path="/dashboard/:z/:x/:y"
+                        element={<Dashboard />}
+                      />
+                    </Route>
+                  </Routes>
+                </MapControllerProvider>
+              </DirectionProvider>
+            </MapInfoProvider>
+          </FilterProvider>
+        </StartupIntro>
+      </LocaleProvider>
+    </BrowserRouter>
   );
 }
+
+export default App;

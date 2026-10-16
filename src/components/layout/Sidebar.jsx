@@ -1,4 +1,4 @@
-import { LayoutDashboard, Map as MapIcon, PanelsTopLeft, Pin, Settings } from "lucide-react";
+import { LayoutDashboard, PanelsTopLeft, Pin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar as SidebarRoot,
@@ -17,12 +17,38 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useLocale } from "@/context/LocaleContext";
 import { SidebarProfile } from "./SidebarProfile";
+import { Ship } from "lucide-react";
+import { Anchor } from "lucide-react";
+import { Navigation } from "lucide-react";
 
 const items = [
-  { label: "Test menu 1", icon: LayoutDashboard, to: "/" },
-  { label: "Test menu 2", icon: PanelsTopLeft, to: "/test-2" },
-  { label: "Map", icon: MapIcon, to: "/map" },
-  { label: "Settings", icon: Settings, to: "/settings" },
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    to: "/",
+  },
+  {
+    label: "Map",
+    icon: PanelsTopLeft,
+    to: "/dashboard/0/0/0",
+    activePaths: ["/dashboard"],
+  },
+  {
+    label: "Ships",
+    icon: Ship,
+    to: "/ships",
+  },
+  {
+    label: "Voyage",
+    icon: Navigation,
+    to: "/voyage",
+  },
+  {
+    label: "Port",
+    icon: Anchor,
+    to: "/port",
+    activePaths: ["/port", "/ports"],
+  },
 ];
 
 export function Sidebar() {
@@ -42,25 +68,25 @@ export function Sidebar() {
       description={t("Application")}
       closeLabel={t("Close sidebar")}
     >
-      <SidebarHeader className="h-16 justify-center border-b">
+      <SidebarHeader className="tooba-sidebar-header h-16 shrink-0 justify-center border-b">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
+              className="tooba-brand"
               render={<Link to="/" />}
               onClick={closeMobile}
-              tooltip={t("Application")}
+              tooltip="Tooba"
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <LayoutDashboard className="size-5" />
+              <span className="tooba-brand-logo">
+                <img
+                  src="/projectIcon.jpg"
+                  alt="Tooba logo"
+                  className="size-full object-contain"
+                />
               </span>
-              <span className="grid min-w-0 gap-0.5 text-start group-data-[collapsible=icon]:hidden">
-                <span className="truncate text-sm font-semibold">
-                  {t("Application")}
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {t("Starter layout")}
-                </span>
+              <span className="tooba-brand-copy min-w-0 group-data-[collapsible=icon]:hidden">
+                <span dir="ltr" className="tooba-brand-name">Tooba</span>
               </span>
             </SidebarMenuButton>
             {!isMobile && (
@@ -69,7 +95,7 @@ export function Sidebar() {
                 aria-label={t("Pin sidebar")}
                 title={t("Pin sidebar")}
                 aria-pressed={isPinned}
-                className="top-1/2 size-7 -translate-y-1/2 peer-data-[size=lg]/menu-button:top-1/2 aria-pressed:bg-sidebar-accent aria-pressed:text-sidebar-primary"
+                className="tooba-brand-pin top-1/2 size-7 -translate-y-1/2 peer-data-[size=lg]/menu-button:top-1/2"
                 onClick={() => setOpen((pinned) => !pinned)}
               >
                 <Pin
@@ -87,20 +113,25 @@ export function Sidebar() {
           <SidebarGroupContent>
             <nav aria-label={t("Navigation")}>
               <SidebarMenu>
-                {items.map(({ label, icon: Icon, to }) => (
-                  <SidebarMenuItem key={to}>
-                    <SidebarMenuButton
-                      render={<Link to={to} />}
-                      isActive={pathname === to}
-                      aria-current={pathname === to ? "page" : undefined}
-                      tooltip={t(label)}
-                      onClick={closeMobile}
-                    >
-                      <Icon />
-                      <span>{t(label)}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map(({ label, icon: Icon, to, activePaths = [to] }) => {
+                  const isActive = activePaths.some(
+                    (path) => pathname === path || (path !== "/" && pathname.startsWith(path + "/")),
+                  );
+                  return (
+                    <SidebarMenuItem key={to}>
+                      <SidebarMenuButton
+                        render={<Link to={to} />}
+                        isActive={isActive}
+                        aria-current={isActive ? "page" : undefined}
+                        tooltip={t(label)}
+                        onClick={closeMobile}
+                      >
+                        <Icon />
+                        <span>{t(label)}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </nav>
           </SidebarGroupContent>

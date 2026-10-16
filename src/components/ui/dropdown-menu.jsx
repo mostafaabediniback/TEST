@@ -132,13 +132,13 @@ function DropdownMenuRadioItem({ className, children, inset, ...props }) {
       data-slot="dropdown-menu-radio-item"
       data-inset={inset || undefined}
       className={cn(
-        "relative flex cursor-default select-none items-center gap-2 rounded-md py-1.5 pe-8 ps-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[inset]:ps-7 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "relative flex cursor-default select-none items-center gap-2 rounded-md py-1.5 pe-8 ps-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[checked]:bg-accent data-[checked]:text-accent-foreground data-[inset]:ps-7 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
         className,
       )}
       {...props}
     >
       <span
-        className="pointer-events-none absolute end-2 flex items-center justify-center"
+        className="pointer-events-none absolute end-2 flex items-center justify-center text-brand-gold"
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>

@@ -1,0 +1,6 @@
+import axiosClient from "./axiosClient";
+
+export async function getCountryFlags() {
+  const response = await axiosClient.get("/mersad/countries/flag/list");
+  return response.data;
+}
