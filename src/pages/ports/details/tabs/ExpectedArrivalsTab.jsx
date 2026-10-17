@@ -12,7 +12,7 @@ import DateRangeFilter from "@/components/DateRangeFilter";
 const EMPTY_FILTERS = {
   departure_time_from: "",
   departure_time_to: "",
-  vessel_type: "",
+  vessel_type: [],
   vessel_flag: "",
 };
 
@@ -88,7 +88,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
 
       <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
         <div className="flex flex-wrap items-start gap-4">
-          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
+          <label className="flex w-full flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel name</span>
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
@@ -105,7 +105,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
             </div>
           </label>
 
-          <div className={`min-w-full max-w-full space-y-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}>
+          <label className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}>
             <span className="block font-medium text-slate-700">
               Arrival date and time
             </span>
@@ -114,9 +114,9 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
             />
-          </div>
+          </label>
 
-          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
+          <label className="flex w-full flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel type</span>
             <VesselTypeDropdown
               selected={filters.vessel_type}
@@ -124,7 +124,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
             />
           </label>
 
-          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
+          <label className="flex w-full flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel flag</span>
             <CountryDropdown
               selected={filters.vessel_flag}

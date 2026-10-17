@@ -161,6 +161,9 @@ function StatisticTable({ portId, config, dateOptions, pageSize }) {
         <PortsPagination
           page={page}
           pageCount={pageCount}
+          pageSize={pageSize}
+          total={total}
+          showPageSize={false}
           isPending={isPending}
           onPageChange={setPage}
         />
@@ -202,14 +205,17 @@ export default function StatisticsTab({ portId }) {
 
       <form onSubmit={handleSearch}>
         <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <DateRangeFilter
-              dateRange={dateRange}
-              onDateRangeChange={setDateRange}
-            />
+          <div className="flex flex-wrap items-end gap-3">
+            <label className="flex max-w-full flex-col gap-1.5 text-sm">
+              <span className="font-medium text-slate-700">Date and time range</span>
+              <DateRangeFilter
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+              />
+            </label>
 
-            <div className="flex items-center gap-2">
-              <label htmlFor="statistics-page-size" className="text-sm">
+            <div className="flex flex-col gap-1.5 text-sm">
+              <label htmlFor="statistics-page-size" className="font-medium text-slate-700">
                 Rows per page
               </label>
 

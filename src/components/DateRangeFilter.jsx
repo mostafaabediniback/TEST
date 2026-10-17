@@ -102,7 +102,7 @@ export default function DateRangeFilter({
         }
       >
         <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-        <span className={cn("min-w-0", fieldLabel && !dateRange?.from && "text-muted-foreground")}>
+        <span className={cn("min-w-0", !dateRange?.from && "text-muted-foreground")}>
           {displayLabel}
         </span>
       </PopoverTrigger>

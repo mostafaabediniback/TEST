@@ -16,9 +16,9 @@ const inputClassName =
 
 function DateRange({ label, from, to, onFromChange, onToChange }) {
   return (
-    <div className={`min-w-full max-w-full sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${from ? "w-max" : "w-0"}`}>
+    <label className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${from ? "w-max" : "w-0"}`}>
+      <span className="font-medium text-slate-700">{label}</span>
       <DateRangeFilter
-        label={label}
         className="min-w-full"
         dateRange={{ from, to }}
         onDateRangeChange={(range) => {
@@ -26,7 +26,7 @@ function DateRange({ label, from, to, onFromChange, onToChange }) {
           onToChange(range?.to);
         }}
       />
-    </div>
+    </label>
   );
 }
 
@@ -36,7 +36,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
   const [pageSize, setPageSize] = useState(20);
 
   const [search, setSearch] = useState("");
-  const [vesselType, setVesselType] = useState("");
+  const [vesselType, setVesselType] = useState([]);
   const [vesselFlag, setVesselFlag] = useState("");
   const [arrivalDateFrom, setArrivalDateFrom] = useState();
   const [arrivalDateTo, setArrivalDateTo] = useState();
@@ -87,7 +87,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
 
     setAppliedFilters({
       search: search.trim(),
-      vesselType: vesselType.trim(),
+      vesselType: [...vesselType],
       vesselFlag: vesselFlag.trim(),
       arrivalDateFrom,
       arrivalDateTo,
@@ -99,7 +99,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
 
   function handleReset() {
     setSearch("");
-    setVesselType("");
+    setVesselType([]);
     setVesselFlag("");
     setArrivalDateFrom(undefined);
     setArrivalDateTo(undefined);
@@ -217,25 +217,25 @@ export function ArrivalsDeparturesTab({ port, portId }) {
                 </div>
               </label>
 
-              <div className="min-w-0">
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              <label className="flex min-w-0 flex-col gap-1.5 text-sm">
+                <span className="font-medium text-slate-700">
                   Vessel type
-                </label>
+                </span>
                 <VesselTypeDropdown
                   selected={vesselType}
-                  onChange={(selected) => setVesselType(selected ?? "")}
+                  onChange={(selected) => setVesselType(selected ?? [])}
                 />
-              </div>
+              </label>
 
-              <div className="min-w-0">
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              <label className="flex min-w-0 flex-col gap-1.5 text-sm">
+                <span className="font-medium text-slate-700">
                   Vessel flag
-                </label>
+                </span>
                 <CountryDropdown
                   selected={vesselFlag}
                   onChange={(country) => setVesselFlag(country ?? "")}
                 />
-              </div>
+              </label>
             </div>
 
             <div className="flex flex-wrap items-start gap-4">

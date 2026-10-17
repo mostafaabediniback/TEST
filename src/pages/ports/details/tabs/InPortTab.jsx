@@ -69,15 +69,18 @@ export function InPortTab({ port, portId }) {
       </div>
 
       <Card className="p-4">
-        <label className="relative block sm:max-w-xs">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-          <input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search vessel, IMO, or type"
-            aria-label="Search vessels in port"
-            className="h-9 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-blue-600"
-          />
+        <label className="flex flex-col gap-1.5 text-sm sm:max-w-xs">
+          <span className="font-medium text-slate-700">Vessel, IMO, or type</span>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search vessel, IMO, or type"
+              aria-label="Search vessels in port"
+              className="h-9 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </div>
         </label>
       </Card>
 
