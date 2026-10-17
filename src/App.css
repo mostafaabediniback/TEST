@@ -2,16 +2,14 @@
 @import "maplibre-gl/dist/maplibre-gl.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/inter";
 
 
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* --font-heading: var(--font-sans);
-  --font-sans: "Inter Variable", sans-serif; */
+  --font-heading: var(--app-font-family);
+  --font-sans: var(--app-font-family);
   --color-brand-gold: var(--brand-gold);
   --color-sidebar-selected: var(--sidebar-selected);
   --color-sidebar-selected-foreground: var(--sidebar-selected-foreground);
@@ -465,7 +463,7 @@
 }
 .tooba-brand-name {
   overflow: hidden;
-  font-family: "Inter Variable", "Geist Variable", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.15;
@@ -574,7 +572,7 @@
 .startup-intro-name {
   position: relative;
   margin: 0;
-  font-family: "Inter Variable", "Geist Variable", sans-serif;
+  font-family: var(--app-font-family);
   font-size: clamp(2rem, 6vw, 2.75rem);
   font-weight: 700;
   line-height: 1.25;

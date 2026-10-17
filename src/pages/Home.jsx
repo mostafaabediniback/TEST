@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { format } from "date-fns";
 import DateRangeFilter from "@/components/DateRangeFilter";
+import { useLocale } from "@/context/LocaleContext";
 import {
   Anchor,
   BarChart3,
@@ -29,6 +30,14 @@ const initialFilters = {
 };
 
 function Home() {
+  const { locale } = useLocale();
+  const chartFontFamily = locale === "en" ? "Roboto" : "Sahel";
+
+  async function handleChartReady(chart) {
+    await document.fonts.load(`400 12px "${chartFontFamily}"`);
+    if (!chart.isDisposed()) chart.resize();
+  }
+
   const [filters, setFilters] = useState(initialFilters);
 
   const filteredShips = useMemo(
@@ -52,6 +61,7 @@ function Home() {
   const inVoyage = filteredShips.filter((ship) => ship.status === "In voyage").length;
 
   const lineOption = {
+    textStyle: { fontFamily: chartFontFamily },
     color: ["#4776e6"],
     tooltip: { trigger: "axis" },
     grid: { left: 40, right: 16, top: 20, bottom: 25 },
@@ -72,6 +82,7 @@ function Home() {
   };
 
   const statusOption = {
+    textStyle: { fontFamily: chartFontFamily },
     tooltip: { trigger: "item" },
     legend: { bottom: 0, icon: "circle" },
     color: ["#4776e6", "#35b88a", "#f3ad4e"],
@@ -89,6 +100,7 @@ function Home() {
   };
 
   const activityOption = {
+    textStyle: { fontFamily: chartFontFamily },
     tooltip: { trigger: "axis" },
     legend: { top: 0, right: 0, icon: "circle" },
     grid: { left: 40, right: 16, top: 38, bottom: 25 },
@@ -113,6 +125,7 @@ function Home() {
   };
 
   const portOption = {
+    textStyle: { fontFamily: chartFontFamily },
     tooltip: { trigger: "axis" },
     grid: { left: 95, right: 20, top: 10, bottom: 20 },
     xAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f2f6" } } },
@@ -215,16 +228,16 @@ function Home() {
 
       <section className="fleet-charts-grid">
         <ChartCard title="Voyage activity" subtitle="Voyages tracked over the last 7 days">
-          <ReactECharts option={lineOption} style={{ height: 230 }} />
+          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={lineOption} style={{ height: 230 }} />
         </ChartCard>
         <ChartCard title="Fleet status" subtitle="Current distribution of ships">
-          <ReactECharts option={statusOption} style={{ height: 230 }} />
+          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={statusOption} style={{ height: 230 }} />
         </ChartCard>
         <ChartCard title="Port activity" subtitle="Arrivals and departures this week">
-          <ReactECharts option={activityOption} style={{ height: 230 }} />
+          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={activityOption} style={{ height: 230 }} />
         </ChartCard>
         <ChartCard title="Voyages by port" subtitle="Most active ports this week">
-          <ReactECharts option={portOption} style={{ height: 230 }} />
+          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={portOption} style={{ height: 230 }} />
         </ChartCard>
       </section>
 
