@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
+import { faIR, getDateLib } from "@daypicker/persian";
+import { useLocale } from "@/context/LocaleContext";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +12,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
+const PERSIAN_DATE_LIB = getDateLib({ locale: faIR, numerals: "arabext" });
 
 const TIMES = Array.from({ length: 96 }, (_, index) => {
   const totalMinutes = index * 15;
@@ -37,9 +41,12 @@ function getTime(date, fallback) {
  * Range mode (default): dateRange / onDateRangeChange use { from, to }.
  * Single mode: date / onDateChange use one Date; convert with toUnixSeconds
  * at the API boundary, just like the existing range fields.
+ * Calendar defaults to Persian for fa and Gregorian for other app languages.
+ * Override with calendar="persian" or calendar="gregorian"; outputs stay Dates.
  */
 export default function DateRangeFilter({
   mode = "range",
+  calendar = "auto",
   date,
   onDateChange,
   dateRange,
@@ -47,6 +54,32 @@ export default function DateRangeFilter({
   className,
   label: fieldLabel,
 }) {
+  const { locale } = useLocale();
+  const calendarType = calendar === "auto"
+    ? (locale === "fa" ? "persian" : "gregorian")
+    : calendar;
+  const isPersian = calendarType === "persian";
+  const text = isPersian
+    ? {
+      from: "از",
+      to: "تا",
+      single: "انتخاب تاریخ و ساعت",
+      range: "انتخاب بازهٔ تاریخ و ساعت",
+      end: "انتخاب پایان بازه",
+      time: "انتخاب ساعت",
+    }
+    : {
+      from: "From",
+      to: "To",
+      single: "Select date and time",
+      range: "Select date and time range",
+      end: "Select end",
+      time: "Choose time",
+    };
+  const formatDateLabel = (value, withTime = true) => isPersian
+    ? PERSIAN_DATE_LIB.format(value, withTime ? "d MMMM yyyy، HH:mm" : "d MMMM")
+    : format(value, withTime ? "MMM d, yyyy HH:mm" : "MMM d");
+  const separator = isPersian ? "تا" : "›";
   const [activeTab, setActiveTab] = useState("from");
   const isSingle = mode === "single";
   const activeDate = isSingle ? date : dateRange?.[activeTab];
@@ -73,10 +106,7 @@ export default function DateRangeFilter({
     }
 
     if (activeTab === "to" && nextRange.from && nextRange.to < nextRange.from) {
-      nextRange.from = setDateTime(
-        date,
-        getTime(nextRange.from, "08:30")
-      );
+      nextRange.from = setDateTime(date, getTime(nextRange.from, "08:30"));
     }
 
     onDateRangeChange(nextRange);
@@ -98,14 +128,15 @@ export default function DateRangeFilter({
 
   const label = isSingle
     ? date
-      ? format(date, "MMM d, yyyy HH:mm")
-      : fieldLabel ?? "Select date and time"
+      ? formatDateLabel(date)
+      : (fieldLabel ?? text.single)
     : dateRange?.from && dateRange?.to
-      ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  ${format(dateRange.to, "MMM d, yyyy HH:mm")}`
+      ? `${formatDateLabel(dateRange.from)}  ${separator}  ${formatDateLabel(dateRange.to)}`
       : dateRange?.from
-        ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  Select end`
-        : fieldLabel ?? "Select date and time range";
-  const displayLabel = fieldLabel && hasValue ? `${fieldLabel}: ${label}` : label;
+        ? `${formatDateLabel(dateRange.from)}  ${separator}  ${text.end}`
+        : (fieldLabel ?? text.range);
+  const displayLabel =
+    fieldLabel && hasValue ? `${fieldLabel}: ${label}` : label;
 
   return (
     <Popover>
@@ -116,19 +147,23 @@ export default function DateRangeFilter({
           <Button
             variant="outline"
             className={cn(
-              "h-auto min-h-8 w-max min-w-0 max-w-full justify-start py-1 text-left font-normal whitespace-normal",
+              "h-auto min-h-8 w-max min-w-0 max-w-full justify-start py-1 text-start font-normal whitespace-normal",
               className,
             )}
           />
         }
       >
-        <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+        <CalendarIcon className="me-2 h-4 w-4 shrink-0" />
         <span className={cn("min-w-0", !hasValue && "text-muted-foreground")}>
           {displayLabel}
         </span>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[min(95vw,380px)] p-0" align="start">
+      <PopoverContent
+        dir={isPersian ? "rtl" : undefined}
+        className="w-[min(95vw,380px)] p-0"
+        align="start"
+      >
         {!isSingle && (
           <div className="grid grid-cols-2 border-b">
             <button
@@ -140,7 +175,7 @@ export default function DateRangeFilter({
                   : "border-transparent text-slate-500"
               }`}
             >
-              From {dateRange?.from ? format(dateRange.from, "MMM d") : ""}
+              {text.from} {dateRange?.from ? formatDateLabel(dateRange.from, false) : ""}
             </button>
 
             <button
@@ -152,35 +187,27 @@ export default function DateRangeFilter({
                   : "border-transparent text-slate-500"
               }`}
             >
-              To {dateRange?.to ? format(dateRange.to, "MMM d") : ""}
+              {text.to} {dateRange?.to ? formatDateLabel(dateRange.to, false) : ""}
             </button>
           </div>
         )}
 
         <div className="flex items-start gap-1 p-2">
           <Calendar
+            key={`${calendarType}-${isSingle ? "single" : activeTab}`}
+            calendar={calendarType}
+            dir={isPersian ? "rtl" : undefined}
             mode="single"
             selected={activeDate}
             onSelect={handleDateSelect}
-            month={isSingle ? undefined : activeDate}
-            defaultMonth={isSingle ? date : undefined}
-            onMonthChange={(month) => {
-              if (isSingle || !activeDate) return;
-
-              onDateRangeChange({
-                ...dateRange,
-                [activeTab]: setDateTime(
-                  month,
-                  getTime(activeDate, activeTab === "from" ? "08:30" : "17:00")
-                ),
-              });
-            }}
+            defaultMonth={activeDate ?? (isSingle ? undefined : dateRange?.from)}
             className="min-w-0 flex-1"
           />
 
           <div
             className="h-[400px] w-[78px] shrink-0 space-y-1 overflow-y-auto"
-            aria-label="Choose time"
+            aria-label={text.time}
+            dir="ltr"
           >
             {TIMES.map((time) => {
               const selectedTime = getTime(activeDate, defaultTime);
@@ -196,7 +223,7 @@ export default function DateRangeFilter({
                       : "border-slate-200 bg-white hover:bg-slate-100"
                   }`}
                 >
-                  {time}
+                  {isPersian ? time.replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]) : time}
                 </button>
               );
             })}

@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Clock3 } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
-import { formatRelativeTime, formatTimestamp, timestampToDate } from "@/lib/dateTime";
+import {
+  formatRelativeTime,
+  formatTimestamp,
+  timestampToDate,
+} from "@/lib/dateTime";
 import { cn } from "@/lib/utils";
 
 export default function TimestampWithRelative({
@@ -28,7 +32,12 @@ export default function TimestampWithRelative({
   const relative = formatRelativeTime(date, { locale, now: new Date(now) });
 
   return (
-    <span className={cn("inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 align-middle", className)}>
+    <span
+      className={cn(
+        "inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 align-middle",
+        className,
+      )}
+    >
       <time dateTime={date.toISOString()} className="tabular-nums" dir="auto">
         {absolute}
       </time>

@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "cn"
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { DayPicker as PersianDayPicker, faIR } from "@daypicker/persian";
 
 import { Button, buttonVariants } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
@@ -11,15 +12,19 @@ function Calendar({
   showOutsideDays = true,
   captionLayout = "label",
   buttonVariant = "ghost",
+  calendar = "gregorian",
   locale,
   formatters,
   components,
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames()
+  const isPersian = calendar === "persian";
+  const CalendarPicker = isPersian ? PersianDayPicker : DayPicker;
+  const calendarLocale = locale ?? (isPersian ? faIR : undefined);
 
   return (
-    <DayPicker
+    <CalendarPicker
       showOutsideDays={showOutsideDays}
       className={cn(
         "group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(6)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent",
@@ -28,10 +33,10 @@ function Calendar({
         className
       )}
       captionLayout={captionLayout}
-      locale={locale}
+      locale={calendarLocale}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString(locale?.code, { month: "short" }),
+          date.toLocaleString(calendarLocale?.code, { month: "short", calendar: isPersian ? "persian" : "gregory" }),
         ...formatters,
       }}
       classNames={{
@@ -153,7 +158,7 @@ function Calendar({
           )
         },
         DayButton: ({ ...props }) => (
-          <CalendarDayButton locale={locale} {...props} />
+          <CalendarDayButton locale={calendarLocale} {...props} />
         ),
         WeekNumber: ({ children, ...props }) => {
           return (
