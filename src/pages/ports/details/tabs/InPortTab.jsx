@@ -1,4 +1,4 @@
-import { formatTimestamp } from "@/lib/dateTime";
+import TimestampWithRelative from "@/components/TimestampWithRelative";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Ship } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -138,7 +138,7 @@ export function InPortTab({ port, portId }) {
                       {voyage.ship?.navigational_status ?? "—"}
                     </td>
                     <td className="px-4 py-3 text-slate-600">
-                      {formatTimestamp(voyage.arrival_time)}
+                      <TimestampWithRelative value={voyage.arrival_time} />
                     </td>
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.departure_port_name ?? "—"}

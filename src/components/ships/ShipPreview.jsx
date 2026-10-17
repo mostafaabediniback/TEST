@@ -1,5 +1,6 @@
 // ShipPreview.jsx
-import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
+import { AIS_TIMESTAMP_FORMAT } from "@/lib/dateTime";
+import TimestampWithRelative from "@/components/TimestampWithRelative";
 import VoyageTimeline from "./VoyageTimeline";
 import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
@@ -131,8 +132,9 @@ export default function ShipPreview({
           </div>
         </div>
 
-        <div className="mt-3 border-t pt-2 text-xs text-slate-500">
-          Received: {formatTimestamp(position?.time, AIS_TIMESTAMP_FORMAT)}
+        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t pt-2 text-xs text-slate-500">
+          <span>Received:</span>
+          <TimestampWithRelative value={position?.time} {...AIS_TIMESTAMP_FORMAT} />
         </div>
       </div>
     </article>

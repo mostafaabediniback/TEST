@@ -2,6 +2,7 @@ import { Ship, MapPin } from "lucide-react";
 import ShipPositionMap from "@/components/map/ShipPositionMap";
 import VoyageTimeline from "@/components/ships/VoyageTimeline";
 import DetailCard from "@/components/detail/DetailCard";
+import TimestampWithRelative from "@/components/TimestampWithRelative";
 import DetailFields from "@/components/detail/DetailFields";
 import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ export default function VesselOverview({
 
   const aisRows = [
     ["Navigational status", position.navigational_status ?? voyage.status],
-    ["Position received", formatTimestamp(position.time, AIS_TIMESTAMP_FORMAT)],
+    ["Position received", <TimestampWithRelative key="position-received" value={position.time} {...AIS_TIMESTAMP_FORMAT} />],
     ["Vessel's local time", formatTimestamp(position.local_time ?? position.vessel_local_time, AIS_TIMESTAMP_FORMAT)],
     [
       "Latitude/Longitude",

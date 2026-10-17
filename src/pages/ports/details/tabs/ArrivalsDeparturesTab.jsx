@@ -8,8 +8,9 @@ import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
 import CountryDropdown from "@/components/ships/CountryDropdown";
 import PortsPagination from "@/components/ports/PortsPagination";
 import { VesselFlag } from "@/components/VesselFlag";
+import TimestampWithRelative from "@/components/TimestampWithRelative";
 import DateRangeFilter from "@/components/DateRangeFilter";
-import { formatTimestamp, toUnixSeconds } from "@/lib/dateTime";
+import { toUnixSeconds } from "@/lib/dateTime";
 
 const inputClassName =
   "h-8 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20";
@@ -333,7 +334,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
                       </Badge>
                     </td>
                     <td className="px-4 py-3 text-slate-600">
-                      {formatTimestamp(movement.timestamp)}
+                      <TimestampWithRelative value={movement.timestamp} />
                     </td>
                     <td className="px-4 py-3 text-slate-600">
                       {movement.route}

@@ -94,3 +94,44 @@ export function formatTimestamp(value, {
     ...(timeZone ? { timeZone } : {}),
   }).format(date);
 }
+
+const RELATIVE_TIME_UNITS = [
+  ["year", 365 * 24 * 60 * 60],
+  ["month", 30 * 24 * 60 * 60],
+  ["week", 7 * 24 * 60 * 60],
+  ["day", 24 * 60 * 60],
+  ["hour", 60 * 60],
+  ["minute", 60],
+  ["second", 1],
+];
+
+/**
+ * Display a timestamp relative to now, e.g. "20 minutes ago" or "in 2 hours".
+ * Accepts the same inputs/units as timestampToDate; `now` can override the
+ * reference instant and uses the same numeric unit as the input. Locale defaults
+ * to the app's document language, then the browser locale. `options` accepts
+ * Intl.RelativeTimeFormat options (numeric: "auto" by default).
+ * Months and years use elapsed durations of 30 and 365 days respectively.
+ */
+export function formatRelativeTime(value, {
+  locale,
+  unit = "seconds",
+  now = new Date(),
+  fallback = "—",
+  options = {},
+} = {}) {
+  const date = timestampToDate(value, { unit });
+  const reference = timestampToDate(now, { unit });
+  if (!date || !reference) return fallback;
+
+  const seconds = (date.getTime() - reference.getTime()) / 1000;
+  const [relativeUnit, duration] = RELATIVE_TIME_UNITS.find(
+    ([name, size]) => name === "second" || Math.abs(seconds) >= size,
+  );
+  const amount = Math.trunc(seconds / duration);
+  const displayLocale = locale ?? (
+    typeof document !== "undefined" ? document.documentElement.lang || undefined : undefined
+  );
+
+  return new Intl.RelativeTimeFormat(displayLocale, { numeric: "auto", ...options }).format(amount, relativeUnit);
+}
