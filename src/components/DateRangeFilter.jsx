@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -32,7 +33,7 @@ function getTime(date, fallback) {
   return date ? format(date, "HH:mm") : fallback;
 }
 
-export default function DateRangeFilter({ dateRange, onDateRangeChange }) {
+export default function DateRangeFilter({ dateRange, onDateRangeChange, className }) {
   const [activeTab, setActiveTab] = useState("from");
   const activeDate = dateRange?.[activeTab];
 
@@ -81,14 +82,20 @@ export default function DateRangeFilter({ dateRange, onDateRangeChange }) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-start text-left font-normal sm:w-[450px]"
-        >
-          <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-          <span className="truncate">{label}</span>
-        </Button>
+      <PopoverTrigger
+        title={label}
+        render={
+          <Button
+            variant="outline"
+            className={cn(
+              "h-auto min-h-8 w-max min-w-0 max-w-full justify-start py-1 text-left font-normal whitespace-normal",
+              className,
+            )}
+          />
+        }
+      >
+        <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+        <span className="min-w-0">{label}</span>
       </PopoverTrigger>
 
       <PopoverContent className="w-[min(95vw,380px)] p-0" align="start">

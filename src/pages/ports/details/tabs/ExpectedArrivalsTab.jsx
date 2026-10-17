@@ -106,8 +106,8 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
       </div>
 
       <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <label className="space-y-1.5 text-sm lg:col-span-2">
+        <div className="flex flex-wrap items-start gap-4">
+          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel name</span>
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
@@ -119,22 +119,23 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
                 }}
                 placeholder="Search vessel name"
                 aria-label="Search expected arrivals"
-                className="h-10 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="h-8 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
           </label>
 
-          <div className="space-y-1.5 text-sm lg:col-span-2">
+          <div className={`min-w-full max-w-full space-y-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}>
             <span className="block font-medium text-slate-700">
               Arrival date and time
             </span>
             <DateRangeFilter
+              className="min-w-full"
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
             />
           </div>
 
-          <label className="space-y-1.5 text-sm">
+          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel type</span>
             <VesselTypeDropdown
               selected={filters.vessel_type}
@@ -142,7 +143,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
             />
           </label>
 
-          <label className="space-y-1.5 text-sm">
+          <label className="w-full space-y-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel flag</span>
             <CountryDropdown
               selected={filters.vessel_flag}

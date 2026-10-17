@@ -41,18 +41,22 @@ export default function VoyagesFilters({
             value={filters.arrival_port_id}
             onChange={(value) => updateFilter("arrival_port_id", value)}
           />
+        </div>
 
-          <div className="min-w-0 space-y-2 sm:col-span-2 lg:col-span-4">
+        <div className="flex flex-wrap items-start gap-4">
+          <div className={`min-w-full max-w-full space-y-1 sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${departureRange?.from ? "w-max" : "w-0"}`}>
             <span className="block text-sm font-medium">Departure time</span>
             <DateRangeFilter
+              className="min-w-full"
               dateRange={departureRange}
               onDateRangeChange={setDepartureRange}
             />
           </div>
 
-          <div className="min-w-0 space-y-2 sm:col-span-2 lg:col-span-4">
+          <div className={`min-w-full max-w-full space-y-1 sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${arrivalRange?.from ? "w-max" : "w-0"}`}>
             <span className="block text-sm font-medium">Arrival time</span>
             <DateRangeFilter
+              className="min-w-full"
               dateRange={arrivalRange}
               onDateRangeChange={setArrivalRange}
             />

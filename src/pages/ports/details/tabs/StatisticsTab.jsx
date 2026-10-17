@@ -220,7 +220,7 @@ export default function StatisticsTab({ portId }) {
                 id="statistics-page-size"
                 value={pageSize}
                 onChange={(event) => setPageSize(Number(event.target.value))}
-                className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+                className="h-8 rounded-lg border border-input bg-background px-3 text-sm"
               >
                 {[5, 10, 20, 50, 100].map((size) => (
                   <option key={size} value={size}>

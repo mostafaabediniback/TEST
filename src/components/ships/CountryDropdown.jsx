@@ -82,7 +82,7 @@ export default function CountryDropdown({ selected = "", onChange }) {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
+        className="flex h-8 w-full min-w-0 items-center justify-between rounded-lg border bg-background px-2.5 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
       >
         <span className={selected ? "" : "text-muted-foreground"}>
           {selected || "Any country"}

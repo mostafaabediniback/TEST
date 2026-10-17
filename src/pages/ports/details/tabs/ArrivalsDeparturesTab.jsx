@@ -27,7 +27,7 @@ function formatTimestamp(timestamp) {
 }
 
 const inputClassName =
-  "h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20";
+  "h-8 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20";
 
 function DateRange({ label, from, to, onFromChange, onToChange }) {
   return (
