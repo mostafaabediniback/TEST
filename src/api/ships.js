@@ -1,3 +1,4 @@
+import { toUnixSeconds } from "@/lib/dateTime";
 // api/ships.js
 
 import axiosClient from "./axiosClient";
@@ -114,10 +115,10 @@ export async function getShips({
     draft_max,
     dwt_min,
     dwt_max,
-    create_time_from,
-    create_time_to,
-    update_time_from,
-    update_time_to,
+    create_time_from: toUnixSeconds(create_time_from),
+    create_time_to: toUnixSeconds(create_time_to),
+    update_time_from: toUnixSeconds(update_time_from),
+    update_time_to: toUnixSeconds(update_time_to),
     sort_by,
     sort_order,
   };

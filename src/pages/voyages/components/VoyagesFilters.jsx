@@ -20,43 +20,43 @@ export default function VoyagesFilters({
   return (
     <Card className="p-4">
       <form onSubmit={handleSearch} className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <FilterInput
             label="Voyage ID"
             value={filters.id}
             onChange={(value) => updateFilter("id", value)}
           />
           <FilterInput
-            label={t("shipId")}
+            label={t("shipId", { defaultValue: "Ship ID" })}
             value={filters.ship_id}
             onChange={(value) => updateFilter("ship_id", value)}
           />
           <FilterInput
-            label={t("departurePortId")}
+            label={t("departurePortId", { defaultValue: "Departure port ID" })}
             value={filters.departure_port_id}
             onChange={(value) => updateFilter("departure_port_id", value)}
           />
           <FilterInput
-            label={t("arrivalPortId")}
+            label={t("arrivalPortId", { defaultValue: "Arrival port ID" })}
             value={filters.arrival_port_id}
             onChange={(value) => updateFilter("arrival_port_id", value)}
           />
         </div>
 
-        <div className="flex flex-wrap items-start gap-4">
-          <div className={`min-w-full max-w-full space-y-1 sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${departureRange?.from ? "w-max" : "w-0"}`}>
-            <span className="block text-sm font-medium">Departure time</span>
+        <div className="flex flex-wrap items-start gap-3">
+          <div className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${departureRange?.from ? "w-max" : "w-0"}`}>
             <DateRangeFilter
               className="min-w-full"
+              label="Departure time"
               dateRange={departureRange}
               onDateRangeChange={setDepartureRange}
             />
           </div>
 
-          <div className={`min-w-full max-w-full space-y-1 sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${arrivalRange?.from ? "w-max" : "w-0"}`}>
-            <span className="block text-sm font-medium">Arrival time</span>
+          <div className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${arrivalRange?.from ? "w-max" : "w-0"}`}>
             <DateRangeFilter
               className="min-w-full"
+              label="Arrival time"
               dateRange={arrivalRange}
               onDateRangeChange={setArrivalRange}
             />

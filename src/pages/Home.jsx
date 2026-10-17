@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
+import { format } from "date-fns";
+import DateRangeFilter from "@/components/DateRangeFilter";
 import {
   Anchor,
   BarChart3,
@@ -19,8 +21,8 @@ const ships = [
 const ports = ["Singapore", "Rotterdam", "Shanghai", "Los Angeles"];
 
 const initialFilters = {
-  from: "",
-  to: "",
+  from: undefined,
+  to: undefined,
   status: "All statuses",
   port: "All ports",
   type: "All ship types",
@@ -36,8 +38,8 @@ function Home() {
           (filters.status === "All statuses" || ship.status === filters.status) &&
           (filters.port === "All ports" || ship.port === filters.port) &&
           (filters.type === "All ship types" || ship.type === filters.type) &&
-          (!filters.from || ship.date >= filters.from) &&
-          (!filters.to || ship.date <= filters.to)
+          (!filters.from || ship.date >= format(filters.from, "yyyy-MM-dd")) &&
+          (!filters.to || ship.date <= format(filters.to, "yyyy-MM-dd"))
         );
       }),
     [filters]
@@ -159,22 +161,18 @@ function Home() {
         </div>
 
         <div className="fleet-filter-grid">
-          <label>
-            <span>Date from</span>
-            <input
-              type="date"
-              value={filters.from}
-              onChange={(event) => updateFilter("from", event.target.value)}
+          <div className={`fleet-date-range${filters.from ? " fleet-date-range--selected" : ""}`}>
+            <DateRangeFilter
+              label="Date range"
+              className="min-h-9 min-w-full"
+              dateRange={{ from: filters.from, to: filters.to }}
+              onDateRangeChange={(range) => setFilters((current) => ({
+                ...current,
+                from: range?.from,
+                to: range?.to,
+              }))}
             />
-          </label>
-          <label>
-            <span>Date to</span>
-            <input
-              type="date"
-              value={filters.to}
-              onChange={(event) => updateFilter("to", event.target.value)}
-            />
-          </label>
+          </div>
           <label>
             <span>Ship status</span>
             <select value={filters.status} onChange={(event) => updateFilter("status", event.target.value)}>

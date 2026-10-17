@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLocale } from "@/context/LocaleContext";
-import { formatTimestamp } from "../voyagesUtils";
+import { formatTimestamp } from "@/lib/dateTime";
 
 export default function VoyagesTable({
   rows,
@@ -21,7 +21,7 @@ export default function VoyagesTable({
   error,
   showDetails,
 }) {
-  const { t, formatNumber, direction } = useLocale();
+  const { t, direction } = useLocale();
 
   return (
     <Card className="py-0">
@@ -52,7 +52,7 @@ export default function VoyagesTable({
                   const value = voyage[key];
                   const displayValue =
                     key === "departure_time" || key === "arrival_time"
-                      ? formatTimestamp(value, formatNumber)
+                      ? formatTimestamp(value)
                       : value;
 
                   return (

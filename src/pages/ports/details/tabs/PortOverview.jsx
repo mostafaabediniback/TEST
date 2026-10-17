@@ -24,9 +24,7 @@ export default function PortOverview({ port, onShowOnMap, canShowOnMap }) {
             <p className="text-xs text-slate-500">
               Port coordinates: {port.lat ?? "—"}, {port.lon ?? "—"}
             </p>
-            {/* <Button size="sm" variant="outline">
-              Free receiver application
-            </Button> */}
+
           </div>
         </PortCard>
 

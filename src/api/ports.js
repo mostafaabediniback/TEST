@@ -1,3 +1,4 @@
+import { toUnixSeconds } from "@/lib/dateTime";
 import axiosClient from "./axiosClient";
 
 export async function getPorts({
@@ -37,10 +38,10 @@ export async function getPorts({
     lon_max,
     lat_min,
     lat_max,
-    create_time_from,
-    create_time_to,
-    update_time_from,
-    update_time_to,
+    create_time_from: toUnixSeconds(create_time_from),
+    create_time_to: toUnixSeconds(create_time_to),
+    update_time_from: toUnixSeconds(update_time_from),
+    update_time_to: toUnixSeconds(update_time_to),
     sort_by,
     sort_order,
   };
@@ -53,24 +54,6 @@ export async function getPortDetails(id) {
   return response.data;
 }
 
-
-export async function getPortArrivalVoyages(id= {}) {
-  const response = await axiosClient.get(
-    `/mersad/port/${id}/arrival_voyages`,
-  );
-  return response.data;
-}
-
-export async function getPortDepartureVoyages(id= {}) {
-  const response = await axiosClient.get(
-    `/mersad/port/${id}/departure_voyages`,
-  );
-  return response.data;
-}
-
-
-// ...existing functions
-
 export async function getPortInPort(id, { page = 1, page_size = 5 } = {}) {
   const response = await axiosClient.get(`/mersad/port/${id}/in_port`, {
     params: { page, page_size },
@@ -78,7 +61,6 @@ export async function getPortInPort(id, { page = 1, page_size = 5 } = {}) {
 
   return response.data;
 }
-
 
 export async function getPortVoyages(id, options = {}) {
   const {
@@ -106,10 +88,10 @@ export async function getPortVoyages(id, options = {}) {
     port_type,
     arrival_type,
     vessel_name,
-    arrival_time_from,
-    arrival_time_to,
-    departure_time_from,
-    departure_time_to,
+    arrival_time_from: toUnixSeconds(arrival_time_from),
+    arrival_time_to: toUnixSeconds(arrival_time_to),
+    departure_time_from: toUnixSeconds(departure_time_from),
+    departure_time_to: toUnixSeconds(departure_time_to),
     vessel_subtype,
     vessel_flag,
     sort_by,

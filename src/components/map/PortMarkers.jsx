@@ -1,3 +1,4 @@
+import { formatTimestamp } from "@/lib/dateTime";
 import {
   useCallback,
   useEffect,
@@ -288,14 +289,15 @@ function PortPreview({ port, onDetailsClick }) {
     port.imageUrl;
   const imageUrl = typeof photo === "string" && photo.trim() ? photo : null;
   const timezone = port.timezone ?? port.timeZone;
-  let localTime = port.local_time ?? port.localTime ?? "—";
+  let localTime = formatTimestamp(port.local_time ?? port.localTime, { unit: "auto" });
   if (timezone) {
     try {
-      localTime = new Intl.DateTimeFormat(locale, {
-        dateStyle: "short",
-        timeStyle: "short",
+      localTime = formatTimestamp(now, {
+        unit: "milliseconds",
+        locale,
         timeZone: timezone,
-      }).format(now);
+        options: { dateStyle: "short", timeStyle: "short" },
+      });
     } catch {
       // Keep the reported local time for unsupported server time-zone names.
     }

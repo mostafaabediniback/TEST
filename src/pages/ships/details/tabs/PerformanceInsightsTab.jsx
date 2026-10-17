@@ -1,6 +1,6 @@
 import DetailCard from "@/components/detail/DetailCard";
 import DetailFields from "@/components/detail/DetailFields";
-import formatTime from "@/lib/formatTime";
+import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
 
 export default function PerformanceInsightsTab({ position, voyage }) {
   return (
@@ -13,7 +13,7 @@ export default function PerformanceInsightsTab({ position, voyage }) {
             "Navigational status",
             position.navigational_status ?? voyage.status,
           ],
-          ["Reported ETA", formatTime(voyage.create_time)],
+          ["Reported ETA", formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT)],
         ]}
       />
     </DetailCard>

@@ -141,9 +141,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  /* html {
-    @apply font-sans;
-  } */
+
 }
 
 /* Ship popups share the map's translucent control surface. */
@@ -285,9 +283,26 @@
 }
 
 .fleet-filter-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  --fleet-filter-width: calc((100% - 36px) / 4);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
   gap: 12px;
+}
+
+.fleet-filter-grid > label {
+  width: var(--fleet-filter-width);
+  min-width: 0;
+}
+
+.fleet-date-range {
+  width: 0;
+  min-width: var(--fleet-filter-width);
+  max-width: 100%;
+}
+
+.fleet-date-range--selected {
+  width: max-content;
 }
 
 .fleet-filter-grid label {
@@ -397,7 +412,7 @@
 
 
 @media (max-width: 1000px) {
-  .fleet-filter-grid { grid-template-columns: repeat(3, minmax(120px, 1fr)); }
+  .fleet-filter-grid { --fleet-filter-width: calc((100% - 12px) / 2); }
   .fleet-stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
@@ -405,7 +420,7 @@
   .fleet-dashboard { padding: 20px 14px; }
   .fleet-heading { align-items: flex-start; }
   .fleet-heading h1 { font-size: 22px; }
-  .fleet-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fleet-filter-grid { --fleet-filter-width: 100%; }
   .fleet-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
   .fleet-charts-grid { grid-template-columns: 1fr; }
 }

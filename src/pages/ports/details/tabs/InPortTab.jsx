@@ -1,16 +1,10 @@
+import { formatTimestamp } from "@/lib/dateTime";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Ship } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { usePortInPort } from "@/hooks/usePortInPort";
 import PortsPagination from "@/components/ports/PortsPagination";
 import { VesselFlag } from "@/components/VesselFlag";
-
-function formatTimestamp(timestamp) {
-  if (timestamp == null) return "—";
-
-  const date = new Date(Number(timestamp) * 1000);
-  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
-}
 
 export function InPortTab({ port, portId }) {
   const [page, setPage] = useState(1);

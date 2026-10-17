@@ -1,3 +1,4 @@
+import { formatTimestamp, toUnixSeconds } from "@/lib/dateTime";
 import { useState } from "react";
 import { Search, Ship } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -14,22 +15,6 @@ const EMPTY_FILTERS = {
   vessel_type: "",
   vessel_flag: "",
 };
-
-function formatTimestamp(timestamp) {
-  if (timestamp == null) return "—";
-
-  const date = new Date(Number(timestamp) * 1000);
-  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
-}
-
-function toUnixSeconds(value, endOfDay = false) {
-  if (!value) return undefined;
-
-  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
-  return Number.isNaN(date.getTime())
-    ? undefined
-    : Math.floor(date.getTime() / 1000);
-}
 
 const ExpectedArrivalsTab = ({ port, portId }) => {
   const [page, setPage] = useState(1);
@@ -49,14 +34,10 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
     sort_by: "id",
     sort_order: "asc",
     vessel_name: appliedSearch.trim() || undefined,
-    arrival_time_from: appliedDateRange.from
-      ? Math.floor(appliedDateRange.from.getTime() / 1000)
-      : undefined,
-    arrival_time_to: appliedDateRange.to
-      ? Math.floor(appliedDateRange.to.getTime() / 1000)
-      : undefined,
+    arrival_time_from: toUnixSeconds(appliedDateRange.from),
+    arrival_time_to: toUnixSeconds(appliedDateRange.to),
     departure_time_from: toUnixSeconds(appliedFilters.departure_time_from),
-    departure_time_to: toUnixSeconds(appliedFilters.departure_time_to, true),
+    departure_time_to: toUnixSeconds(appliedFilters.departure_time_to),
     vessel_type: appliedFilters.vessel_type || undefined,
     vessel_flag: appliedFilters.vessel_flag || undefined,
   };

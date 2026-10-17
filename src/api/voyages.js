@@ -1,3 +1,4 @@
+import { toUnixSeconds } from "@/lib/dateTime";
 
 import axiosClient from "./axiosClient";
 
@@ -27,14 +28,14 @@ export async function getVoyages({
       ship_id,
       departure_port_id,
       arrival_port_id,
-      departure_time_from,
-      departure_time_to,
-      arrival_time_from,
-      arrival_time_to,
-      create_time_from,
-      create_time_to,
-      update_time_from,
-      update_time_to,
+      departure_time_from: toUnixSeconds(departure_time_from),
+      departure_time_to: toUnixSeconds(departure_time_to),
+      arrival_time_from: toUnixSeconds(arrival_time_from),
+      arrival_time_to: toUnixSeconds(arrival_time_to),
+      create_time_from: toUnixSeconds(create_time_from),
+      create_time_to: toUnixSeconds(create_time_to),
+      update_time_from: toUnixSeconds(update_time_from),
+      update_time_to: toUnixSeconds(update_time_to),
       sort_by,
       sort_order,
     },

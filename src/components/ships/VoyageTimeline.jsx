@@ -1,43 +1,27 @@
 import { useEffect, useState } from "react";
+import { formatTimestamp, toUnixMilliseconds } from "@/lib/dateTime";
+
+function formatVoyageTime(value) {
+  return formatTimestamp(value, {
+    unit: "auto",
+    options: { dateStyle: "medium", timeStyle: "short" },
+  });
+}
 
 export default function VoyageTimeline({ voyage }) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(Date.now);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(timer);
   }, []);
 
-  // API timestamps may be Unix seconds or milliseconds.
-  const toMilliseconds = (value) => {
-    if (value == null || value === "") return null;
-
-    const numeric = Number(value);
-    if (!Number.isFinite(numeric)) return null;
-
-    return numeric < 1e12 ? numeric * 1000 : numeric;
-  };
-
-  const formatTimestamp = (value) => {
-    const milliseconds = toMilliseconds(value);
-    if (milliseconds == null) return "—";
-
-    const date = new Date(milliseconds);
-
-    return Number.isNaN(date.getTime())
-      ? "—"
-      : date.toLocaleString(undefined, {
-          dateStyle: "medium",
-          timeStyle: "short",
-        });
-  };
-
-  const startTime = toMilliseconds(voyage?.departure_time);
+  const startTime = toUnixMilliseconds(voyage?.departure_time, { unit: "auto" });
 
   // Treat a missing or empty ETA as unavailable.
   const hasReportedEta =
     voyage?.arrival_time != null && voyage.arrival_time !== "";
-  const endTime = hasReportedEta ? toMilliseconds(voyage.arrival_time) : null;
+  const endTime = hasReportedEta ? toUnixMilliseconds(voyage.arrival_time, { unit: "auto" }) : null;
 
   const hasTimeRange =
     startTime != null && endTime != null && endTime > startTime;
@@ -79,9 +63,9 @@ export default function VoyageTimeline({ voyage }) {
 
       <div className="mt-5">
         <div className="flex justify-between gap-4 text-xs text-slate-500">
-          <span>Start: {formatTimestamp(voyage?.departure_time)}</span>
+          <span>Start: {formatVoyageTime(voyage?.departure_time)}</span>
           <span className="text-right">
-            End: {formatTimestamp(voyage?.arrival_time)}
+            End: {formatVoyageTime(voyage?.arrival_time)}
           </span>
         </div>
 
@@ -126,12 +110,12 @@ export default function VoyageTimeline({ voyage }) {
       <div className="mt-4 grid grid-cols-2 gap-4 border-t pt-3 text-xs">
         <p className="text-slate-600">
           <span className="mb-1 block text-slate-500">Departure</span>
-          {formatTimestamp(voyage?.departure_time)}
+          {formatVoyageTime(voyage?.departure_time)}
         </p>
 
         <p className="text-right text-slate-600">
           <span className="mb-1 block text-slate-500">Reported ETA</span>
-          {formatTimestamp(voyage?.arrival_time)}
+          {formatVoyageTime(voyage?.arrival_time)}
         </p>
       </div>
     </section>

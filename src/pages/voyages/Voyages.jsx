@@ -7,9 +7,9 @@ import { useVoyages } from "@/hooks/useVoyages";
 import { columns, emptyFilters } from "./voyagesConstants";
 import {
   savedDateRange,
-  toUnixSeconds,
   toOptionalNumber,
 } from "./voyagesUtils";
+import { toUnixSeconds } from "@/lib/dateTime";
 import VoyagesFilters from "./components/VoyagesFilters";
 import VoyagesColumnsMenu from "./components/VoyagesColumnsMenu";
 import VoyagesTable from "./components/VoyagesTable";

@@ -1,3 +1,5 @@
+import { toUnixMilliseconds } from "../dateTime.js";
+
 function readPositions(data) {
   if (Array.isArray(data)) return data;
   if (data && typeof data === "object") {
@@ -19,20 +21,6 @@ function number(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function timestamp(value) {
-  if (
-    value == null ||
-    typeof value === "boolean" ||
-    String(value).trim() === ""
-  )
-    return null;
-  const numeric = number(value);
-  if (numeric !== null)
-    return Math.abs(numeric) < 1e12 ? numeric * 1000 : numeric;
-  const parsed = Date.parse(value);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 export function getShipTrackPath(data) {
   const positions = readPositions(data).flatMap((position) => {
     const lon = number(position?.lon ?? position?.longitude);
@@ -44,7 +32,11 @@ export function getShipTrackPath(data) {
       Math.abs(lat) > 85.05112878
     )
       return [];
-    return [{ lon, lat, time: timestamp(position.time ?? position.timestamp) }];
+    return [{
+      lon,
+      lat,
+      time: toUnixMilliseconds(position.time ?? position.timestamp, { unit: "auto" }) ?? null,
+    }];
   });
   // When timestamps are absent, retain the ordering supplied by the API.
   if (positions.every((position) => position.time !== null)) {

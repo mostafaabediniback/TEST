@@ -33,7 +33,12 @@ function getTime(date, fallback) {
   return date ? format(date, "HH:mm") : fallback;
 }
 
-export default function DateRangeFilter({ dateRange, onDateRangeChange, className }) {
+export default function DateRangeFilter({
+  dateRange,
+  onDateRangeChange,
+  className,
+  label: fieldLabel,
+}) {
   const [activeTab, setActiveTab] = useState("from");
   const activeDate = dateRange?.[activeTab];
 
@@ -78,12 +83,14 @@ export default function DateRangeFilter({ dateRange, onDateRangeChange, classNam
       ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  ${format(dateRange.to, "MMM d, yyyy HH:mm")}`
       : dateRange?.from
         ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  Select end`
-        : "Select date and time range";
+        : fieldLabel ?? "Select date and time range";
+  const displayLabel = fieldLabel && dateRange?.from ? `${fieldLabel}: ${label}` : label;
 
   return (
     <Popover>
       <PopoverTrigger
-        title={label}
+        title={displayLabel}
+        aria-label={fieldLabel}
         render={
           <Button
             variant="outline"
@@ -95,7 +102,9 @@ export default function DateRangeFilter({ dateRange, onDateRangeChange, classNam
         }
       >
         <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-        <span className="min-w-0">{label}</span>
+        <span className={cn("min-w-0", fieldLabel && !dateRange?.from && "text-muted-foreground")}>
+          {displayLabel}
+        </span>
       </PopoverTrigger>
 
       <PopoverContent className="w-[min(95vw,380px)] p-0" align="start">

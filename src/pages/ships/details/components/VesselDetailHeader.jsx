@@ -7,10 +7,8 @@ export default function VesselDetailHeader({
   mmsi,
   activeTab,
   tabs,
-  inFleet,
   onBack,
   onTabChange,
-  onFleetToggle,
   onAddNote,
 }) {
   return (
@@ -53,21 +51,7 @@ export default function VesselDetailHeader({
               <span className="hidden sm:inline">Add notes</span>
             </button>
 
-            {/* <button
-              type="button"
-              aria-pressed={inFleet}
-              onClick={onFleetToggle}
-              className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm ${
-                inFleet
-                  ? "border-rose-200 bg-rose-50 text-rose-700"
-                  : "hover:bg-slate-50"
-              }`}
-            >
-              <Heart size={15} fill={inFleet ? "currentColor" : "none"} />
-              <span className="hidden sm:inline">
-                {inFleet ? "In your fleet" : "Add to fleet"}
-              </span>
-            </button> */}
+
           </div>
         </div>
 

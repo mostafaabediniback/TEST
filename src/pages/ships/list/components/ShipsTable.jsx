@@ -21,7 +21,6 @@ export default function ShipsTable({
   onViewDetails,
 }) {
   const { t, direction } = useLocale();
-  console.log(rows);
 
   if (isPending) {
     return (

@@ -1,3 +1,4 @@
+import { toUnixSeconds } from "@/lib/dateTime";
 // StatisticsTab.jsx
 
 import { Search } from "lucide-react";
@@ -174,12 +175,8 @@ export default function StatisticsTab({ portId }) {
   const [pageSize, setPageSize] = useState(5);
 
   const dateOptions = {
-    start: appliedDateRange?.from
-      ? Math.floor(appliedDateRange.from.getTime() / 1000)
-      : undefined,
-    end: appliedDateRange?.to
-      ? Math.floor(appliedDateRange.to.getTime() / 1000)
-      : undefined,
+    start: toUnixSeconds(appliedDateRange?.from),
+    end: toUnixSeconds(appliedDateRange?.to),
   };
 
   function handleSearch(event) {

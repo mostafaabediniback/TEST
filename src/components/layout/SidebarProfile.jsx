@@ -95,15 +95,7 @@ export function SidebarProfile({ user }) {
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            {/* <DropdownMenuItem
-              render={<Link to="/settings" />}
-              onClick={() => {
-                if (isMobile) setOpenMobile(false);
-              }}
-            >
-              <Settings aria-hidden="true" />
-              {t("Settings")}
-            </DropdownMenuItem> */}
+
             <DropdownMenuSub>
               <DropdownMenuSubTrigger
                 aria-label={t("Language")}

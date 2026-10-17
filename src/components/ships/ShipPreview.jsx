@@ -1,30 +1,9 @@
 // ShipPreview.jsx
+import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
 import VoyageTimeline from "./VoyageTimeline";
 import { useLocale } from "@/context/LocaleContext";
 import { useShipPreview } from "@/hooks/useShipPreview";
 import { VesselFlag } from "../VesselFlag";
-
-function formatTimestamp(value) {
-  if (value == null || value === "") return "—";
-
-  const numeric = Number(value);
-  const milliseconds = Number.isFinite(numeric)
-    ? numeric < 1e12
-      ? numeric * 1000
-      : numeric
-    : Date.parse(value);
-
-  if (!Number.isFinite(milliseconds)) return "—";
-
-  return new Date(milliseconds).toLocaleString(undefined, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-}
 
 export default function ShipPreview({
   ship,
@@ -153,7 +132,7 @@ export default function ShipPreview({
         </div>
 
         <div className="mt-3 border-t pt-2 text-xs text-slate-500">
-          Received: {formatTimestamp(position?.time)}  ago (AIS source: {position?.time} )
+          Received: {formatTimestamp(position?.time, AIS_TIMESTAMP_FORMAT)}
         </div>
       </div>
     </article>

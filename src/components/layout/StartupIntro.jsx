@@ -74,9 +74,7 @@ export default function StartupIntro({ children, brandName = "Tooba" }) {
         </h1>
         <span className="startup-intro-rule" aria-hidden="true" />
       </div>
-      {/* <button type="button" className="startup-intro-skip" onClick={finish}>
-        {t("skipIntro")}
-      </button> */}
+
     </main>
   );
 }

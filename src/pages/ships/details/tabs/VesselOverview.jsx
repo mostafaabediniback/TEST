@@ -3,7 +3,7 @@ import ShipPositionMap from "@/components/map/ShipPositionMap";
 import VoyageTimeline from "@/components/ships/VoyageTimeline";
 import DetailCard from "@/components/detail/DetailCard";
 import DetailFields from "@/components/detail/DetailFields";
-import formatTime from "@/lib/formatTime";
+import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
 import BusinessCards from "../components/BusinessCards";
@@ -55,8 +55,8 @@ export default function VesselOverview({
 
   const aisRows = [
     ["Navigational status", position.navigational_status ?? voyage.status],
-    ["Position received", formatTime(position.time)],
-    ["Vessel's local time", position.local_time ?? position.vessel_local_time],
+    ["Position received", formatTimestamp(position.time, AIS_TIMESTAMP_FORMAT)],
+    ["Vessel's local time", formatTimestamp(position.local_time ?? position.vessel_local_time, AIS_TIMESTAMP_FORMAT)],
     [
       "Latitude/Longitude",
       position.lat != null && position.lon != null
@@ -81,14 +81,14 @@ export default function VesselOverview({
     ],
     ["Reported destination", voyage.reported_destination ?? voyage.destination],
     ["Matched destination", voyage.matched_destination],
-    ["Reported ETA", formatTime(voyage.create_time)],
+    ["Reported ETA", formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT)],
     ["AIS vessel type", position.vessel_type ?? ship.vessel_type],
     ["AIS source", position.source ?? position.ais_source],
     [
       "Destination",
       voyage.destination ?? voyage.destination_port ?? voyage.arrival_port_name,
     ],
-    ["ETA", voyage.eta ?? voyage.arrival_time],
+    ["ETA", formatTimestamp(voyage.eta ?? voyage.arrival_time, AIS_TIMESTAMP_FORMAT)],
   ].filter(([, value]) => value != null && value !== "");
 
   const vesselImage = imageUrl ?? ship.main_image ?? details.main_image ?? null;

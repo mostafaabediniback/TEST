@@ -1,3 +1,4 @@
+import { toUnixSeconds } from "@/lib/dateTime";
 import axiosClient from "./axiosClient";
 
 async function getPortStats(id, direction, stat, options = {}) {
@@ -13,8 +14,8 @@ async function getPortStats(id, direction, stat, options = {}) {
   const params = {
     page,
     page_size,
-    start,
-    end,
+    start: toUnixSeconds(start),
+    end: toUnixSeconds(end),
     sort_by,
     sort_order,
   };

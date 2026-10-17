@@ -1,6 +1,6 @@
 import DetailCard from "@/components/detail/DetailCard";
 import DetailFields from "@/components/detail/DetailFields";
-import formatTime from "@/lib/formatTime";
+import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
 
 export default function PortCallLogTab({ voyage }) {
   return (
@@ -13,10 +13,10 @@ export default function PortCallLogTab({ voyage }) {
           ["Departure port", voyage.origin ?? voyage.departure_port_name],
           [
             "Departure time",
-            formatTime(voyage.departure_time) ?? voyage.departure,
+            formatTimestamp(voyage.departure_time, AIS_TIMESTAMP_FORMAT) ?? voyage.departure,
           ],
           ["Arrival port", voyage.destination ?? voyage.arrival_port_name],
-          ["Reported ETA", formatTime(voyage.arrival_time)],
+          ["Reported ETA", formatTimestamp(voyage.arrival_time, AIS_TIMESTAMP_FORMAT)],
           ["Current port", voyage.arrival_port_name],
         ]}
       />

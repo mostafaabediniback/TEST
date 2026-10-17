@@ -62,7 +62,6 @@ export default function ShipDetails() {
     preview.photo?.url ?? preview.photo?.photo_url ?? preview.photo?.image_url;
 
   const [activeTab, setActiveTab] = useState("Overview");
-  const [inFleet, setInFleet] = useState(false);
   const ActiveTabPage = tabPages[activeTab];
 
   const returnTo = getDetailsReturnTarget(location.search, location.state);
@@ -97,10 +96,8 @@ export default function ShipDetails() {
         mmsi={ship.mmsi}
         activeTab={activeTab}
         tabs={tabs}
-        inFleet={inFleet}
         onBack={handleBack}
         onTabChange={setActiveTab}
-        onFleetToggle={() => setInFleet((value) => !value)}
         onAddNote={handleAddNote}
       />
 

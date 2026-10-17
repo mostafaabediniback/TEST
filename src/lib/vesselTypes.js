@@ -2,7 +2,8 @@ export const VESSEL_TYPE_GROUPS = [
   {
     id: "cargo",
     label: "Cargo vessels",
-color: "#90ee90",    types: [
+    color: "#90ee90",
+    types: [
       "General Cargo",
       "Bulk Carrier",
       "Container Ship",
@@ -195,7 +196,10 @@ addAliases("Other Cargo", ["Cargo", "Other Cargo"]);
 addAliases("Tanker", ["Tanker"]);
 addAliases("Oil Products Tanker", ["Oil Products Tanker"]);
 addAliases("Crude Oil Tanker", ["Crude Oil Tanker"]);
-addAliases("Oil/Chemical Tanker", ["Oil/Chemical Tanker", "LPG/Chemical Tanker"]);
+addAliases("Oil/Chemical Tanker", [
+  "Oil/Chemical Tanker",
+  "LPG/Chemical Tanker",
+]);
 addAliases("Chemical Tanker", ["Chemical Tanker"]);
 addAliases("LPG Tanker", ["LPG Tanker"]);
 addAliases("LNG Tanker", ["LNG Tanker"]);
@@ -249,13 +253,19 @@ addAliases("Crew Boat", ["Crew Boat"]);
 addAliases("Patrol Vessel", ["Patrol Vessel"]);
 addAliases("Cable Layer", ["Cable Layer", "Pipe Layer"]);
 addAliases("Landing Craft", ["Landing Craft"]);
-addAliases("Offshore Vessel", ["Offshore Vessel", "Multi Purpose Offshore Vessel"]);
+addAliases("Offshore Vessel", [
+  "Offshore Vessel",
+  "Multi Purpose Offshore Vessel",
+]);
 addAliases("Anchor Handling Vessel", ["Anchor Handling Vessel"]);
 addAliases("Platform", ["Platform"]);
 addAliases("Floating Crane", ["Floating Crane"]);
 addAliases("Drill Ship", ["Drill Ship"]);
 addAliases("Search & Rescue", ["SAR", "Search & Rescue"]);
-addAliases("Pollution Control Vessel", ["Anti-Pollution", "Pollution Control Vessel"]);
+addAliases("Pollution Control Vessel", [
+  "Anti-Pollution",
+  "Pollution Control Vessel",
+]);
 addAliases("Icebreaker", ["Icebreaker"]);
 addAliases("Fire Fighting Vessel", ["Fire Fighting Vessel"]);
 addAliases("Training Ship", ["Training Ship"]);
@@ -277,10 +287,7 @@ addAliases("Special Craft", [
   "Special Craft",
 ]);
 addAliases("Military Ops", ["Military", "Military Ops", "Warship"]);
-addAliases("Other Tug / Special Craft", [
-  "Other Tug / Special Craft",
-  "Other",
-]);
+addAliases("Other Tug / Special Craft", ["Other Tug / Special Craft", "Other"]);
 addAliases("Fishing Vessel", [
   "Fishing",
   "Fishing Vessel",
@@ -311,7 +318,9 @@ export function getVesselType(ship) {
 
   const rawType = String(ship?.vessel_type ?? ship?.type ?? "").trim();
 
-  if (/^(cargo|tanker)\s*-\s*hazard\s*[abcd](?:\s*\([^)]*\))?$/i.test(rawType)) {
+  if (
+    /^(cargo|tanker)\s*-\s*hazard\s*[abcd](?:\s*\([^)]*\))?$/i.test(rawType)
+  ) {
     return rawType.toLowerCase().startsWith("cargo")
       ? "Other Cargo"
       : "Other Tanker";

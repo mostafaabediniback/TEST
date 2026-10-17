@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarDays, Search, Ship } from "lucide-react";
+import { Search, Ship } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,60 +8,25 @@ import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
 import CountryDropdown from "@/components/ships/CountryDropdown";
 import PortsPagination from "@/components/ports/PortsPagination";
 import { VesselFlag } from "@/components/VesselFlag";
-
-function dateToUnix(date, endOfDay = false) {
-  if (!date) return undefined;
-
-  const timestamp = Date.parse(
-    `${date}T${endOfDay ? "23:59:59" : "00:00:00"}Z`,
-  );
-
-  return Number.isNaN(timestamp) ? undefined : Math.floor(timestamp / 1000);
-}
-
-function formatTimestamp(timestamp) {
-  if (timestamp == null) return "—";
-
-  const date = new Date(Number(timestamp) * 1000);
-  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
-}
+import DateRangeFilter from "@/components/DateRangeFilter";
+import { formatTimestamp, toUnixSeconds } from "@/lib/dateTime";
 
 const inputClassName =
   "h-8 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20";
 
 function DateRange({ label, from, to, onFromChange, onToChange }) {
   return (
-    <fieldset className="min-w-0">
-      <legend className="mb-2 text-sm font-medium text-slate-700">
-        {label}
-      </legend>
-
-      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
-        <label className="relative min-w-0">
-          <CalendarDays className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-          <input
-            type="date"
-            value={from}
-            onChange={(event) => onFromChange(event.target.value)}
-            aria-label={`${label} from`}
-            className={`${inputClassName} pl-9`}
-          />
-        </label>
-
-        <span className="text-sm text-slate-500">to</span>
-
-        <label className="relative min-w-0">
-          <CalendarDays className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-          <input
-            type="date"
-            value={to}
-            onChange={(event) => onToChange(event.target.value)}
-            aria-label={`${label} to`}
-            className={`${inputClassName} pl-9`}
-          />
-        </label>
-      </div>
-    </fieldset>
+    <div className={`min-w-full max-w-full sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${from ? "w-max" : "w-0"}`}>
+      <DateRangeFilter
+        label={label}
+        className="min-w-full"
+        dateRange={{ from, to }}
+        onDateRangeChange={(range) => {
+          onFromChange(range?.from);
+          onToChange(range?.to);
+        }}
+      />
+    </div>
   );
 }
 
@@ -73,10 +38,10 @@ export function ArrivalsDeparturesTab({ port, portId }) {
   const [search, setSearch] = useState("");
   const [vesselType, setVesselType] = useState("");
   const [vesselFlag, setVesselFlag] = useState("");
-  const [arrivalDateFrom, setArrivalDateFrom] = useState("");
-  const [arrivalDateTo, setArrivalDateTo] = useState("");
-  const [departureDateFrom, setDepartureDateFrom] = useState("");
-  const [departureDateTo, setDepartureDateTo] = useState("");
+  const [arrivalDateFrom, setArrivalDateFrom] = useState();
+  const [arrivalDateTo, setArrivalDateTo] = useState();
+  const [departureDateFrom, setDepartureDateFrom] = useState();
+  const [departureDateTo, setDepartureDateTo] = useState();
 
   const [appliedFilters, setAppliedFilters] = useState({});
 
@@ -91,13 +56,13 @@ export function ArrivalsDeparturesTab({ port, portId }) {
     vessel_flag: appliedFilters.vesselFlag || undefined,
 
     ...(movementType !== "departure" && {
-      arrival_time_from: dateToUnix(appliedFilters.arrivalDateFrom),
-      arrival_time_to: dateToUnix(appliedFilters.arrivalDateTo, true),
+      arrival_time_from: toUnixSeconds(appliedFilters.arrivalDateFrom),
+      arrival_time_to: toUnixSeconds(appliedFilters.arrivalDateTo),
     }),
 
     ...(movementType !== "arrival" && {
-      departure_time_from: dateToUnix(appliedFilters.departureDateFrom),
-      departure_time_to: dateToUnix(appliedFilters.departureDateTo, true),
+      departure_time_from: toUnixSeconds(appliedFilters.departureDateFrom),
+      departure_time_to: toUnixSeconds(appliedFilters.departureDateTo),
     }),
 
     sort_by: "id",
@@ -136,10 +101,10 @@ export function ArrivalsDeparturesTab({ port, portId }) {
     setSearch("");
     setVesselType("");
     setVesselFlag("");
-    setArrivalDateFrom("");
-    setArrivalDateTo("");
-    setDepartureDateFrom("");
-    setDepartureDateTo("");
+    setArrivalDateFrom(undefined);
+    setArrivalDateTo(undefined);
+    setDepartureDateFrom(undefined);
+    setDepartureDateTo(undefined);
     setAppliedFilters({});
     setPage(1);
   }
@@ -273,10 +238,10 @@ export function ArrivalsDeparturesTab({ port, portId }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="flex flex-wrap items-start gap-4">
               {movementType !== "departure" && (
                 <DateRange
-                  label="Arrival date"
+                  label="Arrival time"
                   from={arrivalDateFrom}
                   to={arrivalDateTo}
                   onFromChange={setArrivalDateFrom}
@@ -286,7 +251,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
 
               {movementType !== "arrival" && (
                 <DateRange
-                  label="Departure date"
+                  label="Departure time"
                   from={departureDateFrom}
                   to={departureDateTo}
                   onFromChange={setDepartureDateFrom}
