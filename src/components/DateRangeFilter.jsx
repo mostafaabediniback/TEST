@@ -33,22 +33,35 @@ function getTime(date, fallback) {
   return date ? format(date, "HH:mm") : fallback;
 }
 
+/**
+ * Range mode (default): dateRange / onDateRangeChange use { from, to }.
+ * Single mode: date / onDateChange use one Date; convert with toUnixSeconds
+ * at the API boundary, just like the existing range fields.
+ */
 export default function DateRangeFilter({
+  mode = "range",
+  date,
+  onDateChange,
   dateRange,
   onDateRangeChange,
   className,
   label: fieldLabel,
 }) {
   const [activeTab, setActiveTab] = useState("from");
-  const activeDate = dateRange?.[activeTab];
+  const isSingle = mode === "single";
+  const activeDate = isSingle ? date : dateRange?.[activeTab];
+  const hasValue = isSingle ? Boolean(date) : Boolean(dateRange?.from);
+  const defaultTime = isSingle || activeTab === "from" ? "08:30" : "17:00";
 
   function handleDateSelect(date) {
     if (!date) return;
 
-    const currentTime = getTime(
-      dateRange?.[activeTab],
-      activeTab === "from" ? "08:30" : "17:00"
-    );
+    const currentTime = getTime(activeDate, defaultTime);
+
+    if (isSingle) {
+      onDateChange(setDateTime(date, currentTime));
+      return;
+    }
 
     const nextRange = {
       ...dateRange,
@@ -72,19 +85,27 @@ export default function DateRangeFilter({
   function handleTimeSelect(time) {
     if (!activeDate) return;
 
+    if (isSingle) {
+      onDateChange(setDateTime(activeDate, time));
+      return;
+    }
+
     onDateRangeChange({
       ...dateRange,
       [activeTab]: setDateTime(activeDate, time),
     });
   }
 
-  const label =
-    dateRange?.from && dateRange?.to
+  const label = isSingle
+    ? date
+      ? format(date, "MMM d, yyyy HH:mm")
+      : fieldLabel ?? "Select date and time"
+    : dateRange?.from && dateRange?.to
       ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  ${format(dateRange.to, "MMM d, yyyy HH:mm")}`
       : dateRange?.from
         ? `${format(dateRange.from, "MMM d, yyyy HH:mm")}  ›  Select end`
         : fieldLabel ?? "Select date and time range";
-  const displayLabel = fieldLabel && dateRange?.from ? `${fieldLabel}: ${label}` : label;
+  const displayLabel = fieldLabel && hasValue ? `${fieldLabel}: ${label}` : label;
 
   return (
     <Popover>
@@ -102,46 +123,49 @@ export default function DateRangeFilter({
         }
       >
         <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-        <span className={cn("min-w-0", !dateRange?.from && "text-muted-foreground")}>
+        <span className={cn("min-w-0", !hasValue && "text-muted-foreground")}>
           {displayLabel}
         </span>
       </PopoverTrigger>
 
       <PopoverContent className="w-[min(95vw,380px)] p-0" align="start">
-        <div className="grid grid-cols-2 border-b">
-          <button
-            type="button"
-            onClick={() => setActiveTab("from")}
-            className={`border-b-2 px-4 py-3 text-sm ${
-              activeTab === "from"
-                ? "border-slate-900 font-medium text-slate-900"
-                : "border-transparent text-slate-500"
-            }`}
-          >
-            From {dateRange?.from ? format(dateRange.from, "MMM d") : ""}
-          </button>
+        {!isSingle && (
+          <div className="grid grid-cols-2 border-b">
+            <button
+              type="button"
+              onClick={() => setActiveTab("from")}
+              className={`border-b-2 px-4 py-3 text-sm ${
+                activeTab === "from"
+                  ? "border-slate-900 font-medium text-slate-900"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              From {dateRange?.from ? format(dateRange.from, "MMM d") : ""}
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("to")}
-            className={`border-b-2 px-4 py-3 text-sm ${
-              activeTab === "to"
-                ? "border-slate-900 font-medium text-slate-900"
-                : "border-transparent text-slate-500"
-            }`}
-          >
-            To {dateRange?.to ? format(dateRange.to, "MMM d") : ""}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab("to")}
+              className={`border-b-2 px-4 py-3 text-sm ${
+                activeTab === "to"
+                  ? "border-slate-900 font-medium text-slate-900"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              To {dateRange?.to ? format(dateRange.to, "MMM d") : ""}
+            </button>
+          </div>
+        )}
 
         <div className="flex items-start gap-1 p-2">
           <Calendar
             mode="single"
             selected={activeDate}
             onSelect={handleDateSelect}
-            month={activeDate}
+            month={isSingle ? undefined : activeDate}
+            defaultMonth={isSingle ? date : undefined}
             onMonthChange={(month) => {
-              if (!activeDate) return;
+              if (isSingle || !activeDate) return;
 
               onDateRangeChange({
                 ...dateRange,
@@ -159,10 +183,7 @@ export default function DateRangeFilter({
             aria-label="Choose time"
           >
             {TIMES.map((time) => {
-              const selectedTime = getTime(
-                activeDate,
-                activeTab === "from" ? "08:30" : "17:00"
-              );
+              const selectedTime = getTime(activeDate, defaultTime);
 
               return (
                 <button
