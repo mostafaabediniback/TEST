@@ -6,7 +6,12 @@ import {
   useSyncExternalStore,
 } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { PolygonLayer } from "@deck.gl/layers";
+import {
+  IconLayer,
+  PathLayer,
+  PolygonLayer,
+  ScatterplotLayer,
+} from "@deck.gl/layers";
 import { X } from "lucide-react";
 import { useMapController } from "@/context/MapControllerContext";
 import { useFilters } from "@/context/FilterContext";
@@ -17,7 +22,9 @@ import {
   getShipCoordinates,
   getShipDetailsNavigation,
 } from "@/lib/shipNavigation";
-import { getShipMarker } from "@/lib/map/shipMarkers";
+import { buildShipMarker } from "@/lib/map/shipMarkers";
+import atAnchorIcon from "@/assets/ship-at-anchor.svg";
+import mooredIcon from "@/assets/ship-moored.svg";
 import MapPopup from "./MapPopup";
 import ShipTrackLayer from "./ShipTrackLayer";
 import ShipTrackControls from "./ShipTrackControls";
@@ -30,54 +37,88 @@ import {
   toggleShipTrack,
 } from "@/lib/map/mapSelection";
 
+// Each navigation status uses its own SVG asset.
+const NAVIGATION_STATUS_ICONS = {
+  anchor: {
+    url: atAnchorIcon,
+    width: 32,
+    height: 32,
+    anchorX: 16,
+    anchorY: 16,
+    mask: false,
+  },
+  moored: {
+    url: mooredIcon,
+    width: 32,
+    height: 32,
+    anchorX: 16,
+    anchorY: 16,
+    mask: false,
+  },
+};
+
+// Draw the markers and handle selection, hover, and popups.
+// shipMarkers.js calculates the shapes and map coordinates.
 export default function ShipMarkers({ ships = [], map, layerManager }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [search, setSearch] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { selectedShip, setSelectedShip } = useMapController();
-  const { t, direction } = useLocale();
+  const { t, direction: textDirection } = useLocale();
   const { vesselTypes } = useFilters();
   const [hoveredShip, setHoveredShip] = useState(null);
 
-  const selectedId = search.get("shipId");
+  // Find the ship selected in the URL and load its preview details.
+  const selectedShipId = searchParams.get("shipId");
 
-  const selected = useMemo(() => {
-    if (selectedId === null) return null;
+  const selectedShipRecord = useMemo(() => {
+    if (selectedShipId === null) return null;
 
     return (
-      ships.find((ship) => String(ship.id) === selectedId) ??
-      (String(selectedShip?.id) === selectedId ? selectedShip : null) ?? {
-        id: selectedId,
+      ships.find((ship) => String(ship.id) === selectedShipId) ??
+      (String(selectedShip?.id) === selectedShipId ? selectedShip : null) ?? {
+        id: selectedShipId,
       }
     );
-  }, [ships, selectedShip, selectedId]);
+  }, [ships, selectedShip, selectedShipId]);
 
-  const preview = useShipPreview(selected, selectedId !== null);
-  const displayedShip = { ...(selected ?? {}), ...(preview.ship ?? {}) };
-  const selectedVisible =
-    matchesVesselTypes(displayedShip, vesselTypes) ||
-    Boolean(getMapSelectionCoordinates(search));
+  const shipPreview = useShipPreview(selectedShipRecord, selectedShipId !== null);
+  const shipForPopup = { ...(selectedShipRecord ?? {}), ...(shipPreview.ship ?? {}) };
+  const isSelectedShipVisible =
+    matchesVesselTypes(shipForPopup, vesselTypes) ||
+    Boolean(getMapSelectionCoordinates(searchParams));
 
+  // Past tracks show recorded positions; movement lines show projected travel.
   const isPastTrackActive =
-    selectedId !== null && search.get("pastTrack") === selectedId;
-  const track = useShipTrack(selectedId, isPastTrackActive && selectedVisible);
-  const togglePastTrack = useCallback(() => {
-    setSearch((current) => toggleShipTrack(current, selectedId), {
+    selectedShipId !== null && searchParams.get("pastTrack") === selectedShipId;
+  const pastTrack = useShipTrack(
+    selectedShipId,
+    isPastTrackActive && isSelectedShipVisible,
+  );
+  const togglePastTrackVisibility = useCallback(() => {
+    setSearchParams((current) => toggleShipTrack(current, selectedShipId), {
       replace: true,
     });
-  }, [setSearch, selectedId]);
+  }, [setSearchParams, selectedShipId]);
 
-  const selectedCoordinates = useMemo(() => {
-    if (selectedId === null) return null;
+  const selectedShipCoordinates = useMemo(() => {
+    if (selectedShipId === null) return null;
 
     return (
-      getShipCoordinates(selected) ??
-      getShipCoordinates(preview.position) ??
-      getShipCoordinates(preview.ship) ??
-      getMapSelectionCoordinates(search)
+      getShipCoordinates(selectedShipRecord) ??
+      getShipCoordinates(shipPreview.position) ??
+      getShipCoordinates(shipPreview.ship) ??
+      getMapSelectionCoordinates(searchParams)
     );
-  }, [selectedId, selected, preview.position, preview.ship, search]);
+  }, [
+    selectedShipId,
+    selectedShipRecord,
+    shipPreview.position,
+    shipPreview.ship,
+    searchParams,
+  ]);
 
+  // Rebuild marker shapes whenever the map zoom changes.
   const subscribeToZoom = useCallback(
     (onChange) => {
       map.on("zoom", onChange);
@@ -86,78 +127,120 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     [map],
   );
 
-  const getZoomSnapshot = useCallback(() => map.getZoom(), [map]);
+  const readMapZoom = useCallback(() => map.getZoom(), [map]);
 
-  const zoom = useSyncExternalStore(
+  const mapZoom = useSyncExternalStore(
     subscribeToZoom,
-    getZoomSnapshot,
-    getZoomSnapshot,
+    readMapZoom,
+    readMapZoom,
   );
 
-  const selectedMarker = useMemo(() => {
-    if (!selectedCoordinates || !selectedVisible) return null;
+  // Include the selected ship's extra position details when building its marker.
+  const selectedShipMarker = useMemo(() => {
+    if (!selectedShipCoordinates || !isSelectedShipVisible) return null;
 
-    return getShipMarker(
+    return buildShipMarker(
       {
-        ...selected,
-        ...preview.ship,
-        lon: selectedCoordinates[0],
-        lat: selectedCoordinates[1],
+        ...selectedShipRecord,
+        ...shipPreview.ship,
+        lon: selectedShipCoordinates[0],
+        lat: selectedShipCoordinates[1],
       },
-      zoom,
-      preview.position,
+      mapZoom,
+      shipPreview.position,
     );
   }, [
-    selected,
-    preview.ship,
-    preview.position,
-    selectedCoordinates,
-    selectedVisible,
-    zoom,
+    selectedShipRecord,
+    shipPreview.ship,
+    shipPreview.position,
+    selectedShipCoordinates,
+    isSelectedShipVisible,
+    mapZoom,
   ]);
 
-  const markers = useMemo(() => {
-    const visibleMarkers = ships
+  // Apply vessel filters, then build the visible markers.
+  // Use the enriched marker for the selected ship instead of drawing it twice.
+  const shipMarkers = useMemo(() => {
+    const visibleShipMarkers = ships
       .filter((ship) => matchesVesselTypes(ship, vesselTypes))
       .map((ship) =>
-        String(ship.id) === selectedId && selectedMarker
-          ? selectedMarker
-          : getShipMarker(ship, zoom),
+        String(ship.id) === selectedShipId && selectedShipMarker
+          ? selectedShipMarker
+          : buildShipMarker(ship, mapZoom),
       )
-      .filter((marker) => marker?.polygon);
+      .filter((marker) => marker?.outlineCoordinates);
     if (
-      selectedMarker &&
-      !visibleMarkers.some((marker) => String(marker.ship.id) === selectedId)
+      selectedShipMarker &&
+      !visibleShipMarkers.some((marker) => String(marker.ship.id) === selectedShipId)
     ) {
-      visibleMarkers.push(selectedMarker);
+      visibleShipMarkers.push(selectedShipMarker);
     }
-    return visibleMarkers;
-  }, [ships, vesselTypes, selectedId, selectedMarker, zoom]);
+    return visibleShipMarkers;
+  }, [ships, vesselTypes, selectedShipId, selectedShipMarker, mapZoom]);
 
-  function showShipDetails() {
-    setSelectedShip(displayedShip);
-    const target = getShipDetailsNavigation(displayedShip, {
+  function openShipDetails() {
+    setSelectedShip(shipForPopup);
+    const detailsPage = getShipDetailsNavigation(shipForPopup, {
       source: "map",
       returnTo: location.pathname + location.search,
     });
-    navigate(target.to, { state: target.state });
+    navigate(detailsPage.to, { state: detailsPage.state });
   }
 
-  const closeSelection = useCallback(() => {
-    setSearch((current) => clearMapSelection(current), { replace: true });
+  const clearShipSelection = useCallback(() => {
+    setSearchParams((current) => clearMapSelection(current), { replace: true });
 
     setSelectedShip(null);
     setHoveredShip(null);
-  }, [setSearch, setSelectedShip]);
+  }, [setSearchParams, setSelectedShip]);
 
+  // Clicking the selected ship closes it; clicking another ship selects that ship.
+  const handleShipClick = useCallback(
+    ({ object: clickedMarker }) => {
+      const clickedShip = clickedMarker?.ship;
+      if (clickedShip?.id == null) return false;
+
+      if (String(clickedShip.id) === selectedShipId) {
+        clearShipSelection();
+        return true;
+      }
+
+      setSelectedShip(clickedShip);
+      setHoveredShip(null);
+      setSearchParams(
+        (currentParams) =>
+          getMapSelectionSearch(
+            "ship",
+            clickedShip.id,
+            getShipCoordinates(clickedShip),
+            currentParams,
+          ),
+        { replace: true },
+      );
+      return true;
+    },
+    [selectedShipId, clearShipSelection, setSelectedShip, setSearchParams],
+  );
+
+  // Pass the prepared drawing data to Deck.gl layers.
   useEffect(() => {
+    const markersWithMovementLines = shipMarkers.filter(
+      (marker) => marker.movementLine,
+    );
+    const shipBodyMarkers = shipMarkers.filter(
+      (marker) => marker.shapeType === "hull",
+    );
+    const markersWithStatusBadges = shipMarkers.filter(
+      (marker) => marker.statusIconName,
+    );
+
     layerManager.setGroup("ships", {
       order: 20,
 
       onEmptyClick: () => {
         setSelectedShip(null);
         setHoveredShip(null);
-        setSearch(
+        setSearchParams(
           (current) => {
             if (!current.has("shipId")) return current;
             return clearMapSelection(current);
@@ -166,56 +249,84 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
         );
       },
 
-      onHover: ({ object }) => {
-        setHoveredShip(object?.ship ?? null);
+      onHover: ({ object: hoveredMarker }) => {
+        setHoveredShip(hoveredMarker?.ship ?? null);
       },
 
       layers: [
+        // Clickable main shape: hull, arrow, circle, or diamond.
         new PolygonLayer({
           id: "ship-markers",
-          data: markers,
-          getPolygon: (marker) => marker.polygon,
-          getFillColor: (marker) => marker.color,
+          data: shipMarkers,
+          getPolygon: (marker) => marker.outlineCoordinates,
+          getFillColor: (marker) => marker.fillColor,
           filled: true,
           stroked: true,
-          getLineColor: [255, 255, 255, 255],
+          getLineColor: [82, 99, 108, 255],
           lineWidthUnits: "pixels",
           getLineWidth: 0.5,
           pickable: true,
           autoHighlight: true,
           highlightColor: [96, 165, 250, 255],
 
-          onClick: ({ object }) => {
-            const ship = object?.ship;
-            if (ship?.id == null) return false;
-
-            if (String(ship.id) === selectedId) {
-              closeSelection();
-              return true;
-            }
-
-            setSelectedShip(ship);
-            setHoveredShip(null);
-
-            setSearch(
-              (current) =>
-                getMapSelectionSearch(
-                  "ship",
-                  ship.id,
-                  getShipCoordinates(ship),
-                  current,
-                ),
-              { replace: true },
-            );
-
-            return true;
-          },
+          onClick: handleShipClick,
         }),
 
+        // Projected movement line and its arrowhead.
+        new PathLayer({
+          id: "ship-motion-vectors",
+          data: markersWithMovementLines,
+          getPath: (marker) => marker.movementLine.lineCoordinates,
+          getColor: [82, 99, 108, 255],
+          widthUnits: "pixels",
+          getWidth: 1,
+          pickable: false,
+        }),
+
+        new PathLayer({
+          id: "ship-motion-vector-heads",
+          data: markersWithMovementLines,
+          getPath: (marker) => marker.movementLine.arrowHeadCoordinates,
+          getColor: [82, 99, 108, 255],
+          widthUnits: "pixels",
+          getWidth: 1,
+          pickable: false,
+        }),
+
+        // White dot at the ship's reported position, inside the hull.
+        new ScatterplotLayer({
+          id: "ship-position-reference",
+          data: shipBodyMarkers,
+          getPosition: (marker) => marker.positionCoordinates,
+          radiusUnits: "pixels",
+          getRadius: 3,
+          getFillColor: [255, 255, 255, 255],
+          getLineColor: [82, 99, 108, 255],
+          lineWidthUnits: "pixels",
+          getLineWidth: 1,
+          stroked: true,
+          pickable: true,
+          onClick: handleShipClick,
+        }),
+
+        // Anchor or mooring badge, slightly offset from the reported position.
+        new IconLayer({
+          id: "ship-navigation-status",
+          data: markersWithStatusBadges,
+          getPosition: (marker) => marker.positionCoordinates,
+          getIcon: (marker) => NAVIGATION_STATUS_ICONS[marker.statusIconName],
+          getSize: 18,
+          sizeUnits: "pixels",
+          getPixelOffset: [14, -14],
+          pickable: true,
+          onClick: handleShipClick,
+        }),
+
+        // Blue selection outline around the selected ship.
         new PolygonLayer({
           id: "selected-ship-outline",
-          data: selectedMarker ? [selectedMarker] : [],
-          getPolygon: (marker) => marker.selectionPolygon,
+          data: selectedShipMarker ? [selectedShipMarker] : [],
+          getPolygon: (marker) => marker.selectionOutlineCoordinates,
           filled: false,
           stroked: true,
           lineWidthUnits: "pixels",
@@ -226,49 +337,52 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
       ],
     });
   }, [
-    markers,
-    selectedMarker,
+    shipMarkers,
+    selectedShipMarker,
     layerManager,
-    setSearch,
+    setSearchParams,
     setSelectedShip,
-    selectedId,
-    closeSelection,
+    handleShipClick,
   ]);
 
+  // Remove this component's layers when it unmounts.
   useEffect(() => () => layerManager.removeGroup("ships"), [layerManager]);
 
-  const hoverCoordinates = matchesVesselTypes(hoveredShip, vesselTypes)
+  const hoveredShipCoordinates = matchesVesselTypes(hoveredShip, vesselTypes)
     ? getShipCoordinates(hoveredShip)
     : null;
 
-  const hoveredMarker = hoveredShip ? getShipMarker(hoveredShip, zoom) : null;
+  const hoveredShipMarker = hoveredShip
+    ? buildShipMarker(hoveredShip, mapZoom)
+    : null;
 
+  // Show the past track, hover label, and selected ship's popup.
   return (
     <>
       <ShipTrackLayer
         map={map}
         layerManager={layerManager}
-        path={track.path}
-        visible={isPastTrackActive && selectedVisible}
+        path={pastTrack.path}
+        visible={isPastTrackActive && isSelectedShipVisible}
       />
-      {isPastTrackActive && selectedVisible && (
+      {isPastTrackActive && isSelectedShipVisible && (
         <ShipTrackControls
-          shipName={displayedShip.name || t("unnamedShip")}
-          track={track}
-          onHide={togglePastTrack}
-          onDetails={showShipDetails}
-          onClose={closeSelection}
+          shipName={shipForPopup.name || t("unnamedShip")}
+          track={pastTrack}
+          onHide={togglePastTrackVisibility}
+          onDetails={openShipDetails}
+          onClose={clearShipSelection}
         />
       )}
-      {hoverCoordinates && String(hoveredShip.id) !== selectedId && (
+      {hoveredShipCoordinates && String(hoveredShip.id) !== selectedShipId && (
         <MapPopup
           map={map}
-          coordinates={hoverCoordinates}
-          markerRadius={hoveredMarker?.radius}
+          coordinates={hoveredShipCoordinates}
+          markerRadius={hoveredShipMarker?.popupOffsetPixels}
           hover
         >
           <div
-            dir={direction}
+            dir={textDirection}
             className="px-3 py-2 text-sm font-semibold text-slate-900"
           >
             {hoveredShip.name || t("unnamedShip")}
@@ -276,40 +390,40 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
         </MapPopup>
       )}
 
-      {selectedId !== null &&
+      {selectedShipId !== null &&
         !isPastTrackActive &&
-        selectedCoordinates &&
-        selectedVisible &&
-        selectedMarker && (
+        selectedShipCoordinates &&
+        isSelectedShipVisible &&
+        selectedShipMarker && (
           <MapPopup
             map={map}
-            coordinates={selectedCoordinates}
-            markerRadius={selectedMarker.radius}
+            coordinates={selectedShipCoordinates}
+            markerRadius={selectedShipMarker.popupOffsetPixels}
           >
-            <div dir={direction} className="relative p-3">
+            <div dir={textDirection} className="relative p-3">
               <button
                 type="button"
                 aria-label={t("closeSelection")}
-                onClick={closeSelection}
+                onClick={clearShipSelection}
                 className="absolute end-2 top-2 z-10 rounded-full p-1 text-slate-600 hover:bg-white/70"
               >
                 <X size={16} />
               </button>
 
               <ShipPreview
-                ship={displayedShip}
-                photo={preview.photo}
-                position={preview.position}
-                voyage={preview.voyage}
-                port={preview.port}
-                isLoading={preview.isLoading}
+                ship={shipForPopup}
+                photo={shipPreview.photo}
+                position={shipPreview.position}
+                voyage={shipPreview.voyage}
+                port={shipPreview.port}
+                isLoading={shipPreview.isLoading}
                 detailsLabel={t("viewDetails")}
-                onPastTrackClick={togglePastTrack}
+                onPastTrackClick={togglePastTrackVisibility}
                 isPastTrackActive={isPastTrackActive}
-                onDetailsClick={showShipDetails}
+                onDetailsClick={openShipDetails}
               />
 
-              {preview.isError && (
+              {shipPreview.isError && (
                 <p role="status" className="mt-2 text-xs text-amber-700">
                   {t("partialShipData")}
                 </p>

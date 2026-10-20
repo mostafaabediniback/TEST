@@ -1,5 +1,10 @@
 export function createMapLayerManager(overlay, map) {
   const groups = new Map();
+  // نشانگر پیش‌فرض Deck.gl فقط حالت گرفتن نقشه را دارد؛ تشخیص هاور را هم لحاظ کن.
+  const getCursor = ({ isDragging, isHovering }) => {
+    if (isDragging) return "grabbing";
+    return isHovering ? "pointer" : "grab";
+  };
   const onClick = (info) => {
     if (!info.object) for (const group of groups.values()) group.onEmptyClick?.();
   };
@@ -12,6 +17,8 @@ export function createMapLayerManager(overlay, map) {
       layers: [...groups.values()].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).flatMap((group) => group.layers),
       onClick,
       onHover,
+      getCursor,
+      pickingRadius: 3,
     });
   }
   return {
@@ -19,7 +26,7 @@ export function createMapLayerManager(overlay, map) {
     removeGroup(key) { if (groups.delete(key)) sync(); },
     clear() {
       groups.clear();
-      overlay.setProps({ layers: [], onClick: null, onHover: null });
+      overlay.setProps({ layers: [], onClick: null, onHover: null, getCursor: () => "" });
       map.getCanvas().style.cursor = "";
     },
   };
