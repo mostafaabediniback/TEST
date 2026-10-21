@@ -12,8 +12,6 @@ export const SHIP_MARKER_OPTIONS = Object.freeze({
   minZoomForShipBody: 14, // Show the ship's actual size from this zoom level.
   movingSpeedThresholdKnots: 0.5, // Treat speeds above this value as moving.
   movementLineMinutes: 6, // Show the distance travelled in this many minutes.
-  // Anchored and moored ships may keep their hull shape at low speed.
-  stationaryHullStatuses: Object.freeze([1, 5]),
 });
 
 // Shape templates: X points right and Y points forward.
@@ -269,15 +267,12 @@ export function buildShipMarker(
   const isNavigationAid =
     navigationStatus === NAVIGATION_AID_STATUS ||
     ["aton", "aid to navigation", "navigation aid"].includes(shipType);
-  const isAnchoredOrMoored =
-    displaySettings.stationaryHullStatuses.includes(navigationStatus);
-
+  // A known heading and size are enough to show the hull, even at zero speed.
   const showShipBody =
     !isNavigationAid &&
     isZoomedIn &&
     headingDegrees !== null &&
-    shipSize !== null &&
-    (isMoving || isAnchoredOrMoored);
+    shipSize !== null;
 
   // Choose the main shape. Navigation aids take priority over ship shapes.
   let shapeType = "circle";
@@ -294,7 +289,14 @@ export function buildShipMarker(
   if (shapeType === "hull") rotationDegrees = headingDegrees;
   if (shapeType === "arrow") rotationDegrees = courseDegrees;
 
-  const fillColor = readFillColor(ship.color_code);
+  // Navigation aids always use a red outline, regardless of the API colour.
+  const fillColor = isNavigationAid
+    ? [239, 68, 68, 20]
+    : readFillColor(ship.color_code);
+  const outlineColor = isNavigationAid
+    ? [239, 68, 68, 255]
+    : [82, 99, 108, 255];
+  const outlineWidthPixels = isNavigationAid ? 1.3 : 0.5;
   const mapPointConverter = createMapPointConverter(positionCoordinates, mapZoom);
   const iconScale = Math.max(0.8, Math.min(1.25, 0.8 + mapZoom * 0.03));
 
@@ -324,10 +326,10 @@ export function buildShipMarker(
     let shapePoints = CIRCLE_POINTS;
     if (shapeType === "arrow") shapePoints = ARROW_POINTS;
     if (shapeType === "diamond") shapePoints = DIAMOND_POINTS;
-    const lengthPixels =
-      (shapeType === "arrow" ? 16 : 8) * iconScale + 2 * paddingPixels;
-    const widthPixels =
-      (shapeType === "arrow" ? 12 : 8) * iconScale + 2 * paddingPixels;
+    const baseLengthPixels = shapeType === "arrow" ? 16 : isNavigationAid ? 12 : 8;
+    const baseWidthPixels = shapeType === "arrow" || isNavigationAid ? 12 : 8;
+    const lengthPixels = baseLengthPixels * iconScale + 2 * paddingPixels;
+    const widthPixels = baseWidthPixels * iconScale + 2 * paddingPixels;
     return shapePoints.map(([x, y]) => [x * widthPixels, y * lengthPixels]);
   }
 
@@ -379,6 +381,8 @@ export function buildShipMarker(
     positionCoordinates,
     rotationDegrees,
     fillColor,
+    outlineColor,
+    outlineWidthPixels,
     shapeType,
     ...movement,
     movementLine, // Movement line and arrowhead, or null when there is no line.

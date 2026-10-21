@@ -230,6 +230,9 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     const shipBodyMarkers = shipMarkers.filter(
       (marker) => marker.shapeType === "hull",
     );
+    const navigationAidMarkers = shipMarkers.filter(
+      (marker) => marker.shapeType === "diamond",
+    );
     const markersWithStatusBadges = shipMarkers.filter(
       (marker) => marker.statusIconName,
     );
@@ -262,13 +265,29 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
           getFillColor: (marker) => marker.fillColor,
           filled: true,
           stroked: true,
-          getLineColor: [82, 99, 108, 255],
+          getLineColor: (marker) => marker.outlineColor,
           lineWidthUnits: "pixels",
-          getLineWidth: 0.5,
+          getLineWidth: (marker) => marker.outlineWidthPixels,
           pickable: true,
           autoHighlight: true,
           highlightColor: [96, 165, 250, 255],
 
+          onClick: handleShipClick,
+        }),
+
+        // Small red ring inside each navigation-aid diamond.
+        new ScatterplotLayer({
+          id: "navigation-aid-centres",
+          data: navigationAidMarkers,
+          getPosition: (marker) => marker.positionCoordinates,
+          radiusUnits: "pixels",
+          getRadius: 1.75,
+          filled: false,
+          stroked: true,
+          getLineColor: (marker) => marker.outlineColor,
+          lineWidthUnits: "pixels",
+          getLineWidth: 1,
+          pickable: true,
           onClick: handleShipClick,
         }),
 
