@@ -29,10 +29,7 @@ export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
     let timeoutId;
     let previousTileKeys = "";
 
-    function updateTiles() {
-      clearTimeout(timeoutId);
-
-      timeoutId = setTimeout(() => {
+    function applyTiles() {
         const nextTiles = getVisibleTiles(map);
         const nextTileKeys = getTileKeys(nextTiles);
 
@@ -40,10 +37,15 @@ export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
 
         previousTileKeys = nextTileKeys;
         setTiles(nextTiles);
-      }, 200);
     }
 
-    updateTiles();
+    function updateTiles() {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(applyTiles, 200);
+    }
+
+    // Do not delay the initial ships request.
+    applyTiles();
     map.on("moveend", updateTiles);
     map.on("resize", updateTiles);
 
