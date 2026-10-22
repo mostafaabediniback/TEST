@@ -53,6 +53,7 @@ export default function WorldMap({ geoData }) {
       ...initialView,
       minZoom: 2,
       maxZoom: 19,
+      zoomSnap: 1,
       style: {
         version: 8,
         sources: {
@@ -81,6 +82,25 @@ export default function WorldMap({ geoData }) {
 
     map.addControl(overlay);
 
+    // One wheel gesture = one integer zoom level. Avoid rebuilding ship
+    // geometries at every fractional zoom step.
+    map.scrollZoom.disable();
+    const wheelTarget = container.current;
+    let wheelLocked = false;
+    let wheelUnlockTimer;
+    function onWheel(event) {
+      event.preventDefault();
+      if (wheelLocked || event.deltaY === 0) return;
+      wheelLocked = true;
+      const direction = event.deltaY < 0 ? 1 : -1;
+      const nextZoom = Math.max(2, Math.min(19, Math.round(map.getZoom()) + direction));
+      map.zoomTo(nextZoom, { duration: 0 });
+      wheelUnlockTimer = setTimeout(() => {
+        wheelLocked = false;
+      }, 180);
+    }
+    wheelTarget.addEventListener("wheel", onWheel, { passive: false });
+
     const handleLoad = () => setEngine({ map, overlay });
     map.once("load", handleLoad);
 
@@ -88,6 +108,8 @@ export default function WorldMap({ geoData }) {
     resizeObserver.observe(container.current);
 
     return () => {
+      clearTimeout(wheelUnlockTimer);
+      wheelTarget.removeEventListener("wheel", onWheel);
       resizeObserver.disconnect();
       map.remove();
       setEngine(null);
