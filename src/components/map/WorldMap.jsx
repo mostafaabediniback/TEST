@@ -53,7 +53,6 @@ export default function WorldMap({ geoData }) {
       ...initialView,
       minZoom: 2,
       maxZoom: 19,
-      zoomSnap: 1,
       style: {
         version: 8,
         sources: {
