@@ -37,9 +37,13 @@ export async function getShipById(id) {
 }
 
 export async function getShipPhoto(id) {
-  const response = await axiosClient.get(`/mersad/ship/${id}/image`);
+  const response = await axiosClient.get(`/mersad/ship/${id}/image`, {
+    responseType: "blob",
+  });
+
   return response.data;
 }
+
 
 export async function getShipPosition(id) {
   const response = await axiosClient.get(`/mersad/ship/${id}/position`);
@@ -157,4 +161,29 @@ export async function getShipCompanies(id) {
 export async function getShipTotalCount() {
   const { data } = await axiosClient.get("/mersad/ships/total_count");
   return Number(data);
+}
+
+
+export async function searchShipsByName(name, page = 1, pageSize = 100, id) {
+  const response = await axiosClient.get("/mersad/ships/name", {
+    params: {
+      name,
+      page,
+      page_size: pageSize,
+      ...(id ? { id } : {}),
+    },
+  });
+
+  return response.data;
+}
+
+
+
+export async function getShipVoyages({ shipId, ...params }) {
+  const response = await axiosClient.get(
+    `/mersad/ship/${encodeURIComponent(shipId)}/voyages`,
+    { params },
+  );
+
+  return response.data;
 }

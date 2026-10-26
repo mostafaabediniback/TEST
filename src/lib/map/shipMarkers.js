@@ -12,6 +12,8 @@ export const SHIP_MARKER_OPTIONS = Object.freeze({
   minZoomForShipBody: 14, // Show the ship's actual size from this zoom level.
   movingSpeedThresholdKnots: 0.5, // Treat speeds above this value as moving.
   movementLineMinutes: 6, // Show the distance travelled in this many minutes.
+  // Anchored and moored ships may keep their hull shape at low speed.
+  stationaryHullStatuses: Object.freeze([1, 5]),
 });
 
 // Shape templates: X points right and Y points forward.
@@ -57,7 +59,12 @@ function readAngle(value) {
 
 // Prefer position details, then fall back to the ship record.
 // Accept the field names used by different API responses.
-function readShipValue(ship, positionDetails, fieldNames, parseValue = readNumber) {
+function readShipValue(
+  ship,
+  positionDetails,
+  fieldNames,
+  parseValue = readNumber,
+) {
   for (const dataRecord of [positionDetails, ship]) {
     for (const fieldName of fieldNames) {
       const value = parseValue(dataRecord?.[fieldName]);
@@ -128,7 +135,10 @@ export function readShipMovement(ship, positionDetails = ship?.position) {
 
 // Kept for callers needing a single best available orientation.
 export function getShipDirection(ship, positionDetails = ship?.position) {
-  const { headingDegrees, courseDegrees } = readShipMovement(ship, positionDetails);
+  const { headingDegrees, courseDegrees } = readShipMovement(
+    ship,
+    positionDetails,
+  );
   return headingDegrees ?? courseDegrees;
 }
 
@@ -144,7 +154,9 @@ function readShipSize(ship, positionDetails) {
   for (const dataRecord of possibleSizeRecords) {
     const candidateValues = [
       dataRecord?.bow ?? dataRecord?.to_bow ?? dataRecord?.dimension_to_bow,
-      dataRecord?.stern ?? dataRecord?.to_stern ?? dataRecord?.dimension_to_stern,
+      dataRecord?.stern ??
+        dataRecord?.to_stern ??
+        dataRecord?.dimension_to_stern,
       dataRecord?.port ?? dataRecord?.to_port ?? dataRecord?.dimension_to_port,
       dataRecord?.starboard ??
         dataRecord?.to_starboard ??
@@ -152,7 +164,8 @@ function readShipSize(ship, positionDetails) {
     ].map(readNumber);
     // Distances from the reported position to each side of the hull, in metres.
     if (candidateValues.every((value) => value !== null && value >= 0)) {
-      const [frontMeters, backMeters, leftMeters, rightMeters] = candidateValues;
+      const [frontMeters, backMeters, leftMeters, rightMeters] =
+        candidateValues;
       if (frontMeters + backMeters > 0 && leftMeters + rightMeters > 0) {
         return {
           frontMeters,
@@ -200,39 +213,14 @@ function readFillColor(colorCode) {
     .concat(255);
 }
 
-// Overview markers keep one position per ship. Pixel-sized shapes are drawn by
-// instanced GPU layers instead of tessellating two polygons for every record.
-export function readShipOverview(ship) {
-  const positionCoordinates = getShipCoordinates(ship);
-  if (
-    !positionCoordinates ||
-    Math.abs(positionCoordinates[0]) > 180 ||
-    Math.abs(positionCoordinates[1]) > MAX_MAP_LATITUDE
-  ) return null;
-
-  const { courseDegrees, speedKnots, navigationStatus } = readShipMovement(ship);
-  const shipType = String(ship.kind ?? ship.vessel_type ?? ship.type ?? "")
-    .trim().toLowerCase();
-  const isNavigationAid = navigationStatus === NAVIGATION_AID_STATUS ||
-    ["aton", "aid to navigation", "navigation aid"].includes(shipType);
-
-  return {
-    positionCoordinates,
-    shapeType: isNavigationAid ? "diamond" :
-      speedKnots !== null && speedKnots > SHIP_MARKER_OPTIONS.movingSpeedThresholdKnots &&
-      courseDegrees !== null ? "arrow" : "circle",
-    rotationDegrees: courseDegrees ?? 0,
-    fillColor: readFillColor(ship.color_code),
-  };
-}
-
 // Convert hull sizes from metres to pixels, then place the points on the map.
 function createMapPointConverter(positionCoordinates, mapZoom) {
   const latitudeRadians = (positionCoordinates[1] * Math.PI) / 180;
   const worldSizePixels = 512 * 2 ** mapZoom;
   const shipPixelX = ((positionCoordinates[0] + 180) / 360) * worldSizePixels;
   const shipPixelY =
-    ((1 - Math.log(Math.tan(Math.PI / 4 + latitudeRadians / 2)) / Math.PI) / 2) *
+    ((1 - Math.log(Math.tan(Math.PI / 4 + latitudeRadians / 2)) / Math.PI) /
+      2) *
     worldSizePixels;
   const metersPerPixel =
     (EARTH_CIRCUMFERENCE_METERS * Math.cos(latitudeRadians)) / worldSizePixels;
@@ -241,7 +229,11 @@ function createMapPointConverter(positionCoordinates, mapZoom) {
     // Preserve unwrapped longitude for short dateline crossings.
     return [
       ((shipPixelX + eastPixels) / worldSizePixels) * 360 - 180,
-      (Math.atan(Math.sinh(Math.PI * (1 - (2 * (shipPixelY - northPixels)) / worldSizePixels))) *
+      (Math.atan(
+        Math.sinh(
+          Math.PI * (1 - (2 * (shipPixelY - northPixels)) / worldSizePixels),
+        ),
+      ) *
         180) /
         Math.PI,
     ];
@@ -250,8 +242,10 @@ function createMapPointConverter(positionCoordinates, mapZoom) {
   function placePointOnMap([rightPixels, forwardPixels], rotationDegrees) {
     const angleRadians = (rotationDegrees * Math.PI) / 180;
     return pixelOffsetToMapCoordinates(
-      rightPixels * Math.cos(angleRadians) + forwardPixels * Math.sin(angleRadians),
-      -rightPixels * Math.sin(angleRadians) + forwardPixels * Math.cos(angleRadians),
+      rightPixels * Math.cos(angleRadians) +
+        forwardPixels * Math.sin(angleRadians),
+      -rightPixels * Math.sin(angleRadians) +
+        forwardPixels * Math.cos(angleRadians),
     );
   }
   return { metersPerPixel, placePointOnMap };
@@ -282,9 +276,11 @@ export function buildShipMarker(
   // Read the ship data and decide which display rules apply.
   const displaySettings = { ...SHIP_MARKER_OPTIONS, ...customSettings };
   const movement = readShipMovement(ship, positionDetails);
-  const { headingDegrees, courseDegrees, speedKnots, navigationStatus } = movement;
+  const { headingDegrees, courseDegrees, speedKnots, navigationStatus } =
+    movement;
   const isMoving =
-    speedKnots !== null && speedKnots > displaySettings.movingSpeedThresholdKnots;
+    speedKnots !== null &&
+    speedKnots > displaySettings.movingSpeedThresholdKnots;
   const isZoomedIn = mapZoom >= displaySettings.minZoomForShipBody;
   const shipSize = readShipSize(ship, positionDetails);
   const shipType = String(ship.kind ?? ship.vessel_type ?? ship.type ?? "")
@@ -293,12 +289,15 @@ export function buildShipMarker(
   const isNavigationAid =
     navigationStatus === NAVIGATION_AID_STATUS ||
     ["aton", "aid to navigation", "navigation aid"].includes(shipType);
-  // A known heading and size are enough to show the hull, even at zero speed.
+  const isAnchoredOrMoored =
+    displaySettings.stationaryHullStatuses.includes(navigationStatus);
+
   const showShipBody =
     !isNavigationAid &&
     isZoomedIn &&
     headingDegrees !== null &&
-    shipSize !== null;
+    shipSize !== null &&
+    (isMoving || isAnchoredOrMoored);
 
   // Choose the main shape. Navigation aids take priority over ship shapes.
   let shapeType = "circle";
@@ -315,15 +314,11 @@ export function buildShipMarker(
   if (shapeType === "hull") rotationDegrees = headingDegrees;
   if (shapeType === "arrow") rotationDegrees = courseDegrees;
 
-  // Navigation aids always use a red outline, regardless of the API colour.
-  const fillColor = isNavigationAid
-    ? [239, 68, 68, 20]
-    : readFillColor(ship.color_code);
-  const outlineColor = isNavigationAid
-    ? [239, 68, 68, 255]
-    : [82, 99, 108, 255];
-  const outlineWidthPixels = isNavigationAid ? 1.3 : 0.5;
-  const mapPointConverter = createMapPointConverter(positionCoordinates, mapZoom);
+  const fillColor = readFillColor(ship.color_code);
+  const mapPointConverter = createMapPointConverter(
+    positionCoordinates,
+    mapZoom,
+  );
   const iconScale = Math.max(0.8, Math.min(1.25, 0.8 + mapZoom * 0.03));
 
   // Build the shape around the reported position, using pixel offsets.
@@ -352,10 +347,10 @@ export function buildShipMarker(
     let shapePoints = CIRCLE_POINTS;
     if (shapeType === "arrow") shapePoints = ARROW_POINTS;
     if (shapeType === "diamond") shapePoints = DIAMOND_POINTS;
-    const baseLengthPixels = shapeType === "arrow" ? 16 : isNavigationAid ? 12 : 8;
-    const baseWidthPixels = shapeType === "arrow" || isNavigationAid ? 12 : 8;
-    const lengthPixels = baseLengthPixels * iconScale + 2 * paddingPixels;
-    const widthPixels = baseWidthPixels * iconScale + 2 * paddingPixels;
+    const lengthPixels =
+      (shapeType === "arrow" ? 16 : 8) * iconScale + 2 * paddingPixels;
+    const widthPixels =
+      (shapeType === "arrow" ? 12 : 8) * iconScale + 2 * paddingPixels;
     return shapePoints.map(([x, y]) => [x * widthPixels, y * lengthPixels]);
   }
 
@@ -377,9 +372,13 @@ export function buildShipMarker(
     courseDegrees !== null &&
     displaySettings.movementLineMinutes > 0
   ) {
-    const lineLengthMeters =
-      (speedKnots * 1852 * displaySettings.movementLineMinutes) / 60;
-    const lineLengthPixels = lineLengthMeters / mapPointConverter.metersPerPixel;
+    // const lineLengthMeters =
+    //   (speedKnots * 1852 * displaySettings.movementLineMinutes) / 60;
+    console.log(shipSize.leftMeters)
+    console.log(shipSize.rightMeters)
+    const lineLengthMeters = (shipSize.leftMeters + shipSize.rightMeters* 185 * displaySettings.movementLineMinutes) / 60  ;
+    const lineLengthPixels =
+      lineLengthMeters / mapPointConverter.metersPerPixel;
     const lineEndCoordinates = mapPointConverter.placePointOnMap(
       [0, lineLengthPixels],
       courseDegrees,
@@ -407,8 +406,6 @@ export function buildShipMarker(
     positionCoordinates,
     rotationDegrees,
     fillColor,
-    outlineColor,
-    outlineWidthPixels,
     shapeType,
     ...movement,
     movementLine, // Movement line and arrowhead, or null when there is no line.
@@ -423,4 +420,3 @@ export function buildShipMarker(
     statusIconName,
   };
 }
-

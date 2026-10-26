@@ -1,7 +1,7 @@
-import { useId } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useId } from "react";
 
 export default function PortsPagination({
   page,

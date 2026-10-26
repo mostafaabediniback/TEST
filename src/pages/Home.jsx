@@ -1,263 +1,321 @@
 import { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { Anchor, Building2, MapPin, Route, Ship } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import DateRangeFilter from "@/components/DateRangeFilter";
 import { useLocale } from "@/context/LocaleContext";
-import {
-  Anchor,
-  BarChart3,
-  CalendarDays,
-  Ship,
-  ShipWheel,
-} from "lucide-react";
+import { useRecordCounts } from "@/hooks/useRecordCounts";
+import { useRecordSummary } from "@/hooks/useRecordSummary";
 
-const ships = [
-  { name: "Ocean Pioneer", type: "Container", status: "In voyage", port: "Singapore", date: "2025-06-12" },
-  { name: "Blue Horizon", type: "Tanker", status: "In port", port: "Rotterdam", date: "2025-06-13" },
-  { name: "Northern Star", type: "Cargo", status: "In voyage", port: "Shanghai", date: "2025-06-14" },
-  { name: "Sea Venture", type: "Container", status: "In port", port: "Singapore", date: "2025-06-15" },
-  { name: "Atlantic Queen", type: "Tanker", status: "In voyage", port: "Rotterdam", date: "2025-06-16" },
+const metrics = [
+  {
+    key: "position",
+    label: "Positions",
+    icon: MapPin,
+    color: "bg-sky-50 text-sky-700",
+  },
+  {
+    key: "voyage",
+    label: "Voyages",
+    icon: Route,
+    color: "bg-emerald-50 text-emerald-700",
+  },
+  {
+    key: "ship",
+    label: "Ships",
+    icon: Ship,
+    color: "bg-violet-50 text-violet-700",
+  },
+  {
+    key: "port",
+    label: "Ports",
+    icon: Anchor,
+    color: "bg-amber-50 text-amber-700",
+  },
+  {
+    key: "company",
+    label: "Companies",
+    icon: Building2,
+    color: "bg-rose-50 text-rose-700",
+  },
 ];
 
-const ports = ["Singapore", "Rotterdam", "Shanghai", "Los Angeles"];
+const colors = ["#93C5FD", "#86EFAC", "#FCD34D", "#C4B5FD", "#FDA4AF"];
+const intervals = ["month", "week", "day", "hour", "minute"];
 
-const initialFilters = {
-  from: undefined,
-  to: undefined,
-  status: "All statuses",
-  port: "All ports",
-  type: "All ship types",
-};
-
-function Home() {
-  const { locale } = useLocale();
-  const chartFontFamily = locale === "en" ? "Roboto" : "Sahel";
-
-  async function handleChartReady(chart) {
-    await document.fonts.load(`400 12px "${chartFontFamily}"`);
-    if (!chart.isDisposed()) chart.resize();
-  }
-
-  const [filters, setFilters] = useState(initialFilters);
-
-  const filteredShips = useMemo(
-    () =>
-      ships.filter((ship) => {
-        return (
-          (filters.status === "All statuses" || ship.status === filters.status) &&
-          (filters.port === "All ports" || ship.port === filters.port) &&
-          (filters.type === "All ship types" || ship.type === filters.type) &&
-          (!filters.from || ship.date >= format(filters.from, "yyyy-MM-dd")) &&
-          (!filters.to || ship.date <= format(filters.to, "yyyy-MM-dd"))
-        );
-      }),
-    [filters]
-  );
-
-  const updateFilter = (key, value) =>
-    setFilters((current) => ({ ...current, [key]: value }));
-
-  const inPort = filteredShips.filter((ship) => ship.status === "In port").length;
-  const inVoyage = filteredShips.filter((ship) => ship.status === "In voyage").length;
-
-  const lineOption = {
-    textStyle: { fontFamily: chartFontFamily },
-    color: ["#4776e6"],
-    tooltip: { trigger: "axis" },
-    grid: { left: 40, right: 16, top: 20, bottom: 25 },
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      axisLine: { lineStyle: { color: "#e7eaf0" } },
-    },
-    yAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f2f6" } } },
-    series: [{
-      name: "Voyages",
-      type: "line",
-      smooth: true,
-      symbolSize: 7,
-      data: [18, 25, 21, 32, 28, 39, 35],
-      areaStyle: { opacity: 0.08 },
-    }],
-  };
-
-  const statusOption = {
-    textStyle: { fontFamily: chartFontFamily },
-    tooltip: { trigger: "item" },
-    legend: { bottom: 0, icon: "circle" },
-    color: ["#4776e6", "#35b88a", "#f3ad4e"],
-    series: [{
-      type: "pie",
-      radius: ["48%", "72%"],
-      center: ["50%", "43%"],
-      label: { show: false },
-      data: [
-        { value: inVoyage, name: "In voyage" },
-        { value: inPort, name: "In port" },
-        { value: Math.max(filteredShips.length - inVoyage - inPort, 0), name: "Other" },
-      ],
-    }],
-  };
-
-  const activityOption = {
-    textStyle: { fontFamily: chartFontFamily },
-    tooltip: { trigger: "axis" },
-    legend: { top: 0, right: 0, icon: "circle" },
-    grid: { left: 40, right: 16, top: 38, bottom: 25 },
-    xAxis: { type: "category", data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
-    yAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f2f6" } } },
-    series: [
-      {
-        name: "Arrivals",
-        type: "bar",
-        barMaxWidth: 12,
-        data: [12, 18, 14, 22, 17, 25, 20],
-        itemStyle: { color: "#4776e6", borderRadius: [4, 4, 0, 0] },
-      },
-      {
-        name: "Departures",
-        type: "bar",
-        barMaxWidth: 12,
-        data: [9, 14, 19, 16, 23, 18, 26],
-        itemStyle: { color: "#35b88a", borderRadius: [4, 4, 0, 0] },
-      },
-    ],
-  };
-
-  const portOption = {
-    textStyle: { fontFamily: chartFontFamily },
-    tooltip: { trigger: "axis" },
-    grid: { left: 95, right: 20, top: 10, bottom: 20 },
-    xAxis: { type: "value", splitLine: { lineStyle: { color: "#f0f2f6" } } },
-    yAxis: {
-      type: "category",
-      data: ports,
-      axisLine: { show: false },
-      axisTick: { show: false },
-    },
-    series: [{
-      type: "bar",
-      data: [42, 35, 28, 19],
-      barMaxWidth: 18,
-      itemStyle: { color: "#4776e6", borderRadius: [0, 5, 5, 0] },
-    }],
-  };
-
-  const stats = [
-    { label: "All ships", value: filteredShips.length, icon: Ship, color: "blue", note: "Ships matching filters" },
-    { label: "Ships in port", value: inPort, icon: Anchor, color: "green", note: "Currently docked" },
-    { label: "Ships in voyage", value: inVoyage, icon: ShipWheel, color: "purple", note: "Currently at sea" },
-    { label: "Arrivals", value: 24, icon: CalendarDays, color: "orange", note: "Scheduled this week" },
-    { label: "Departures", value: 18, icon: BarChart3, color: "pink", note: "Scheduled this week" },
-  ];
-
-  return (
-    <main className="fleet-dashboard">
-      <header className="fleet-heading">
-        <div>
-          <p className="fleet-eyebrow">FLEET MANAGEMENT</p>
-          <h1>Fleet overview</h1>
-          <p className="fleet-subtitle">Track your fleet and stay ahead of every voyage.</p>
-        </div>
-        <button className="fleet-export" onClick={() => window.print()}>
-          Export report
-        </button>
-      </header>
-
-      <section className="fleet-filter-card">
-        <div className="fleet-filter-heading">
-          <div>
-            <strong>Filters</strong>
-            <span>Refine your fleet data</span>
-          </div>
-          <button onClick={() => setFilters(initialFilters)}>Reset filters</button>
-        </div>
-
-        <div className="fleet-filter-grid">
-          <div className={`fleet-date-range${filters.from ? " fleet-date-range--selected" : ""}`}>
-            <DateRangeFilter
-              label="Date range"
-              className="min-h-9 min-w-full"
-              dateRange={{ from: filters.from, to: filters.to }}
-              onDateRangeChange={(range) => setFilters((current) => ({
-                ...current,
-                from: range?.from,
-                to: range?.to,
-              }))}
-            />
-          </div>
-          <label>
-            <span>Ship status</span>
-            <select value={filters.status} onChange={(event) => updateFilter("status", event.target.value)}>
-              <option>All statuses</option>
-              <option>In port</option>
-              <option>In voyage</option>
-            </select>
-          </label>
-          <label>
-            <span>Port</span>
-            <select value={filters.port} onChange={(event) => updateFilter("port", event.target.value)}>
-              <option>All ports</option>
-              {ports.map((port) => <option key={port}>{port}</option>)}
-            </select>
-          </label>
-          <label>
-            <span>Ship type</span>
-            <select value={filters.type} onChange={(event) => updateFilter("type", event.target.value)}>
-              <option>All ship types</option>
-              <option>Container</option>
-              <option>Tanker</option>
-              <option>Cargo</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section className="fleet-stats-grid">
-        {stats.map(({ label, value, icon: Icon, color, note }) => (
-          <article className="fleet-stat-card" key={label}>
-            <div className="fleet-stat-top">
-              <span>{label}</span>
-              <span className={`fleet-stat-icon ${color}`}><Icon size={17} /></span>
-            </div>
-            <strong className="fleet-stat-value">{value}</strong>
-            <span className="fleet-stat-note">{note}</span>
-          </article>
-        ))}
-      </section>
-
-      <section className="fleet-charts-grid">
-        <ChartCard title="Voyage activity" subtitle="Voyages tracked over the last 7 days">
-          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={lineOption} style={{ height: 230 }} />
-        </ChartCard>
-        <ChartCard title="Fleet status" subtitle="Current distribution of ships">
-          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={statusOption} style={{ height: 230 }} />
-        </ChartCard>
-        <ChartCard title="Port activity" subtitle="Arrivals and departures this week">
-          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={activityOption} style={{ height: 230 }} />
-        </ChartCard>
-        <ChartCard title="Voyages by port" subtitle="Most active ports this week">
-          <ReactECharts key={chartFontFamily} onChartReady={handleChartReady} option={portOption} style={{ height: 230 }} />
-        </ChartCard>
-      </section>
-
-      <footer className="fleet-footer">
-        Showing {filteredShips.length} ships <span>•</span> Last updated just now
-      </footer>
-    </main>
-  );
+function toUnixSeconds(date) {
+  return date ? Math.floor(date.getTime() / 1000) : undefined;
 }
 
-function ChartCard({ title, subtitle, children }) {
+function ChartCard({ title, subtitle, actions, children }) {
   return (
-    <article className="fleet-chart-card">
-      <div className="fleet-chart-heading">
-        <h2>{title}</h2>
-        <p>{subtitle}</p>
+    <article className="rounded-xl border bg-card text-card-foreground shadow-sm">
+      <div className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <div>
+          <h2 className="text-base font-semibold">{title}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+        </div>
+        {actions}
       </div>
-      {children}
+      <div className="p-3 sm:p-5">{children}</div>
     </article>
   );
 }
 
-export default Home;
+export default function Home() {
+  const { locale } = useLocale();
+  const chartFontFamily = locale === "en" ? "Roboto" : "Sahel";
+
+  const [interval, setInterval] = useState("day");
+  const [dateRange, setDateRange] = useState({
+    from: undefined,
+    to: undefined,
+  });
+  const [chartType, setChartType] = useState("line");
+
+  const validRange =
+    !dateRange.from || !dateRange.to || dateRange.from <= dateRange.to;
+
+  const params = useMemo(
+    () => ({
+      interval,
+      start: toUnixSeconds(dateRange.from),
+      end: toUnixSeconds(dateRange.to),
+    }),
+    [interval, dateRange.from, dateRange.to],
+  );
+
+  const {
+    data: records = [],
+    isLoading,
+    isError,
+    error,
+  } = useRecordCounts(params, { enabled: validRange });
+
+  const summaryParams = useMemo(
+    () => ({
+      start: toUnixSeconds(dateRange.from),
+      end: toUnixSeconds(dateRange.to),
+    }),
+    [dateRange.from, dateRange.to],
+  );
+
+  const {
+    data: summary,
+    isLoading: isSummaryLoading,
+    isError: isSummaryError,
+  } = useRecordSummary(summaryParams, { enabled: validRange });
+
+  const summaryTable = summary?.table ?? {};
+
+  const latestRecord = records.length ? records[records.length - 1] : null;
+
+  const chartOption = useMemo(() => {
+    const labels = records.map((record) => {
+      const date = parseISO(record.time);
+
+      if (interval === "minute" || interval === "hour") {
+        return format(date, "MMM d, HH:mm");
+      }
+
+      if (interval === "month") {
+        return format(date, "MMM yyyy");
+      }
+
+      return format(date, "MMM d");
+    });
+
+    return {
+      textStyle: { fontFamily: chartFontFamily },
+      color: colors,
+      tooltip: { trigger: "axis" },
+      legend: { top: 0, icon: "circle" },
+      grid: { left: 48, right: 20, top: 42, bottom: 48 },
+      xAxis: {
+        type: "category",
+        data: labels,
+        axisLabel: { hideOverlap: true },
+      },
+      yAxis: {
+        type: "value",
+        min: 0,
+        splitLine: { lineStyle: { color: "#f0f2f6" } },
+      },
+      series: metrics.map(({ key, label }) => ({
+        name: label,
+        type: "line",
+        smooth: true,
+        showSymbol: false,
+        data: records.map((record) => record[key] ?? 0),
+        ...(chartType === "area"
+          ? {
+              stack: "total",
+              areaStyle: { opacity: 0.45 },
+            }
+          : {}),
+      })),
+    };
+  }, [records, interval, chartType, chartFontFamily]);
+
+  function resetFilters() {
+    setInterval("day");
+    setDateRange({ from: undefined, to: undefined });
+  }
+
+  return (
+    <main className="mx-auto w-full max-w-screen-2xl space-y-6 p-4 sm:p-6">
+      <header>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+          Records overview
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          View record counts over time.
+        </p>
+      </header>
+
+
+      <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="font-semibold">Filters</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Choose an interval and optional date and time range.
+            </p>
+          </div>
+          <Button type="button" variant="outline" onClick={resetFilters}>
+            Reset filters
+          </Button>
+        </div>
+
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <label className="grid gap-2 text-sm font-medium">
+            <span>Interval</span>
+            <select
+              value={interval}
+              onChange={(event) => setInterval(event.target.value)}
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {intervals.map((value) => (
+                <option key={value} value={value}>
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="grid content-start gap-2 text-sm font-medium">
+            <span>Date and time range</span>
+            <DateRangeFilter
+              label="Date and time range"
+              className="min-h-9 w-full"
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+            />
+          </div>
+        </div>
+      </section>
+
+      {!validRange && (
+        <p
+          role="alert"
+          className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+        >
+          The start must be before or equal to the end.
+        </p>
+      )}
+
+<section
+  aria-label="Record totals"
+  className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+>
+  {metrics.map(({ key, label, icon: Icon, color }) => {
+    const counts = summary?.table?.[key];
+
+    return (
+      <article
+        className="rounded-xl border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
+        key={key}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-medium text-muted-foreground">{label}</p>
+          <span className={`rounded-lg p-2 ${color}`}>
+            <Icon aria-hidden="true" className="h-4 w-4" />
+          </span>
+        </div>
+
+        <p className="mt-3 text-2xl font-semibold tabular-nums">
+          {counts?.total?.toLocaleString() ?? "—"}
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">Total</p>
+      </article>
+    );
+  })}
+</section>
+
+
+      <ChartCard
+        title="Record counts"
+        subtitle={`Counts grouped by ${interval}`}
+        actions={
+          <div
+            className="inline-flex w-fit rounded-lg border bg-muted p-1"
+            role="group"
+            aria-label="Chart type"
+          >
+            <button
+              type="button"
+              className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                chartType === "line"
+                  ? "bg-background font-medium text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              aria-pressed={chartType === "line"}
+              onClick={() => setChartType("line")}
+            >
+              Line
+            </button>
+            <button
+              type="button"
+              className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                chartType === "area"
+                  ? "bg-background font-medium text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              aria-pressed={chartType === "area"}
+              onClick={() => setChartType("area")}
+            >
+              Stacked area
+            </button>
+          </div>
+        }
+      >
+        {isLoading ? (
+          <p className="py-12 text-center text-sm text-muted-foreground">
+            Loading record counts…
+          </p>
+        ) : isError ? (
+          <p
+            role="alert"
+            className="py-12 text-center text-sm text-destructive"
+          >
+            Could not load record counts
+            {error?.message ? `: ${error.message}` : "."}
+          </p>
+        ) : records.length === 0 ? (
+          <p className="py-12 text-center text-sm text-muted-foreground">
+            No record counts found for this filter.
+          </p>
+        ) : (
+          <ReactECharts
+            key={`${chartFontFamily}-${chartType}`}
+            option={chartOption}
+            notMerge
+            style={{ height: 320 }}
+          />
+        )}
+      </ChartCard>
+    </main>
+  );
+}

@@ -54,13 +54,50 @@ export async function getPortDetails(id) {
   return response.data;
 }
 
-export async function getPortInPort(id, { page = 1, page_size = 5 } = {}) {
+export async function getPortInPort(
+  id,
+  {
+    page = 1,
+    page_size = 20,
+    vessel_name = "",
+    vessel_imo = "",
+    vessel_subtype = [],
+    vessel_status = ["Moored", "At Anchor"],
+    arrival_time_from,
+    arrival_time_to,
+  } = {},
+) {
   const response = await axiosClient.get(`/mersad/port/${id}/in_port`, {
-    params: { page, page_size },
+    params: {
+      page,
+      page_size,
+      vessel_name,
+      vessel_imo,
+      vessel_subtype,
+      vessel_status,
+      arrival_time_from,
+      arrival_time_to,
+    },
+    paramsSerializer: (params) => {
+      const query = new URLSearchParams();
+
+      for (const [key, value] of Object.entries(params)) {
+        if (value == null || value === "") continue;
+
+        if (Array.isArray(value)) {
+          value.forEach((item) => query.append(key, item));
+        } else {
+          query.append(key, value);
+        }
+      }
+
+      return query.toString();
+    },
   });
 
   return response.data;
 }
+
 
 export async function getPortVoyages(id, options = {}) {
   const {
@@ -116,3 +153,29 @@ export async function getPortVoyages(id, options = {}) {
 
   return response.data;
 }
+
+
+export async function searchPortsByName(name, page = 1, pageSize = 100, id) {
+  const response = await axiosClient.get("/mersad/ports/name", {
+    params: {
+      name,
+      page,
+      page_size: pageSize,
+      ...(id ? { id } : {}),
+    },
+  });
+
+  return response.data;
+}
+
+
+
+export async function getPortCompanies(portId, radiusMeters = 12000) {
+  const response = await axiosClient.get(
+    `/mersad/port/${portId}/companies`,
+    { params: { radius_meters: radiusMeters } }
+  );
+
+  return response.data;
+}
+

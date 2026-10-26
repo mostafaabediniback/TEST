@@ -2,7 +2,6 @@
 import { useCallback, useMemo, useSyncExternalStore } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { getPortsInTile } from "@/api/portTiles";
-import { createTileQueryCombiner } from "@/lib/map/tileQueryResults";
 
 function getVisibleTiles(map) {
   const zoom = Math.floor(map.getZoom());
@@ -39,9 +38,7 @@ export function usePortsInVisibleTiles({ map }) {
 
   const tiles = useMemo(() => getVisibleTiles(map), [map, snapshot]);
 
-  const combine = useMemo(() => createTileQueryCombiner("ports"), []);
-  const combined = useQueries({
-    combine,
+  const queries = useQueries({
     queries: tiles.map(({ z, x, y }) => ({
       queryKey: ["ports", z, x, y],
       queryFn: ({ signal }) => getPortsInTile({ z, x, y, signal }),
@@ -49,5 +46,22 @@ export function usePortsInVisibleTiles({ map }) {
     })),
   });
 
-  return combined;
+  const ports = useMemo(() => {
+    const byId = new Map();
+
+    for (const query of queries) {
+      for (const port of query.data?.ports ?? []) {
+        byId.set(port.id, port);
+      }
+    }
+
+    return [...byId.values()];
+  }, [queries]);
+
+  return {
+    ports,
+    isPending: queries.some((query) => query.isPending),
+    isError: queries.some((query) => query.isError),
+    errors: queries.filter((query) => query.error).map((query) => query.error),
+  };
 }

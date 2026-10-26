@@ -3,13 +3,13 @@ export const columns = [
   { key: "name", labelKey: "name" },
   { key: "imo", labelKey: "imo" },
   { key: "flag", labelKey: "flag" },
-  { key: "vessel_type", labelKey: "vesselType" },
-  { key: "vessel_subtype", labelKey: "vesselSubtype" },
+  { key: "vessel_type_subtype", label: "Vessel Type / Subtype" },
   { key: "vessel_class", labelKey: "vesselClass" },
   { key: "vessel_maker", labelKey: "maker" },
   { key: "yob", labelKey: "yearBuilt" },
   { key: "dwt", labelKey: "dwt" },
 ];
+
 
 export const emptyFilters = {
   name: "",

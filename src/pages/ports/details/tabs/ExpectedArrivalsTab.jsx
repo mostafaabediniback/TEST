@@ -8,6 +8,7 @@ import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
 import CountryDropdown from "@/components/ships/CountryDropdown";
 import { VesselFlag } from "@/components/VesselFlag";
 import DateRangeFilter from "@/components/DateRangeFilter";
+import { Link, useSearchParams } from "react-router-dom";
 
 const EMPTY_FILTERS = {
   departure_time_from: "",
@@ -16,15 +17,50 @@ const EMPTY_FILTERS = {
   vessel_flag: "",
 };
 
+function parseUrlDate(value) {
+  if (!value) return undefined;
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function dateToUrl(value) {
+  if (!value) return undefined;
+
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
 const ExpectedArrivalsTab = ({ port, portId }) => {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-  const [search, setSearch] = useState("");
-  const [appliedSearch, setAppliedSearch] = useState("");
-  const [dateRange, setDateRange] = useState({});
-  const [appliedDateRange, setAppliedDateRange] = useState({});
-  const [filters, setFilters] = useState({ ...EMPTY_FILTERS });
-  const [appliedFilters, setAppliedFilters] = useState({ ...EMPTY_FILTERS });
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [page, setPage] = useState(
+    Math.max(1, Number(searchParams.get("page")) || 1),
+  );
+  const [pageSize, setPageSize] = useState(
+    Math.max(1, Number(searchParams.get("page_size")) || 20),
+  );
+
+  const initialSearch = searchParams.get("vessel_name") ?? "";
+  const [search, setSearch] = useState(initialSearch);
+  const [appliedSearch, setAppliedSearch] = useState(initialSearch);
+
+  const initialDateRange = {
+    from: parseUrlDate(searchParams.get("arrival_from")),
+    to: parseUrlDate(searchParams.get("arrival_to")),
+  };
+  const [dateRange, setDateRange] = useState(initialDateRange);
+  const [appliedDateRange, setAppliedDateRange] = useState(initialDateRange);
+
+  const initialFilters = {
+    ...EMPTY_FILTERS,
+    departure_time_from: searchParams.get("departure_time_from") ?? "",
+    departure_time_to: searchParams.get("departure_time_to") ?? "",
+    vessel_type: searchParams.getAll("vessel_type"),
+    vessel_flag: searchParams.get("vessel_flag") ?? "",
+  };
+  const [filters, setFilters] = useState(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   const queryFilters = {
     page,
@@ -36,9 +72,13 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
     vessel_name: appliedSearch.trim() || undefined,
     arrival_time_from: toUnixSeconds(appliedDateRange.from),
     arrival_time_to: toUnixSeconds(appliedDateRange.to),
-    departure_time_from: toUnixSeconds(appliedFilters.departure_time_from),
+    departure_time_from: toUnixSeconds(
+      appliedFilters.departure_time_from,
+    ),
     departure_time_to: toUnixSeconds(appliedFilters.departure_time_to),
-    vessel_type: appliedFilters.vessel_type || undefined,
+    vessel_type: appliedFilters.vessel_type.length
+      ? appliedFilters.vessel_type
+      : undefined,
     vessel_flag: appliedFilters.vessel_flag || undefined,
   };
 
@@ -49,30 +89,111 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
   const total = data?.total ?? 0;
   const pageCount = Math.max(1, data?.pages ?? Math.ceil(total / pageSize));
 
+  function updateUrl(
+    nextPage,
+    nextPageSize,
+    nextSearch,
+    nextDateRange,
+    nextFilters,
+  ) {
+    const params = new URLSearchParams(searchParams);
+
+    for (const key of [
+      "page",
+      "page_size",
+      "vessel_name",
+      "arrival_from",
+      "arrival_to",
+      "departure_time_from",
+      "departure_time_to",
+      "vessel_type",
+      "vessel_flag",
+    ]) {
+      params.delete(key);
+    }
+
+    const trimmedSearch = nextSearch.trim();
+    if (trimmedSearch) params.set("vessel_name", trimmedSearch);
+
+    const arrivalFrom = dateToUrl(nextDateRange.from);
+    const arrivalTo = dateToUrl(nextDateRange.to);
+    if (arrivalFrom) params.set("arrival_from", arrivalFrom);
+    if (arrivalTo) params.set("arrival_to", arrivalTo);
+
+    if (nextFilters.departure_time_from) {
+      params.set("departure_time_from", nextFilters.departure_time_from);
+    }
+    if (nextFilters.departure_time_to) {
+      params.set("departure_time_to", nextFilters.departure_time_to);
+    }
+
+    (nextFilters.vessel_type ?? []).forEach((type) =>
+      params.append("vessel_type", type),
+    );
+
+    if (nextFilters.vessel_flag) {
+      params.set("vessel_flag", nextFilters.vessel_flag);
+    }
+
+    params.set("page", String(nextPage));
+    params.set("page_size", String(nextPageSize));
+    setSearchParams(params);
+  }
+
   function updateFilter(name, value) {
     setFilters((current) => ({ ...current, [name]: value }));
   }
 
   function handleSearch() {
+    const nextDateRange = { ...dateRange };
+    const nextFilters = { ...filters };
+
     setAppliedSearch(search);
-    setAppliedDateRange({ ...dateRange });
-    setAppliedFilters({ ...filters });
+    setAppliedDateRange(nextDateRange);
+    setAppliedFilters(nextFilters);
     setPage(1);
+
+    updateUrl(1, pageSize, search, nextDateRange, nextFilters);
   }
 
   function handleResetFilters() {
-    setFilters({ ...EMPTY_FILTERS });
-    setAppliedFilters({ ...EMPTY_FILTERS });
+    const clearedFilters = {
+      ...EMPTY_FILTERS,
+      vessel_type: [],
+    };
+
+    setFilters(clearedFilters);
+    setAppliedFilters(clearedFilters);
     setDateRange({});
     setAppliedDateRange({});
     setSearch("");
     setAppliedSearch("");
     setPage(1);
+
+    updateUrl(1, pageSize, "", {}, clearedFilters);
+  }
+
+  function handlePageChange(nextPage) {
+    setPage(nextPage);
+    updateUrl(
+      nextPage,
+      pageSize,
+      appliedSearch,
+      appliedDateRange,
+      appliedFilters,
+    );
   }
 
   function handlePageSizeChange(size) {
     setPageSize(size);
     setPage(1);
+    updateUrl(
+      1,
+      size,
+      appliedSearch,
+      appliedDateRange,
+      appliedFilters,
+    );
   }
 
   return (
@@ -105,7 +226,9 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
             </div>
           </label>
 
-          <label className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}>
+          <label
+            className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}
+          >
             <span className="block font-medium text-slate-700">
               Arrival date and time
             </span>
@@ -172,10 +295,11 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
         )}
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px] text-left text-sm">
+          <table className="w-full min-w-[1000px] text-left text-sm">
             <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Vessel</th>
+                <th className="px-4 py-3 font-medium">IMO</th>
                 <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Flag</th>
                 <th className="px-4 py-3 font-medium">Expected arrival</th>
@@ -189,7 +313,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
               {isPending ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-14 text-center text-slate-500"
                   >
                     Loading expected arrivals…
@@ -200,29 +324,45 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
                   <tr key={voyage.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3">
                       <div className="font-medium text-slate-900">
-                        {voyage.ship?.name ?? "Unknown vessel"}
-                      </div>
-                      <div className="text-xs text-slate-500">
-                        IMO {voyage.ship?.imo ?? "—"}
+                        {voyage.ship?.id != null ? (
+                          <Link
+                            to={`/ships/${encodeURIComponent(voyage.ship.id)}`}
+                            className="text-emerald-800 underline-offset-4 hover:underline"
+                          >
+                            {voyage.ship?.name ?? "Unknown vessel"}
+                          </Link>
+                        ) : (
+                          voyage.ship?.name ?? "Unknown vessel"
+                        )}
                       </div>
                     </td>
+
+                    <td className="px-4 py-3 text-slate-600">
+                      {voyage.ship?.imo ?? "—"}
+                    </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {[voyage.ship?.vessel_type, voyage.ship?.vessel_subtype]
                         .filter(Boolean)
                         .join(" · ") || "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       <VesselFlag country={voyage.ship?.flag} />
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {formatTimestamp(voyage.arrival_time)}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.departure_port_name ?? "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.ship?.navigational_status ?? "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.ship?.speed == null
                         ? "—"
@@ -234,7 +374,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
 
               {!isPending && !isError && voyages.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-14 text-center">
+                  <td colSpan={8} className="px-4 py-14 text-center">
                     <Ship className="mx-auto size-8 text-slate-300" />
                     <p className="mt-3 font-medium text-slate-700">
                       No expected arrivals found
@@ -256,7 +396,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
         pageSize={pageSize}
         total={total}
         isPending={isPending}
-        onPageChange={setPage}
+        onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
       />
     </div>

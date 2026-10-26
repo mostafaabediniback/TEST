@@ -65,6 +65,5 @@ export function useShips({
   return useQuery({
     queryKey: ["ships", params],
     queryFn: () => getShips(params),
-    placeholderData: (previousData) => previousData,
   });
 }

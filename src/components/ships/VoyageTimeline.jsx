@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { formatTimestamp, toUnixMilliseconds } from "@/lib/dateTime";
+import { useEffect, useState } from "react";
 
 function formatVoyageTime(value) {
   return formatTimestamp(value, {

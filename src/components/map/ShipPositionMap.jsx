@@ -1,65 +1,61 @@
 import { useEffect, useRef } from "react";
-import { Map as MapLibreMap } from "maplibre-gl";
-import { MapLibreOverlay } from "@deck.gl/maplibre";
-import { ScatterplotLayer } from "@deck.gl/layers";
+import { Map as MapLibreMap, Marker } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+
 
 export default function ShipPositionMap({ coordinates, name }) {
-  const container = useRef(null);
+  const containerRef = useRef(null);
+
+  const longitude = Number(coordinates?.[0]);
+  const latitude = Number(coordinates?.[1]);
 
   useEffect(() => {
-    if (!container.current || !coordinates) return;
+    if (
+      !containerRef.current ||
+      !Number.isFinite(longitude) ||
+      !Number.isFinite(latitude)
+    ) {
+      return;
+    }
 
     const map = new MapLibreMap({
-      container: container.current,
-      center: coordinates, // [longitude, latitude]
+      container: containerRef.current,
+      center: coordinates,
       zoom: 8,
       minZoom: 2,
       maxZoom: 19,
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: "raster",
-            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-            tileSize: 256,
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          },
-        },
-        layers: [{ id: "base-map", type: "raster", source: "osm" }],
-      },
+      // style: {
+      //   version: 8,
+      //   sources: {
+      //     osm: {
+      //       type: "raster",
+      //       tiles: [tileUrl],
+      //       tileSize: 256,
+      //       attribution: "Map data attribution",
+      //     },
+      //   },
+      //   layers: [{ id: "base-map", type: "raster", source: "osm" }],
+      // },
+      style: import.meta.env.VITE_MAP_STYLE_URL || "/tiles/styles/basic-preview/style.json",
     });
 
-    const overlay = new MapLibreOverlay({
-      interleaved: true,
-      layers: [
-        new ScatterplotLayer({
-          id: "detail-ship-marker",
-          data: [{ coordinates, name }],
-          getPosition: (item) => item.coordinates,
-          getRadius: 9,
-          radiusUnits: "pixels",
-          getFillColor: [37, 99, 235, 242],
-          getLineColor: [255, 255, 255, 255],
-          getLineWidth: 2,
-          lineWidthUnits: "pixels",
-          stroked: true,
-          filled: true,
-          pickable: false,
-        }),
-      ],
-    });
-
-    map.addControl(overlay);
+    const marker = new Marker({ color: "#2563eb" })
+      .setLngLat([longitude, latitude])
+      .addTo(map);
 
     const resizeObserver = new ResizeObserver(() => map.resize());
-    resizeObserver.observe(container.current);
+    resizeObserver.observe(containerRef.current);
+
+    map.on("error", (event) => {
+      console.error("Ship map error:", event.error);
+    });
 
     return () => {
       resizeObserver.disconnect();
+      marker.remove();
       map.remove();
     };
-  }, [coordinates, name]);
+  }, [longitude, latitude]);
 
-  return <div ref={container} className="h-full w-full" />;
+  return <div ref={containerRef} className="h-full w-full" />;
 }

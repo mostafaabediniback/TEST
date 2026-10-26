@@ -39,16 +39,6 @@ const filterItems = [
     title: "Navigation",
   },
   {
-    id: "time",
-    label: "9m",
-    title: "Time",
-    options: [
-      { label: "9 minutes", value: "9m" },
-      { label: "30 minutes", value: "30m" },
-      { label: "1 hour", value: "1h" },
-    ],
-  },
-  {
     id: "fullscreen",
     icon: Maximize,
     title: "Display",
@@ -64,7 +54,7 @@ export function Toolbar() {
   const { data: totalCount } = useShipTotalCount();
   const popoverSide = isRtl ? "right" : "left";
 
-  const handleSelect = (filterId, option) => {
+  const handleSelect = (option) => {
     if (option.locked) return;
 
     if (option.value === "copy-link") {
@@ -81,34 +71,36 @@ export function Toolbar() {
   };
 
   return (
-    <div className="flex w-fit flex-col gap-1 rounded-xl border bg-background/95 p-1.5 shadow-panel backdrop-blur">
+    <div className="flex w-fit flex-col gap-1 rounded-xl border border-white/20 bg-[#51585d] p-1.5 text-white shadow-panel backdrop-blur">
       <VesselTypeFilter />
-      <Separator />
+      <Separator className="bg-white/20" />
 
       {filterItems.map((item, index) => {
         const Icon = item.icon;
 
         return (
           <div key={item.id}>
-            {index > 0 && item.id === "fullscreen" && <Separator />}
+            {index > 0 && item.id === "fullscreen" && (
+              <Separator className="bg-white/20" />
+            )}
 
             {item.id === "navigation" ? (
-<Button
-  type="button"
-  size="icon"
-  variant="ghost"
-  aria-label={t(item.title)}
-  title={t(item.title)}
-  className="relative flex flex-col items-center justify-center gap-0 overflow-visible"
->
-  <Icon aria-hidden="true" className="size-4" />
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                aria-label={t(item.title)}
+                title={t(item.title)}
+                className="relative flex flex-col items-center justify-center gap-0 overflow-visible text-white hover:bg-white/10 hover:text-white"
+              >
+                <Icon aria-hidden="true" className="size-4" />
 
-  {totalCount != null && (
-    <span className="min-w-8 rounded-sm bg-primary px-1 text-center text-[9px] font-semibold leading-4 text-primary-foreground">
-      {new Intl.NumberFormat().format(totalCount)}
-    </span>
-  )}
-</Button>
+                {totalCount != null && (
+                  <span className="min-w-8 rounded-sm bg-primary px-1 text-center text-[9px] font-semibold leading-4 text-primary-foreground">
+                    {new Intl.NumberFormat().format(totalCount)}
+                  </span>
+                )}
+              </Button>
             ) : (
               <Popover>
                 <PopoverTrigger
@@ -118,14 +110,11 @@ export function Toolbar() {
                       variant="ghost"
                       aria-label={t(item.title)}
                       title={t(item.title)}
+                      className="text-white hover:bg-white/10 hover:text-white"
                     />
                   }
                 >
-                  {Icon ? (
-                    <Icon aria-hidden="true" className="size-5" />
-                  ) : (
-                    <span className="text-xs">{item.label}</span>
-                  )}
+                  <Icon aria-hidden="true" className="size-5" />
                 </PopoverTrigger>
 
                 <PopoverContent
@@ -137,14 +126,14 @@ export function Toolbar() {
                   <PopoverTitle>{t(item.title)}</PopoverTitle>
 
                   <div className="grid gap-2">
-                    {item.options.map((option) => (
+                    {item.options?.map((option) => (
                       <Button
                         key={option.value}
                         type="button"
                         size="sm"
                         variant="outline"
                         disabled={option.locked}
-                        onClick={() => handleSelect(item.id, option)}
+                        onClick={() => handleSelect(option)}
                         className="justify-between"
                       >
                         <span>{t(option.label)}</span>

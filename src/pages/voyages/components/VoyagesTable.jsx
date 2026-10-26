@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useLocale } from "@/context/LocaleContext";
 import { formatTimestamp } from "@/lib/dateTime";
+import { Link } from "react-router-dom";
 
 export default function VoyagesTable({
   rows,
@@ -49,26 +50,49 @@ export default function VoyagesTable({
             {rows.map((voyage) => (
               <TableRow key={voyage.id}>
                 {displayedColumns.map(({ key }) => {
-                  const value = voyage[key];
+                  const value =
+                    key === "ship_details"
+                      ? [voyage.ship_type, voyage.ship_subtype]
+                          .filter(Boolean)
+                          .join(" / ")
+                      : voyage[key];
+
                   const displayValue =
                     key === "departure_time" || key === "arrival_time"
                       ? formatTimestamp(value)
                       : value;
 
+                  const link =
+                    key === "ship_name" && voyage.ship_id != null
+                      ? `/ships/${encodeURIComponent(voyage.ship_id)}`
+                      : key === "departure_port_name" &&
+                          voyage.departure_port_id != null
+                        ? `/ports/${encodeURIComponent(voyage.departure_port_id)}`
+                        : key === "arrival_port_name" &&
+                            voyage.arrival_port_id != null
+                          ? `/ports/${encodeURIComponent(voyage.arrival_port_id)}`
+                          : null;
+
                   return (
                     <TableCell key={key}>
                       {displayValue == null || displayValue === "" ? (
                         <span className="text-muted-foreground">—</span>
+                      ) : link ? (
+                        <Link
+                          to={link}
+                          className="font-medium text-emerald-800 underline-offset-4 hover:underline"
+                        >
+                          {displayValue}
+                        </Link>
                       ) : key === "ship_id" ? (
                         <Badge variant="outline">{displayValue}</Badge>
-                      ) : typeof displayValue === "number" ? (
-                        displayValue
                       ) : (
                         displayValue
                       )}
                     </TableCell>
                   );
                 })}
+
                 <TableCell>
                   <Button
                     variant="ghost"

@@ -46,8 +46,7 @@ export function SidebarProfile({ user }) {
   const name = user?.name || t("Your profile");
   const subtitle = user?.email || t("Settings and language");
 
-  // The menu lives in a portal. Keep its sidebar anchor expanded until it closes,
-  // and release that temporary state if the mobile sidebar unmounts it.
+
   useEffect(() => () => setMenuOpen(false), [setMenuOpen]);
 
   return (

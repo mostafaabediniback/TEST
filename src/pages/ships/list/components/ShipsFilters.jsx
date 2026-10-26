@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
+import CountryDropdown from "@/components/ships/CountryDropdown";
+import ImoFilter from "./ImoFilter";
 
 export default function ShipsFilters({
   filters,
@@ -13,14 +15,14 @@ export default function ShipsFilters({
   return (
     <Card className="p-4">
       <form onSubmit={onSearch} className="space-y-4">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Input
             value={filters.name}
             onChange={(event) => onFilterChange("name", event.target.value)}
-            placeholder="Ship name"
-            aria-label="Ship name"
+            placeholder="Vessels name"
+            aria-label="Vessels name"
           />
-
+          
           <Input
             value={filters.imo}
             onChange={(event) => onFilterChange("imo", event.target.value)}
@@ -28,11 +30,9 @@ export default function ShipsFilters({
             aria-label="IMO"
           />
 
-          <Input
-            value={filters.flag}
-            onChange={(event) => onFilterChange("flag", event.target.value)}
-            placeholder="Flag"
-            aria-label="Flag"
+          <CountryDropdown
+            selected={filters.flag ?? ""}
+            onChange={(country) => onFilterChange("flag", country ?? "")}
           />
 
           <VesselTypeDropdown
@@ -40,7 +40,7 @@ export default function ShipsFilters({
             onChange={(selected) => onFilterChange("vessel_type", selected)}
           />
 
-          <Input
+          {/* <Input
             value={filters.vessel_class}
             onChange={(event) =>
               onFilterChange("vessel_class", event.target.value)
@@ -56,11 +56,15 @@ export default function ShipsFilters({
             }
             placeholder="Vessel maker"
             aria-label="Vessel maker"
-          />
+          /> */}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <RangeInputs
+          {/* <ImoFilter
+            value={filters.imo}
+            onChange={(value) => onFilterChange("imo", value)}
+          /> */}
+          {/* <RangeInputs
             label="Year built"
             minValue={filters.yob_from}
             maxValue={filters.yob_to}
@@ -82,9 +86,9 @@ export default function ShipsFilters({
             maxValue={filters.width_max}
             onMinChange={(value) => onFilterChange("width_min", value)}
             onMaxChange={(value) => onFilterChange("width_max", value)}
-          />
+          /> */}
 
-          <RangeInputs
+          {/* <RangeInputs
             label="Draft"
             minValue={filters.draft_min}
             maxValue={filters.draft_max}
@@ -98,7 +102,7 @@ export default function ShipsFilters({
             maxValue={filters.dwt_max}
             onMinChange={(value) => onFilterChange("dwt_min", value)}
             onMaxChange={(value) => onFilterChange("dwt_max", value)}
-          />
+          /> */}
         </div>
 
         <div className="flex flex-wrap gap-2">

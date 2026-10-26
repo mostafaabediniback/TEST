@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { Clock3 } from "lucide-react";
 import { useLocale } from "@/context/LocaleContext";
 import {
   formatRelativeTime,
@@ -7,6 +5,8 @@ import {
   timestampToDate,
 } from "@/lib/dateTime";
 import { cn } from "@/lib/utils";
+import { Clock3 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function TimestampWithRelative({
   value,

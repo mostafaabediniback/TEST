@@ -22,10 +22,7 @@ import {
   getShipCoordinates,
   getShipDetailsNavigation,
 } from "@/lib/shipNavigation";
-import { buildShipMarker, SHIP_MARKER_OPTIONS } from "@/lib/map/shipMarkers";
-import { MAX_DETAILED_SHIPS } from "@/lib/map/shipOverviewData";
-import { createShipOverviewLayers } from "@/lib/map/shipOverviewLayers";
-import { useShipOverview } from "@/hooks/useShipOverview";
+import { buildShipMarker } from "@/lib/map/shipMarkers";
 import atAnchorIcon from "@/assets/ship-at-anchor.svg";
 import mooredIcon from "@/assets/ship-moored.svg";
 import MapPopup from "./MapPopup";
@@ -121,8 +118,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     searchParams,
   ]);
 
-  // Fractional zoom frames only move existing GPU instances. Rebuild detailed
-  // geometry at whole zoom levels, never on every frame of a zoom gesture.
+  // Rebuild marker shapes whenever the map zoom changes.
   const subscribeToZoom = useCallback(
     (onChange) => {
       map.on("zoom", onChange);
@@ -131,17 +127,12 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     [map],
   );
 
-  const readMapZoom = useCallback(() => Math.floor(map.getZoom()), [map]);
+  const readMapZoom = useCallback(() => map.getZoom(), [map]);
 
   const mapZoom = useSyncExternalStore(
     subscribeToZoom,
     readMapZoom,
     readMapZoom,
-  );
-  const showDetails = mapZoom >= SHIP_MARKER_OPTIONS.minZoomForShipBody &&
-    ships.length <= MAX_DETAILED_SHIPS;
-  const { overview, isPending: isPreparingMarkers } = useShipOverview(
-    ships, vesselTypes, !showDetails,
   );
 
   // Include the selected ship's extra position details when building its marker.
@@ -170,7 +161,6 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
   // Apply vessel filters, then build the visible markers.
   // Use the enriched marker for the selected ship instead of drawing it twice.
   const shipMarkers = useMemo(() => {
-    if (!showDetails) return selectedShipMarker ? [selectedShipMarker] : [];
     const visibleShipMarkers = ships
       .filter((ship) => matchesVesselTypes(ship, vesselTypes))
       .map((ship) =>
@@ -186,7 +176,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
       visibleShipMarkers.push(selectedShipMarker);
     }
     return visibleShipMarkers;
-  }, [ships, vesselTypes, selectedShipId, selectedShipMarker, mapZoom, showDetails]);
+  }, [ships, vesselTypes, selectedShipId, selectedShipMarker, mapZoom]);
 
   function openShipDetails() {
     setSelectedShip(shipForPopup);
@@ -240,9 +230,6 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     const shipBodyMarkers = shipMarkers.filter(
       (marker) => marker.shapeType === "hull",
     );
-    const navigationAidMarkers = shipMarkers.filter(
-      (marker) => marker.shapeType === "diamond",
-    );
     const markersWithStatusBadges = shipMarkers.filter(
       (marker) => marker.statusIconName,
     );
@@ -267,7 +254,6 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
       },
 
       layers: [
-        ...(!showDetails ? createShipOverviewLayers(overview, ships, mapZoom, handleShipClick) : []),
         // Clickable main shape: hull, arrow, circle, or diamond.
         new PolygonLayer({
           id: "ship-markers",
@@ -276,29 +262,13 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
           getFillColor: (marker) => marker.fillColor,
           filled: true,
           stroked: true,
-          getLineColor: (marker) => marker.outlineColor,
+          getLineColor: [82, 99, 108, 255],
           lineWidthUnits: "pixels",
-          getLineWidth: (marker) => marker.outlineWidthPixels,
+          getLineWidth: 0.5,
           pickable: true,
           autoHighlight: true,
           highlightColor: [96, 165, 250, 255],
 
-          onClick: handleShipClick,
-        }),
-
-        // Small red ring inside each navigation-aid diamond.
-        new ScatterplotLayer({
-          id: "navigation-aid-centres",
-          data: navigationAidMarkers,
-          getPosition: (marker) => marker.positionCoordinates,
-          radiusUnits: "pixels",
-          getRadius: 1.75,
-          filled: false,
-          stroked: true,
-          getLineColor: (marker) => marker.outlineColor,
-          lineWidthUnits: "pixels",
-          getLineWidth: 1,
-          pickable: true,
           onClick: handleShipClick,
         }),
 
@@ -373,10 +343,6 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     setSearchParams,
     setSelectedShip,
     handleShipClick,
-    showDetails,
-    overview,
-    ships,
-    mapZoom,
   ]);
 
   // Remove this component's layers when it unmounts.
@@ -393,11 +359,6 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
   // Show the past track, hover label, and selected ship's popup.
   return (
     <>
-      {isPreparingMarkers && (
-        <div role="status" className="pointer-events-none absolute left-4 top-4 z-[1000] rounded bg-white px-3 py-2 text-sm shadow">
-          {t("loadingShips")}
-        </div>
-      )}
       <ShipTrackLayer
         map={map}
         layerManager={layerManager}

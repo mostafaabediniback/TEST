@@ -1,31 +1,50 @@
-// MapPortsLayer.jsx
 import { useLocale } from "@/context/LocaleContext";
 import { usePortsInVisibleTiles } from "@/hooks/usePortsInVisibleTiles";
+import { useEffect, useState } from "react";
 import PortMarkers from "./PortMarkers";
 
 export default function MapPortsLayer({ map, layerManager }) {
   const { t } = useLocale();
-  const { ports, isPending, isError } = usePortsInVisibleTiles({ map });
+  const [zoom, setZoom] = useState(() => map.getZoom());
+  const enabled = zoom >= 10;
+
+  useEffect(() => {
+    const updateZoom = () => setZoom(map.getZoom());
+
+    map.on("zoomend", updateZoom);
+    updateZoom();
+
+    return () => map.off("zoomend", updateZoom);
+  }, [map]);
+
+  const { ports, isPending, isError } = usePortsInVisibleTiles({
+    map,
+    enabled,
+  });
 
   return (
     <>
-      <div
-        role="status"
-        className="pointer-events-none absolute left-4 top-16 z-[1000] space-y-2 text-sm"
-      >
-        {isPending && (
-          <p className="rounded bg-white px-3 py-2 shadow">
-            {t("loadingPorts")}
-          </p>
-        )}
-        {isError && (
-          <p className="rounded bg-white px-3 py-2 text-amber-700 shadow">
-            {t("loadPortsError")}
-          </p>
-        )}
-      </div>
+      {enabled && (
+        <div
+          role="status"
+          className="pointer-events-none absolute left-4 top-16 z-[1000] space-y-2 text-sm"
+        >
+          {isPending && (
+            <p className="rounded bg-white px-3 py-2 shadow">
+              {t("loadingPorts")}
+            </p>
+          )}
+          {isError && (
+            <p className="rounded bg-white px-3 py-2 text-amber-700 shadow">
+              {t("loadPortsError")}
+            </p>
+          )}
+        </div>
+      )}
 
-      <PortMarkers ports={ports} map={map} layerManager={layerManager} />
+      {enabled && (
+        <PortMarkers ports={ports} map={map} layerManager={layerManager} />
+      )}
     </>
   );
 }

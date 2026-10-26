@@ -1,15 +1,20 @@
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useMapController } from "@/context/MapControllerContext";
 import { usePortDetails } from "@/hooks/usePortDetails";
 import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
 import { getPortCoordinates } from "@/lib/map/portMarkers";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import PortDetailHeader from "./components/PortDetailHeader";
+import { tabPages, tabs } from "./tabs";
 import PortOverview from "./tabs/PortOverview";
-import { tabs, tabPages } from "./tabs";
 
 export default function PortDetails() {
   const navigate = useNavigate();
@@ -17,7 +22,36 @@ export default function PortDetails() {
   const { id } = useParams();
   const { data, isPending, isError, error } = usePortDetails(id);
   const port = data?.body;
-  const [activeTab, setActiveTab] = useState("Overview");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get("tab");
+  const activeUrlTab = tabs.includes(tabFromUrl) ? tabFromUrl : "Overview";
+  const [activeTab, setActiveTab] = useState(activeUrlTab);
+
+  useEffect(() => {
+    setActiveTab(activeUrlTab);
+  }, [activeUrlTab]);
+
+  function handleTabChange(tab) {
+    if (!tabs.includes(tab)) return;
+
+    setActiveTab(tab);
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+
+        if (tab === "Overview") {
+          next.delete("tab");
+        } else {
+          next.set("tab", tab);
+        }
+
+        return next;
+      },
+      { replace: true },
+    );
+  }
+
   const ActiveTabPage = tabPages[activeTab];
   const coordinates = getPortCoordinates(port);
   const mapTarget = getMapSelectionNavigation(
@@ -27,7 +61,8 @@ export default function PortDetails() {
   );
 
   function handleShowOnMap() {
-    if (!mapTarget) return;
+    if (!mapTarget || !port) return;
+
     setSelectedShip(null);
     setSelectedPort({
       ...port,
@@ -76,7 +111,7 @@ export default function PortDetails() {
         port={port}
         tabs={tabs}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       />
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">

@@ -1,6 +1,6 @@
 export function createMapLayerManager(overlay, map) {
   const groups = new Map();
-  // نشانگر پیش‌فرض Deck.gl فقط حالت گرفتن نقشه را دارد؛ تشخیص هاور را هم لحاظ کن.
+
   const getCursor = ({ isDragging, isHovering }) => {
     if (isDragging) return "grabbing";
     return isHovering ? "pointer" : "grab";

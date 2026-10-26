@@ -640,3 +640,54 @@
   .startup-intro-rule { animation: none; }
 }
 
+.fleet-chart-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.chart-switch {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #e7eaf0;
+  border-radius: 9px;
+  background: #f7f8fa;
+}
+
+.chart-switch button {
+  padding: 7px 11px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #596273;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chart-switch button.is-active {
+  background: #fff;
+  color: #315fc2;
+  box-shadow: 0 1px 3px rgb(20 30 50 / 14%);
+}
+
+.chart-switch button:focus-visible {
+  outline: 2px solid #4776e6;
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .fleet-chart-heading-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chart-switch {
+    align-self: flex-start;
+  }
+}
+

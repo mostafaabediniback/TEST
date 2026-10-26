@@ -10,7 +10,7 @@ export function VesselFlag({ country }) {
     : undefined;
 
   return (
-    <div className="flex items-center gap-2">
+    <span className="inline-flex items-center gap-2">
       {code && (
         <span
           className={`fi fi-${code} h-4 w-6 rounded-sm`}
@@ -19,6 +19,6 @@ export function VesselFlag({ country }) {
         />
       )}
       <span>{name || "—"}</span>
-    </div>
+    </span>
   );
 }

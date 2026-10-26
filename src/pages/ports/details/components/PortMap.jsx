@@ -1,14 +1,57 @@
+import { useEffect, useRef } from "react";
+import { Map as MapLibreMap, Marker } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
 
-export default function PortMap({ port, onShowOnMap, canShowOnMap }) {
+
+export default function PortMap({
+  port = {},
+  onShowOnMap,
+  canShowOnMap = false,
+}) {
   const { t } = useLocale();
+  const containerRef = useRef(null);
+
+  const latitude = Number(port.lat);
+  const longitude = Number(port.lon);
+
   const hasCoordinates =
     port.lat != null &&
     port.lon != null &&
-    Number.isFinite(Number(port.lat)) &&
-    Number.isFinite(Number(port.lon));
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude);
+
+  useEffect(() => {
+    if (!containerRef.current || !hasCoordinates) return;
+
+    const map = new MapLibreMap({
+      container: containerRef.current,
+      style: import.meta.env.VITE_MAP_STYLE_URL || "/tiles/styles/basic-preview/style.json",
+      center: [longitude, latitude],
+      zoom: 10,
+      minZoom: 2,
+      maxZoom: 19,
+    });
+
+    const marker = new Marker({ color: "#2563eb" })
+      .setLngLat([longitude, latitude])
+      .addTo(map);
+
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(containerRef.current);
+
+    map.on("error", (event) => {
+      console.error("Port map error:", event.error);
+    });
+
+    return () => {
+      resizeObserver.disconnect();
+      marker.remove();
+      map.remove();
+    };
+  }, [hasCoordinates, latitude, longitude]);
 
   if (!hasCoordinates) {
     return (
@@ -18,29 +61,16 @@ export default function PortMap({ port, onShowOnMap, canShowOnMap }) {
     );
   }
 
-  const lat = Number(port.lat);
-  const lon = Number(port.lon);
-
-  // OpenStreetMap embed centered on the port coordinates.
-  const delta = 0.08;
-  const bbox = `${lon - delta}%2C${lat - delta}%2C${lon + delta}%2C${lat + delta}`;
-  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lon}`;
-
   return (
     <div className="relative h-72 overflow-hidden rounded-md bg-slate-100">
-      <iframe
-        title={`Map showing ${port.name ?? "port"}`}
-        src={mapUrl}
-        className="h-full w-full border-0"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      />
+      <div ref={containerRef} className="h-full w-full" />
+
       <Button
         size="sm"
         variant="outline"
         onClick={onShowOnMap}
         disabled={!canShowOnMap}
-        className="absolute end-3 top-3 bg-background/95 shadow-sm"
+        className="absolute end-3 top-3 z-10 bg-background/95 shadow-sm"
       >
         <MapPin aria-hidden="true" />
         {t("viewOnMap")}

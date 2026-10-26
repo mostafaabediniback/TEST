@@ -7,12 +7,10 @@ export default function Dashboard() {
   useEffect(() => {
     async function loadGeoData() {
       try {
-        const response = await fetch(
-          "/maps/countries.geo.json",
-        );
+        const response = await fetch("/maps/countries.geo.json");
 
         if (!response.ok) {
-          throw new Error("Failed to load map data");
+          throw new Error(`Failed to load map data: ${response.status}`);
         }
 
         const result = await response.json();

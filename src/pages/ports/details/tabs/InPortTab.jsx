@@ -1,23 +1,101 @@
-import TimestampWithRelative from "@/components/TimestampWithRelative";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Search, Ship } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { usePortInPort } from "@/hooks/usePortInPort";
-import PortsPagination from "@/components/ports/PortsPagination";
-import { VesselFlag } from "@/components/VesselFlag";
 
-export function InPortTab({ port, portId }) {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-  const [search, setSearch] = useState("");
+import DateRangeFilter from "@/components/DateRangeFilter";
+import TimestampWithRelative from "@/components/TimestampWithRelative";
+import TypeDropdown from "@/components/TypeDropdown";
+import { Card } from "@/components/ui/card";
+import { VesselFlag } from "@/components/VesselFlag";
+import PortsPagination from "@/components/ports/PortsPagination";
+import { usePortInPort } from "@/hooks/usePortInPort";
+import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
+
+function parseDate(value) {
+  if (!value) return undefined;
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function formatElapsedTime(seconds) {
+  if (seconds == null) return "—";
+
+  const totalSeconds = Number(seconds);
+  if (!Number.isFinite(totalSeconds)) return "—";
+
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const remainingSeconds = totalSeconds % 60;
+
+  return [
+    days && `${days}d`,
+    hours && `${hours}h`,
+    minutes && `${minutes}m`,
+    `${remainingSeconds}s`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function getInitialFilters(params) {
+  const arrivalFrom = parseDate(params.get("arrival_from"));
+  const arrivalTo = parseDate(params.get("arrival_to"));
+
+  return {
+    vessel_name: params.get("vessel_name") || undefined,
+    vessel_imo: params.get("vessel_imo") || undefined,
+    vessel_subtype: params.getAll("vessel_subtype"),
+    vessel_status: params.getAll("vessel_status"),
+    arrival_time_from: arrivalFrom
+      ? Math.floor(arrivalFrom.getTime() / 1000)
+      : undefined,
+    arrival_time_to: arrivalTo
+      ? Math.floor(arrivalTo.getTime() / 1000)
+      : undefined,
+  };
+}
+
+export function InPortTab({ port }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const portId = port?.id;
+
+  const [page, setPage] = useState(
+    Math.max(1, Number(searchParams.get("page")) || 1),
+  );
+  const [pageSize, setPageSize] = useState(
+    Math.max(1, Number(searchParams.get("pageSize")) || 20),
+  );
+
+  const [vesselName, setVesselName] = useState(
+    searchParams.get("vessel_name") ?? "",
+  );
+  const [vesselImo, setVesselImo] = useState(
+    searchParams.get("vessel_imo") ?? "",
+  );
+  const [vesselSubtype, setVesselSubtype] = useState(
+    searchParams.getAll("vessel_subtype"),
+  );
+  const [vesselStatus, setVesselStatus] = useState(
+    searchParams.getAll("vessel_status"),
+  );
+  const [arrivalRange, setArrivalRange] = useState(() => ({
+    from: parseDate(searchParams.get("arrival_from")),
+    to: parseDate(searchParams.get("arrival_to")),
+  }));
+
+  const [appliedFilters, setAppliedFilters] = useState(() =>
+    getInitialFilters(searchParams),
+  );
 
   const { data, isPending, isError, error } = usePortInPort(
     portId,
     page,
     pageSize,
+    appliedFilters,
   );
 
-  // API response: { total, page, page_size, pages, items }
   const vessels = Array.isArray(data)
     ? data
     : (data?.items ?? data?.data ?? []);
@@ -29,32 +107,140 @@ export function InPortTab({ port, portId }) {
   const pageCount = Math.max(1, data?.pages ?? Math.ceil(total / pageSize));
 
   useEffect(() => {
-    if (page > pageCount) setPage(pageCount);
+    if (page > pageCount) {
+      setPage(pageCount);
+    }
   }, [page, pageCount]);
 
-  const filteredVessels = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    if (!query) return vessels;
+  function updateUrl(nextPage, nextPageSize) {
+    const params = new URLSearchParams(searchParams);
 
-    return vessels.filter((voyage) =>
-      [
-        voyage.ship?.name,
-        voyage.ship?.imo,
-        voyage.ship?.flag,
-        voyage.ship?.vessel_type,
-        voyage.ship?.vessel_subtype,
-        voyage.ship?.navigational_status,
-        voyage.departure_port_name,
-        voyage.arrival_port_name,
-      ]
-        .filter(Boolean)
-        .some((value) => String(value).toLowerCase().includes(query)),
+    params.delete("vessel_subtype");
+    params.delete("vessel_status");
+
+    const name = vesselName.trim();
+    if (name) params.set("vessel_name", name);
+    else params.delete("vessel_name");
+
+    const imo = vesselImo.trim();
+    if (imo) params.set("vessel_imo", imo);
+    else params.delete("vessel_imo");
+
+    vesselSubtype.forEach((subtype) =>
+      params.append("vessel_subtype", subtype),
     );
-  }, [vessels, search]);
 
-  function handlePageSizeChange(size) {
-    setPageSize(size);
+    vesselStatus.forEach((status) => params.append("vessel_status", status));
+
+    if (arrivalRange.from) {
+      params.set("arrival_from", arrivalRange.from.toISOString());
+    } else {
+      params.delete("arrival_from");
+    }
+
+    if (arrivalRange.to) {
+      params.set("arrival_to", arrivalRange.to.toISOString());
+    } else {
+      params.delete("arrival_to");
+    }
+
+    params.set("page", String(nextPage));
+    params.set("pageSize", String(nextPageSize));
+
+    setSearchParams(params);
+  }
+
+  function handleSearch() {
+    const filters = {
+      vessel_name: vesselName.trim() || undefined,
+      vessel_imo: vesselImo.trim() || undefined,
+      vessel_subtype: vesselSubtype.length ? vesselSubtype : undefined,
+      vessel_status: vesselStatus.length ? vesselStatus : undefined,
+      arrival_time_from: arrivalRange.from
+        ? Math.floor(arrivalRange.from.getTime() / 1000)
+        : undefined,
+      arrival_time_to: arrivalRange.to
+        ? Math.floor(arrivalRange.to.getTime() / 1000)
+        : undefined,
+    };
+
+    setAppliedFilters(filters);
     setPage(1);
+
+    const params = new URLSearchParams(searchParams);
+    params.set("tab", "In port");
+
+    for (const key of [
+      "vessel_name",
+      "vessel_imo",
+      "vessel_subtype",
+      "vessel_status",
+      "arrival_from",
+      "arrival_to",
+    ]) {
+      params.delete(key);
+    }
+
+    if (filters.vessel_name) {
+      params.set("vessel_name", filters.vessel_name);
+    }
+
+    if (filters.vessel_imo) {
+      params.set("vessel_imo", filters.vessel_imo);
+    }
+
+    filters.vessel_subtype?.forEach((value) =>
+      params.append("vessel_subtype", value),
+    );
+    filters.vessel_status?.forEach((value) =>
+      params.append("vessel_status", value),
+    );
+
+    if (arrivalRange.from) {
+      params.set("arrival_from", arrivalRange.from.toISOString());
+    }
+
+    if (arrivalRange.to) {
+      params.set("arrival_to", arrivalRange.to.toISOString());
+    }
+
+    params.set("page", "1");
+    params.set("pageSize", String(pageSize));
+
+    setSearchParams(params, { replace: true });
+  }
+
+  function handleResetFilters() {
+    setVesselName("");
+    setVesselImo("");
+    setVesselSubtype([]);
+    setVesselStatus([]);
+    setArrivalRange({});
+    setAppliedFilters({});
+    setPage(1);
+
+    const params = new URLSearchParams(searchParams);
+    params.delete("vessel_name");
+    params.delete("vessel_imo");
+    params.delete("vessel_subtype");
+    params.delete("vessel_status");
+    params.delete("arrival_from");
+    params.delete("arrival_to");
+    params.set("page", "1");
+    params.set("pageSize", String(pageSize));
+
+    setSearchParams(params);
+  }
+
+  function handlePageChange(nextPage) {
+    setPage(nextPage);
+    updateUrl(nextPage, pageSize);
+  }
+
+  function handlePageSizeChange(nextPageSize) {
+    setPageSize(nextPageSize);
+    setPage(1);
+    updateUrl(1, nextPageSize);
   }
 
   return (
@@ -68,20 +254,86 @@ export function InPortTab({ port, portId }) {
         </p>
       </div>
 
-      <Card className="p-4">
-        <label className="flex flex-col gap-1.5 text-sm sm:max-w-xs">
-          <span className="font-medium text-slate-700">Vessel, IMO, or type</span>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
+      <Card className="space-y-4 p-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-slate-700">Vessel name</span>
             <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search vessel, IMO, or type"
+              value={vesselName}
+              onChange={(event) => setVesselName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") handleSearch();
+              }}
+              placeholder="Search vessel name"
               aria-label="Search vessels in port"
-              className="h-9 w-full rounded-md border bg-white pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-blue-600"
+              className="h-9 rounded-md border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </label>
+
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-slate-700">Vessel IMO</span>
+            <input
+              value={vesselImo}
+              onChange={(event) => setVesselImo(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") handleSearch();
+              }}
+              placeholder="Search IMO"
+              aria-label="Search by vessel IMO"
+              className="h-9 rounded-md border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </label>
+
+          <div className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-slate-700">
+              Vessel type/subtype
+            </span>
+            <VesselTypeDropdown
+              selected={vesselSubtype}
+              onChange={setVesselSubtype}
             />
           </div>
-        </label>
+
+          <div className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-slate-700">Vessel status</span>
+            <TypeDropdown
+              multiple
+              selectedValue={vesselStatus}
+              onChange={setVesselStatus}
+              placeholder="Select statuses"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5 text-sm">
+            <span className="font-medium text-slate-700">Arrival time</span>
+            <DateRangeFilter
+              mode="range"
+              dateRange={arrivalRange}
+              onDateRangeChange={setArrivalRange}
+              label="Select arrival range"
+              className="w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 p-4 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="h-10 rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          >
+            Reset filters
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-emerald-900 px-4 text-sm font-medium text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2"
+          >
+            <Search className="size-4" />
+            Search
+          </button>
+        </div>
       </Card>
 
       <Card className="overflow-hidden">
@@ -96,8 +348,10 @@ export function InPortTab({ port, portId }) {
             <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Vessel</th>
+                <th className="px-4 py-3 font-medium">IMO</th>
                 <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Flag</th>
+                <th className="px-4 py-3 font-medium">Time Anchor</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Arrival</th>
                 <th className="px-4 py-3 font-medium">From</th>
@@ -109,40 +363,60 @@ export function InPortTab({ port, portId }) {
               {isPending ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={9}
                     className="px-4 py-14 text-center text-slate-500"
                   >
                     Loading vessels…
                   </td>
                 </tr>
               ) : (
-                filteredVessels.map((voyage) => (
+                vessels.map((voyage) => (
                   <tr key={voyage.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3">
                       <div className="font-medium text-slate-900">
-                        {voyage.ship?.name ?? "Unknown vessel"}
-                      </div>
-                      <div className="text-xs text-slate-500">
-                        IMO {voyage.ship?.imo ?? "—"}
+                        {voyage.ship?.id != null ? (
+                          <Link
+                            to={`/ships/${encodeURIComponent(voyage.ship.id)}`}
+                            className="text-emerald-800 underline-offset-4 hover:underline"
+                          >
+                            {voyage.ship?.name ?? "Unknown vessel"}
+                          </Link>
+                        ) : (
+                          voyage.ship?.name ?? "Unknown vessel"
+                        )}
                       </div>
                     </td>
+
+                    <td className="px-4 py-3 text-slate-600">
+                      {voyage.ship?.imo ?? "—"}
+                    </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {[voyage.ship?.vessel_type, voyage.ship?.vessel_subtype]
                         .filter(Boolean)
                         .join(" · ") || "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       <VesselFlag country={voyage.ship?.flag} />
                     </td>
+
+                    <td className="px-4 py-3 text-slate-600">
+                      {formatElapsedTime(voyage.status_elapsed_time)}
+                    </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.ship?.navigational_status ?? "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       <TimestampWithRelative value={voyage.arrival_time} />
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.departure_port_name ?? "—"}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {voyage.ship?.speed == null
                         ? "—"
@@ -152,9 +426,9 @@ export function InPortTab({ port, portId }) {
                 ))
               )}
 
-              {!isPending && !isError && filteredVessels.length === 0 && (
+              {!isPending && !isError && vessels.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-14 text-center">
+                  <td colSpan={9} className="px-4 py-14 text-center">
                     <Ship className="mx-auto size-8 text-slate-300" />
                     <p className="mt-3 font-medium text-slate-700">
                       No vessels found
@@ -176,7 +450,7 @@ export function InPortTab({ port, portId }) {
         pageSize={pageSize}
         total={total}
         isPending={isPending}
-        onPageChange={setPage}
+        onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
       />
     </div>

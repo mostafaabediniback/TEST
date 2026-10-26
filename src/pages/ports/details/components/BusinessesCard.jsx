@@ -1,16 +1,37 @@
 import { useState } from "react";
 import { Anchor } from "lucide-react";
 import PortCard from "./PortCard";
+import { usePortCompanies } from "@/hooks/usePortCompanies";
+import { useEffect } from "react";
 
-export default function BusinessesCard({ companies }) {
+export default function BusinessesCard({ radiusMeters = 12000 }) {
   const [showAll, setShowAll] = useState(false);
-  const businesses = Array.isArray(companies)
-    ? companies
-    : (companies?.items ?? companies?.companies ?? []);
+const portId = window.location.pathname.split("/").filter(Boolean).pop();
+
+
+  const { data, isLoading, isError, refetch } = usePortCompanies({
+    portId,
+    radiusMeters,
+  });
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const businesses = Array.isArray(data)
+    ? data
+    : (data?.items ?? data?.companies ?? data?.data?.items ?? []);
 
   return (
     <PortCard title="Businesses at port">
-      {businesses.length ? (
+      {isLoading ? (
+        <p className="py-6 text-center text-sm text-slate-500">
+          Loading businesses…
+        </p>
+      ) : isError ? (
+        <p className="py-6 text-center text-sm text-red-600">
+          Could not load businesses for this port.
+        </p>
+      ) : businesses.length ? (
         <>
           <ul className="divide-y divide-slate-100">
             {businesses
@@ -23,6 +44,7 @@ export default function BusinessesCard({ companies }) {
                   <span className="flex size-9 shrink-0 items-center justify-center rounded bg-blue-50 text-blue-700">
                     <Anchor size={17} />
                   </span>
+
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-blue-700">
                       {business.name ?? "Unnamed business"}

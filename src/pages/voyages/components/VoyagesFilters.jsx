@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
 import DateRangeFilter from "@/components/DateRangeFilter";
 import FilterInput from "./FilterInput";
+import ShipNameDropdown from "@/components/ShipNameDropdown";
+import PortNameDropdown from "@/components/PortNameDropdown";
+import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
 
 export default function VoyagesFilters({
   filters,
@@ -21,30 +24,45 @@ export default function VoyagesFilters({
     <Card className="p-4">
       <form onSubmit={handleSearch} className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <FilterInput
+          {/* <FilterInput
             label="Voyage ID"
             value={filters.id}
             onChange={(value) => updateFilter("id", value)}
+          /> */}
+
+          <ShipNameDropdown
+            selectedId={filters.ship_id}
+            onChange={(shipId) => updateFilter("ship_id", shipId)}
           />
-          <FilterInput
-            label={t("shipId", { defaultValue: "Ship ID" })}
-            value={filters.ship_id}
-            onChange={(value) => updateFilter("ship_id", value)}
-          />
-          <FilterInput
-            label={t("departurePortId", { defaultValue: "Departure port ID" })}
-            value={filters.departure_port_id}
+
+          <PortNameDropdown
+            selectedId={filters.departure_port_id}
             onChange={(value) => updateFilter("departure_port_id", value)}
+            placeholder={t("departurePortId", {
+              defaultValue: "Select departure port",
+            })}
           />
-          <FilterInput
-            label={t("arrivalPortId", { defaultValue: "Arrival port ID" })}
-            value={filters.arrival_port_id}
+
+          <PortNameDropdown
+            selectedId={filters.arrival_port_id}
             onChange={(value) => updateFilter("arrival_port_id", value)}
+            placeholder={t("arrivalPortId", {
+              defaultValue: "Select arrival port",
+            })}
+          />
+
+          <VesselTypeDropdown
+            selected={filters.ship_subtype ?? []}
+            onChange={(value) => updateFilter("ship_subtype", value)}
           />
         </div>
 
         <div className="flex flex-wrap items-start gap-3">
-          <div className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${departureRange?.from ? "w-max" : "w-0"}`}>
+          <div
+            className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${
+              departureRange?.from ? "w-max" : "w-0"
+            }`}
+          >
             <DateRangeFilter
               className="min-w-full"
               label="Departure time"
@@ -53,7 +71,11 @@ export default function VoyagesFilters({
             />
           </div>
 
-          <div className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${arrivalRange?.from ? "w-max" : "w-0"}`}>
+          <div
+            className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${
+              arrivalRange?.from ? "w-max" : "w-0"
+            }`}
+          >
             <DateRangeFilter
               className="min-w-full"
               label="Arrival time"
@@ -68,6 +90,7 @@ export default function VoyagesFilters({
             <Search aria-hidden="true" />
             Search
           </Button>
+
           <Button type="button" variant="outline" onClick={handleReset}>
             Reset filters
           </Button>

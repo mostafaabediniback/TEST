@@ -29,37 +29,55 @@ export function DashboardLayout() {
       >
         <Sidebar />
 
-        <SidebarInset data-map-popup-boundary className="relative isolate h-dvh min-w-0 overflow-hidden">
-          <header data-map-popup-obstacle={isDashboard ? "" : undefined} className="pointer-events-none absolute inset-x-0 top-0 z-[9999] flex h-16 items-center gap-2 border-b border-white/20 bg-transparent px-3 shadow-none backdrop-blur-0 sm:gap-3 sm:px-4">
+        <SidebarInset
+          data-map-popup-boundary
+          className="relative isolate h-dvh min-w-0 overflow-hidden"
+        >
+          <header
+            data-map-popup-obstacle={isDashboard ? "" : undefined}
+            className="pointer-events-none absolute inset-x-0 top-0 z-[9999] flex h-16 items-center gap-2 border-b border-white/20 bg-transparent px-3 shadow-none backdrop-blur-0 sm:gap-3 sm:px-4 md:hidden"
+          >
             <SidebarTrigger
               label={t("Toggle sidebar")}
-              className="pointer-events-auto relative z-[10000] shrink-0 md:hidden"
+              className="pointer-events-auto relative z-[10000] shrink-0"
             />
 
-            {isDashboard ? (
+            {isDashboard && (
               <div className="pointer-events-auto relative z-[10000] mx-auto w-full max-w-xl">
                 <AppSearch />
               </div>
-            ) : (
-              <div className="flex-1" />
             )}
           </header>
 
+          {isDashboard && (
+            <div className="pointer-events-none absolute inset-x-0 top-3 z-[10000] hidden w-full px-4 md:block">
+              <div
+                data-map-popup-obstacle
+                className="pointer-events-auto mx-auto w-full max-w-xl"
+              >
+                <AppSearch />
+              </div>
+            </div>
+          )}
           <div className="relative h-full w-full">
             {isDashboard ? (
               <div className="absolute inset-0">
                 <Outlet />
               </div>
             ) : (
-              <div className="h-full w-full overflow-y-auto pt-16">
+              <div className="h-full w-full overflow-y-auto pt-4">
                 <Outlet />
               </div>
             )}
-
             {isDashboard && (
-              <div className="pointer-events-auto absolute end-3 top-20 z-[900] flex w-fit flex-col items-end gap-2 sm:end-4">
-                <Toolbar />
-                <MapInfo />
+              <div className="pointer-events-none absolute inset-y-20 end-3 z-[900] flex flex-col items-end justify-between sm:end-4">
+                <div className="pointer-events-auto">
+                  <Toolbar />
+                </div>
+
+                <div className="pointer-events-auto">
+                  <MapInfo />
+                </div>
               </div>
             )}
           </div>

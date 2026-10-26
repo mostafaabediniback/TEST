@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Anchor } from "lucide-react";
+
 import { Card } from "@/components/ui/card";
 import { useLocale } from "@/context/LocaleContext";
 import { usePorts } from "@/hooks/usePorts";
@@ -14,16 +16,36 @@ import {
   optionalValue,
 } from "./portsConstants";
 
+function readFilters(params) {
+  return Object.fromEntries(
+    Object.entries(emptyFilters).map(([key, defaultValue]) => [
+      key,
+      params.get(key) ?? defaultValue,
+    ]),
+  );
+}
+
 export default function Ports() {
   const { t, direction } = useLocale();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [filters, setFilters] = useState({ ...emptyFilters });
-  const [appliedFilters, setAppliedFilters] = useState({ ...emptyFilters });
+  const [filters, setFilters] = useState(() => readFilters(searchParams));
+  const [appliedFilters, setAppliedFilters] = useState(() =>
+    readFilters(searchParams),
+  );
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [visibleColumns, setVisibleColumns] = useState(
     columns.map((column) => column.key),
   );
+
+  // Keep the filter inputs in sync when loading a URL or using browser back/forward.
+  useEffect(() => {
+    const urlFilters = readFilters(searchParams);
+    setFilters(urlFilters);
+    setAppliedFilters(urlFilters);
+    setPage(1);
+  }, [searchParams]);
 
   const { data, isPending, isError, error } = usePorts({
     page,
@@ -55,6 +77,7 @@ export default function Ports() {
   const rows = data?.items ?? data?.results ?? data?.data ?? [];
   const total = data?.total ?? data?.count ?? rows.length;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
   const displayedColumns = columns.filter((column) =>
     visibleColumns.includes(column.key),
   );
@@ -67,17 +90,36 @@ export default function Ports() {
     event.preventDefault();
     setPage(1);
     setAppliedFilters({ ...filters });
+
+    const nextParams = new URLSearchParams(searchParams);
+
+    // Remove old filter values while keeping unrelated query parameters.
+    Object.keys(emptyFilters).forEach((key) => nextParams.delete(key));
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== "" && value != null) {
+        nextParams.set(key, value);
+      }
+    });
+
+    setSearchParams(nextParams);
   }
 
   function handleReset() {
     setFilters({ ...emptyFilters });
     setAppliedFilters({ ...emptyFilters });
     setPage(1);
+
+    const nextParams = new URLSearchParams(searchParams);
+    Object.keys(emptyFilters).forEach((key) => nextParams.delete(key));
+    setSearchParams(nextParams);
   }
 
   function toggleColumn(key, checked) {
     setVisibleColumns((current) =>
-      checked ? [...current, key] : current.filter((column) => column !== key),
+      checked
+        ? [...current, key]
+        : current.filter((column) => column !== key),
     );
   }
 
@@ -86,7 +128,7 @@ export default function Ports() {
       dir={direction}
       className="h-full overflow-y-auto bg-muted/30 p-4 sm:p-6"
     >
-      <div className="mx-auto max-w-6xl space-y-5">
+      <div className="mx-auto max-w-7xl space-y-5">
         <header className="flex items-start gap-3">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border bg-background text-primary">
             <Anchor className="size-5" aria-hidden="true" />

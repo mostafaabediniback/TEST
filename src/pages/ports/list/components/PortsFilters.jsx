@@ -1,3 +1,4 @@
+import CountryDropdown from "@/components/ships/CountryDropdown";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,58 +13,35 @@ export default function PortsFilters({
   return (
     <Card className="p-4">
       <form onSubmit={onSearch} className="space-y-4">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <FilterInput
             label="Port name"
             value={filters.name}
             onChange={(value) => onFilterChange("name", value)}
           />
 
-          <FilterInput
+          {/* <FilterInput
             label="Alternative name"
             value={filters.alternative_name}
             onChange={(value) => onFilterChange("alternative_name", value)}
-          />
+          /> */}
 
-          <FilterInput
+          {/* <FilterInput
             label="UN/LOCODE"
             value={filters.unlo_code}
             onChange={(value) => onFilterChange("unlo_code", value)}
-          />
+          /> */}
 
-          <FilterInput
-            label="Country name"
-            value={filters.country_name}
-            onChange={(value) => onFilterChange("country_name", value)}
-          />
 
-          <FilterInput
-            label="Country code"
-            value={filters.country_code}
-            onChange={(value) => onFilterChange("country_code", value)}
-          />
+<CountryDropdown
+  selected={filters.country_name ?? ""}
+  onChange={(country) => onFilterChange("country_name", country ?? "")}
+  placeholder="Select a country"
+/>
 
-          <FilterInput
-            label="Timezone"
-            value={filters.timezone}
-            onChange={(value) => onFilterChange("timezone", value)}
-          />
-
-          <FilterInput
-            label="Port ID"
-            type="number"
-            value={filters.id}
-            onChange={(value) => onFilterChange("id", value)}
-          />
-
-          <FilterInput
-            label="Gallery URL"
-            value={filters.gallery_url}
-            onChange={(value) => onFilterChange("gallery_url", value)}
-          />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {/* <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <RangeInputs
             label="Longitude"
             minValue={filters.lon_min}
@@ -79,7 +57,7 @@ export default function PortsFilters({
             onMinChange={(value) => onFilterChange("lat_min", value)}
             onMaxChange={(value) => onFilterChange("lat_max", value)}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-wrap gap-2">
           <Button type="submit">

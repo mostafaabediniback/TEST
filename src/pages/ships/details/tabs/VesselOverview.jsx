@@ -4,30 +4,33 @@ import VoyageTimeline from "@/components/ships/VoyageTimeline";
 import DetailCard from "@/components/detail/DetailCard";
 import TimestampWithRelative from "@/components/TimestampWithRelative";
 import DetailFields from "@/components/detail/DetailFields";
-import { AIS_TIMESTAMP_FORMAT, formatTimestamp } from "@/lib/dateTime";
+import {
+  AIS_TIMESTAMP_FORMAT,
+  formatTimestamp,
+  formatVesselTimestamp,
+} from "@/lib/dateTime";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
-import BusinessCards from "../components/BusinessCards";
-import NotesCard from "../components/NotesCard";
+import { VesselFlag } from "@/components/VesselFlag";
 
 export default function VesselOverview({
-  id,
   ship = {},
   position = {},
   voyage = {},
   summary = {},
-  companies,
   coordinates,
   imageUrl,
   onShowOnMap,
   canShowOnMap = false,
 }) {
   const { t } = useLocale();
-  const details = summary ?? ship;
+
+  // Merge both objects so ship fields remain available when summary is empty.
+  const details = { ...ship, ...summary };
   const name = ship.name || details.name || "Unnamed vessel";
   const vesselType = ship.vessel_type || details.vessel_type || "Vessel";
 
-  // API position fields are lat/lon. Map coordinates use [longitude, latitude].
+  // Map coordinates use [longitude, latitude]; AIS position fields use lat/lon.
   const latitude = coordinates?.[1] ?? position.lat;
   const longitude = coordinates?.[0] ?? position.lon;
 
@@ -43,11 +46,13 @@ export default function VesselOverview({
 
   const generalRows = [
     ["Name", name],
-    ["Flag", details.flag],
+    ["Flag", <VesselFlag key="vessel-flag" country={details.flag} />],
     ["IMO", details.imo],
     ["MMSI", details.mmsi],
     ["Call sign", details.call_sign ?? details.callsign],
-    ["Vessel type", vesselType],
+    ["AIS transponder class", details.ais_class],
+    ["General vessel type", vesselType],
+    ["Detail vessel type", details.detail_vessel_type],
     ["Year built", details.yob ?? details.year_built],
     ["Length overall", details.loa == null ? null : `${details.loa} m`],
     ["Width", details.width == null ? null : `${details.width} m`],
@@ -56,8 +61,20 @@ export default function VesselOverview({
 
   const aisRows = [
     ["Navigational status", position.navigational_status ?? voyage.status],
-    ["Position received", <TimestampWithRelative key="position-received" value={position.time} {...AIS_TIMESTAMP_FORMAT} />],
-    ["Vessel's local time", formatTimestamp(position.local_time ?? position.vessel_local_time, AIS_TIMESTAMP_FORMAT)],
+    [
+      "Position received",
+      position.time ? (
+        <TimestampWithRelative
+          key="position-received"
+          value={position.time}
+          {...AIS_TIMESTAMP_FORMAT}
+        />
+      ) : null,
+    ],
+    [
+      "Vessel's local time",
+      formatVesselTimestamp(position.time, position.timezone ?? 0),
+    ],
     [
       "Latitude/Longitude",
       position.lat != null && position.lon != null
@@ -66,13 +83,12 @@ export default function VesselOverview({
     ],
     ["Speed", position.speed == null ? null : `${position.speed} kn`],
     ["Course", position.course == null ? null : `${position.course}°`],
-    [
-      "True heading",
-      position.true_heading == null ? null : `${position.true_heading}°`,
-    ],
+    ["True heading", position.heading == null ? null : `${position.heading}°`],
     [
       "Rate of turn",
-      position.rate_of_turn == null ? null : `${position.rate_of_turn} °/min`,
+      position.rate_of_turn == null
+        ? null
+        : `${position.rate_of_turn} °/min`,
     ],
     [
       "Draught",
@@ -82,17 +98,29 @@ export default function VesselOverview({
     ],
     ["Reported destination", voyage.reported_destination ?? voyage.destination],
     ["Matched destination", voyage.matched_destination],
-    ["Reported ETA", formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT)],
+    [
+      "Reported ETA",
+      formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT),
+    ],
     ["AIS vessel type", position.vessel_type ?? ship.vessel_type],
     ["AIS source", position.source ?? position.ais_source],
     [
       "Destination",
-      voyage.destination ?? voyage.destination_port ?? voyage.arrival_port_name,
+      voyage.destination ??
+        voyage.destination_port ??
+        voyage.arrival_port_name,
     ],
-    ["ETA", formatTimestamp(voyage.eta ?? voyage.arrival_time, AIS_TIMESTAMP_FORMAT)],
-  ].filter(([, value]) => value != null && value !== "");
+    [
+      "ETA",
+      formatTimestamp(voyage.eta ?? voyage.arrival_time, AIS_TIMESTAMP_FORMAT),
+    ],
+  ].map(([label, value]) => [
+    label,
+    value == null || value === "" ? "—" : value,
+  ]);
 
-  const vesselImage = imageUrl ?? ship.main_image ?? details.main_image ?? null;
+  const vesselImage =
+    imageUrl ?? ship.main_image ?? details.main_image ?? null;
 
   return (
     <div className="grid gap-5 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
@@ -101,14 +129,17 @@ export default function VesselOverview({
           <div className="relative h-72 overflow-hidden rounded-md bg-slate-100">
             {hasCoordinates ? (
               <>
-                <ShipPositionMap coordinates={mapCoordinates} name={name} />
+                <ShipPositionMap
+                  coordinates={mapCoordinates}
+                  name={name}
+                />
 
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={onShowOnMap}
                   disabled={!canShowOnMap}
-                  className="absolute end-3 top-3 bg-background/95 shadow-sm"
+                  className="absolute end-3 top-3 z-10 bg-background/95 shadow-sm"
                 >
                   <MapPin aria-hidden="true" />
                   {t("viewOnMap")}
@@ -130,10 +161,6 @@ export default function VesselOverview({
           </div>
         </DetailCard>
 
-        <BusinessCards companyData={companies} />
-      </div>
-
-      <div className="space-y-5">
         <DetailCard title="Summary">
           <h3 className="font-medium text-slate-800">Where is the ship?</h3>
 
@@ -145,7 +172,7 @@ export default function VesselOverview({
               </>
             ) : hasCoordinates ? (
               <>
-                <strong>{name}</strong> was last reported at{" "}
+                <strong>{name}</strong> was last reported on{" "}
                 <strong>
                   {lat.toFixed(4)}°, {lon.toFixed(4)}°
                 </strong>
@@ -167,13 +194,16 @@ export default function VesselOverview({
             {details.flag ? (
               <>
                 {" "}
-                and is sailing under the flag of <strong>{details.flag}</strong>
+                and is sailing under the flag of{" "}
+                <strong>{details.flag}</strong>
               </>
             ) : null}
             .{summary.description ? ` ${summary.description}` : ""}
           </p>
         </DetailCard>
+      </div>
 
+      <div className="space-y-5">
         <div className="grid gap-5 2xl:grid-cols-2">
           <DetailCard title="General">
             <div className="mb-4 h-48 overflow-hidden rounded-md bg-slate-100">
@@ -197,13 +227,9 @@ export default function VesselOverview({
             <DetailFields rows={generalRows} />
           </DetailCard>
 
-          <div className="space-y-5">
-            <DetailCard title="Latest AIS information">
-              <DetailFields rows={aisRows} />
-            </DetailCard>
-
-            <NotesCard id={id ?? ship.id ?? "unknown"} />
-          </div>
+          <DetailCard title="Latest AIS information">
+            <DetailFields rows={aisRows} />
+          </DetailCard>
         </div>
       </div>
     </div>

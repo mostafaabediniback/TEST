@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Search, Ship } from "lucide-react";
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,9 +17,68 @@ import { toUnixSeconds } from "@/lib/dateTime";
 const inputClassName =
   "h-8 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20";
 
+const FILTER_PARAM_NAMES = [
+  "search",
+  "vesselType",
+  "vesselFlag",
+  "arrivalDateFrom",
+  "arrivalDateTo",
+  "departureDateFrom",
+  "departureDateTo",
+];
+
+function dateFromUrl(value) {
+  if (!value) return undefined;
+
+  // Keep date-only values in local time to avoid shifting the displayed day.
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (dateOnly) {
+    return new Date(
+      Number(dateOnly[1]),
+      Number(dateOnly[2]) - 1,
+      Number(dateOnly[3]),
+    );
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function dateToUrl(value) {
+  if (!value) return "";
+
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return "";
+
+    // Date filters are calendar dates, so keep the local date in the URL.
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, "0");
+    const day = String(value.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  return String(value);
+}
+
+function readFiltersFromParams(params) {
+  return {
+    search: params.get("search") ?? "",
+    vesselType: params.getAll("vesselType"),
+    vesselFlag: params.get("vesselFlag") ?? "",
+    arrivalDateFrom: dateFromUrl(params.get("arrivalDateFrom")),
+    arrivalDateTo: dateFromUrl(params.get("arrivalDateTo")),
+    departureDateFrom: dateFromUrl(params.get("departureDateFrom")),
+    departureDateTo: dateFromUrl(params.get("departureDateTo")),
+  };
+}
+
 function DateRange({ label, from, to, onFromChange, onToChange }) {
   return (
-    <label className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${from ? "w-max" : "w-0"}`}>
+    <label
+      className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${
+        from ? "w-max" : "w-0"
+      }`}
+    >
       <span className="font-medium text-slate-700">{label}</span>
       <DateRangeFilter
         className="min-w-full"
@@ -32,19 +93,55 @@ function DateRange({ label, from, to, onFromChange, onToChange }) {
 }
 
 export function ArrivalsDeparturesTab({ port, portId }) {
-  const [movementType, setMovementType] = useState("all");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryString = searchParams.toString();
 
-  const [search, setSearch] = useState("");
-  const [vesselType, setVesselType] = useState([]);
-  const [vesselFlag, setVesselFlag] = useState("");
-  const [arrivalDateFrom, setArrivalDateFrom] = useState();
-  const [arrivalDateTo, setArrivalDateTo] = useState();
-  const [departureDateFrom, setDepartureDateFrom] = useState();
-  const [departureDateTo, setDepartureDateTo] = useState();
+  const rawMovementType = searchParams.get("movementType");
+  const movementType = ["all", "arrival", "departure"].includes(rawMovementType)
+    ? rawMovementType
+    : "all";
 
-  const [appliedFilters, setAppliedFilters] = useState({});
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const pageSize = Math.max(1, Number(searchParams.get("pageSize")) || 20);
+
+  const [search, setSearch] = useState(
+    () => readFiltersFromParams(searchParams).search,
+  );
+  const [vesselType, setVesselType] = useState(
+    () => readFiltersFromParams(searchParams).vesselType,
+  );
+  const [vesselFlag, setVesselFlag] = useState(
+    () => readFiltersFromParams(searchParams).vesselFlag,
+  );
+  const [arrivalDateFrom, setArrivalDateFrom] = useState(
+    () => readFiltersFromParams(searchParams).arrivalDateFrom,
+  );
+  const [arrivalDateTo, setArrivalDateTo] = useState(
+    () => readFiltersFromParams(searchParams).arrivalDateTo,
+  );
+  const [departureDateFrom, setDepartureDateFrom] = useState(
+    () => readFiltersFromParams(searchParams).departureDateFrom,
+  );
+  const [departureDateTo, setDepartureDateTo] = useState(
+    () => readFiltersFromParams(searchParams).departureDateTo,
+  );
+
+  // Update the editable form fields when the URL changes, including browser
+  // back/forward navigation.
+  useEffect(() => {
+    const params = new URLSearchParams(queryString);
+    const filters = readFiltersFromParams(params);
+
+    setSearch(filters.search);
+    setVesselType(filters.vesselType);
+    setVesselFlag(filters.vesselFlag);
+    setArrivalDateFrom(filters.arrivalDateFrom);
+    setArrivalDateTo(filters.arrivalDateTo);
+    setDepartureDateFrom(filters.departureDateFrom);
+    setDepartureDateTo(filters.departureDateTo);
+  }, [queryString]);
+
+  const appliedFilters = readFiltersFromParams(searchParams);
 
   const filters = {
     page,
@@ -53,7 +150,9 @@ export function ArrivalsDeparturesTab({ port, portId }) {
     ...(movementType !== "departure" && { arrival_type: "arrivaled" }),
 
     vessel_name: appliedFilters.search || undefined,
-    vessel_type: appliedFilters.vesselType || undefined,
+    vessel_type: appliedFilters.vesselType.length
+      ? appliedFilters.vesselType
+      : undefined,
     vessel_flag: appliedFilters.vesselFlag || undefined,
 
     ...(movementType !== "departure" && {
@@ -78,24 +177,64 @@ export function ArrivalsDeparturesTab({ port, portId }) {
   const total = data?.total ?? 0;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
+  function updateUrl(updater) {
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+      updater(nextParams);
+      return nextParams;
+    });
+  }
+
+  function handlePageChange(nextPage) {
+    updateUrl((params) => {
+      params.set("page", String(nextPage));
+    });
+  }
+
   function handlePageSizeChange(nextPageSize) {
-    setPageSize(Number(nextPageSize));
-    setPage(1);
+    updateUrl((params) => {
+      params.set("pageSize", String(Number(nextPageSize)));
+      params.set("page", "1");
+    });
+  }
+
+  function handleMovementTypeChange(value) {
+    updateUrl((params) => {
+      params.set("movementType", value);
+      params.set("page", "1");
+    });
   }
 
   function handleSearch(event) {
     event.preventDefault();
 
-    setAppliedFilters({
-      search: search.trim(),
-      vesselType: [...vesselType],
-      vesselFlag: vesselFlag.trim(),
-      arrivalDateFrom,
-      arrivalDateTo,
-      departureDateFrom,
-      departureDateTo,
+    updateUrl((params) => {
+      FILTER_PARAM_NAMES.forEach((name) => params.delete(name));
+
+      const trimmedSearch = search.trim();
+      const trimmedFlag = vesselFlag.trim();
+
+      if (trimmedSearch) params.set("search", trimmedSearch);
+      if (trimmedFlag) params.set("vesselFlag", trimmedFlag);
+
+      vesselType.forEach((type) => {
+        params.append("vesselType", type);
+      });
+
+      const dates = {
+        arrivalDateFrom,
+        arrivalDateTo,
+        departureDateFrom,
+        departureDateTo,
+      };
+
+      Object.entries(dates).forEach(([name, value]) => {
+        const urlValue = dateToUrl(value);
+        if (urlValue) params.set(name, urlValue);
+      });
+
+      params.set("page", "1");
     });
-    setPage(1);
   }
 
   function handleReset() {
@@ -106,23 +245,20 @@ export function ArrivalsDeparturesTab({ port, portId }) {
     setArrivalDateTo(undefined);
     setDepartureDateFrom(undefined);
     setDepartureDateTo(undefined);
-    setAppliedFilters({});
-    setPage(1);
-  }
 
-  function handleMovementTypeChange(value) {
-    setMovementType(value);
-    setPage(1);
+    updateUrl((params) => {
+      FILTER_PARAM_NAMES.forEach((name) => params.delete(name));
+      params.set("page", "1");
+    });
   }
 
   const movements = (data?.items ?? [])
     .flatMap((voyage) => {
       const common = {
         vessel: voyage.ship?.name ?? "Unknown vessel",
+        shipId: voyage.ship?.id,
         imo: voyage.ship?.imo,
-        terminal: "—",
         flag: voyage.ship?.flag,
-
         status: voyage.ship?.navigational_status ?? "—",
       };
 
@@ -184,8 +320,8 @@ export function ArrivalsDeparturesTab({ port, portId }) {
               <div className="flex flex-wrap gap-2">
                 {[
                   { value: "all", label: "All movements" },
-                  { value: "arrival", label: "Arrivals" },
-                  { value: "departure", label: "Departures" },
+                  { value: "arrival", label: "Arrived" },
+                  { value: "departure", label: "Departed" },
                 ].map(({ value, label }) => (
                   <Button
                     key={value}
@@ -219,9 +355,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
               </label>
 
               <label className="flex min-w-0 flex-col gap-1.5 text-sm">
-                <span className="font-medium text-slate-700">
-                  Vessel type
-                </span>
+                <span className="font-medium text-slate-700">Vessel type</span>
                 <VesselTypeDropdown
                   selected={vesselType}
                   onChange={(selected) => setVesselType(selected ?? [])}
@@ -229,9 +363,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
               </label>
 
               <label className="flex min-w-0 flex-col gap-1.5 text-sm">
-                <span className="font-medium text-slate-700">
-                  Vessel flag
-                </span>
+                <span className="font-medium text-slate-700">Vessel flag</span>
                 <CountryDropdown
                   selected={vesselFlag}
                   onChange={(country) => setVesselFlag(country ?? "")}
@@ -298,7 +430,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
                 <th className="px-4 py-3 font-medium">Movement</th>
                 <th className="px-4 py-3 font-medium">Date and time</th>
                 <th className="px-4 py-3 font-medium">From / to</th>
-                <th className="px-4 py-3 font-medium">Terminal</th>
+                <th className="px-4 py-3 font-medium">Flag</th>
                 <th className="px-4 py-3 font-medium">Status</th>
               </tr>
             </thead>
@@ -318,12 +450,22 @@ export function ArrivalsDeparturesTab({ port, portId }) {
                   <tr key={movement.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3">
                       <div className="font-medium text-slate-900">
-                        {movement.vessel}
+                        {movement.shipId != null ? (
+                          <Link
+                            to={`/ships/${encodeURIComponent(movement.shipId)}`}
+                            className="text-emerald-800 underline-offset-4 hover:underline"
+                          >
+                            {movement.vessel}
+                          </Link>
+                        ) : (
+                          movement.vessel
+                        )}
                       </div>
                       <div className="text-xs text-slate-500">
                         IMO {movement.imo ?? "—"}
                       </div>
                     </td>
+
                     <td className="px-4 py-3">
                       <Badge
                         variant={
@@ -333,15 +475,19 @@ export function ArrivalsDeparturesTab({ port, portId }) {
                         {movement.type}
                       </Badge>
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       <TimestampWithRelative value={movement.timestamp} />
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {movement.route}
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       <VesselFlag country={movement.flag} />
                     </td>
+
                     <td className="px-4 py-3 text-slate-600">
                       {movement.status}
                     </td>
@@ -373,7 +519,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
         pageSize={pageSize}
         total={total}
         isPending={isPending}
-        onPageChange={setPage}
+        onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
       />
     </div>

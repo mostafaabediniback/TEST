@@ -1,8 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Trash2 } from "lucide-react";
 import { useCountryFlags } from "@/hooks/useCountryFlags";
+import { VesselFlag } from "@/components/VesselFlag";
 
-export default function CountryDropdown({ selected = "", onChange }) {
+export default function CountryDropdown({
+  selected = "",
+  onChange,
+  placeholder = "",
+}) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [menuStyle, setMenuStyle] = useState({});
@@ -11,7 +17,6 @@ export default function CountryDropdown({ selected = "", onChange }) {
   const searchRef = useRef(null);
 
   const { data, isPending, isError, error } = useCountryFlags();
-
   const countries = Array.isArray(data) ? data : [];
 
   const filteredCountries = useMemo(() => {
@@ -19,9 +24,7 @@ export default function CountryDropdown({ selected = "", onChange }) {
 
     if (!query) return countries;
 
-    return countries.filter((country) =>
-      country.toLowerCase().includes(query),
-    );
+    return countries.filter((country) => country.toLowerCase().includes(query));
   }, [countries, search]);
 
   useEffect(() => {
@@ -70,25 +73,48 @@ export default function CountryDropdown({ selected = "", onChange }) {
   }, [open]);
 
   function selectCountry(country) {
-    onChange(country);
+    onChange?.(country);
     setSearch("");
     setOpen(false);
   }
 
   return (
     <>
-      <button
+      <div
         ref={buttonRef}
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        className="flex h-8 w-full min-w-0 items-center justify-between rounded-lg border bg-background px-2.5 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
+        className={`flex h-8 w-full min-w-0 items-center rounded-lg border bg-background px-2.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground ${
+          open ? "bg-accent text-accent-foreground" : ""
+        }`}
       >
-        <span className={selected ? "" : "text-muted-foreground"}>
-          {selected || "Any country"}
-        </span>
-        <span aria-hidden="true">▾</span>
-      </button>
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+          className="flex h-full min-w-0 flex-1 items-center justify-between text-left focus-visible:outline-2 focus-visible:outline-ring"
+        >
+          {selected ? (
+            <VesselFlag country={selected} />
+          ) : (
+            <span className="text-muted-foreground">
+              {placeholder || "selected Flag"}
+            </span>
+          )}
+          <span aria-hidden="true" className="ml-2">
+            ▾
+          </span>
+        </button>
+
+        {selected && (
+          <button
+            type="button"
+            aria-label="Clear selected country"
+            onClick={() => onChange?.("")}
+            className="ml-1 inline-flex shrink-0 items-center justify-center rounded p-1 text-muted-foreground hover:bg-accent hover:text-red-600 focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            <Trash2 aria-hidden="true" className="h-4 w-4" />
+          </button>
+        )}
+      </div>
 
       {open &&
         createPortal(
@@ -137,19 +163,17 @@ export default function CountryDropdown({ selected = "", onChange }) {
                     type="button"
                     onClick={() => selectCountry(country)}
                     aria-selected={selected === country}
-                    className="w-full rounded px-3 py-2 text-left text-sm hover:bg-accent aria-selected:bg-accent"
+                    className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-accent aria-selected:bg-accent"
                   >
-                    {country}
+                    <VesselFlag country={country} />
                   </button>
                 ))}
 
-              {!isPending &&
-                !isError &&
-                filteredCountries.length === 0 && (
-                  <p className="px-3 py-2 text-sm text-muted-foreground">
-                    No countries found.
-                  </p>
-                )}
+              {!isPending && !isError && filteredCountries.length === 0 && (
+                <p className="px-3 py-2 text-sm text-muted-foreground">
+                  No countries found.
+                </p>
+              )}
             </div>
           </div>,
           document.body,

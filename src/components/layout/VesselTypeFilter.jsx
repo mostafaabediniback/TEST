@@ -1,5 +1,3 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { ChevronDown, Ship } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -15,12 +13,18 @@ import {
   getVesselTypeGroupState,
   updateVesselTypeSelection,
 } from "@/lib/vesselTypes";
+import { ChevronDown, Ship } from "lucide-react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 function FilterCheckbox({ checked, indeterminate = false, label, onChange }) {
   const ref = useRef(null);
+
   useEffect(() => {
-    ref.current.indeterminate = indeterminate;
+    if (ref.current) {
+      ref.current.indeterminate = indeterminate;
+    }
   }, [indeterminate]);
+
   return (
     <input
       ref={ref}
@@ -50,19 +54,24 @@ function VesselSymbol({ color }) {
 export function VesselTypeFilter() {
   const { vesselTypes, setVesselTypes } = useFilters();
   const { t, direction, isRtl, formatNumber } = useLocale();
-  const [expanded, setExpanded] = useState(["cargo", "tankers", "passenger"]);
+
+  // Empty array means every group starts collapsed.
+  const [expanded, setExpanded] = useState([]);
+
   const selected = useMemo(() => new Set(vesselTypes), [vesselTypes]);
   const contentId = useId();
   const active = vesselTypes.length !== ALL_VESSEL_TYPES.length;
+
   const toggleTypes = (types, checked) =>
     setVesselTypes((current) =>
-      updateVesselTypeSelection(current, types, checked),
+      updateVesselTypeSelection(current, types, checked)
     );
+
   const toggleGroup = (id) =>
     setExpanded((current) =>
       current.includes(id)
         ? current.filter((value) => value !== id)
-        : [...current, id],
+        : [...current, id]
     );
 
   return (
@@ -74,13 +83,12 @@ export function VesselTypeFilter() {
             variant="ghost"
             aria-label={t("vesselType")}
             title={t("vesselType")}
-            className={
-              active ? "relative bg-primary/10 text-primary" : "relative"
-            }
+            className="relative bg-[#51585d] text-white ring-1 ring-white/20 hover:bg-[#454b50] hover:text-white"
           />
         }
       >
         <Ship className="size-5" aria-hidden="true" />
+
         {active && (
           <span
             aria-hidden="true"
@@ -90,20 +98,22 @@ export function VesselTypeFilter() {
           </span>
         )}
       </PopoverTrigger>
+
       <PopoverContent
         side={isRtl ? "right" : "left"}
         align="start"
         dir={direction}
-        className="w-72 max-w-[calc(100vw-5rem)] max-h-[min(80dvh,var(--available-height))] gap-0 overflow-hidden p-0 text-start"
+        className="max-h-[min(80dvh,var(--available-height))] w-72 max-w-[calc(100vw-5rem)] gap-0 overflow-hidden p-0 text-start"
       >
         <PopoverTitle className="shrink-0 border-b bg-muted/60 px-3 py-2 text-xs">
           {t("vesselType")}
         </PopoverTitle>
+
         <div className="min-h-0 max-h-[65dvh] overflow-y-auto px-2 py-1">
           {VESSEL_TYPE_GROUPS.map((group) => {
             const { checked, indeterminate } = getVesselTypeGroupState(
               vesselTypes,
-              group,
+              group
             );
             const isExpanded = expanded.includes(group.id);
             const hasChildren = group.types.length > 1;
@@ -111,16 +121,19 @@ export function VesselTypeFilter() {
               defaultValue: group.label,
             });
             const groupId = `${contentId}-${group.id}`;
+
             return (
               <div key={group.id} className="py-0.5">
-                <div className="flex items-center gap-2 rounded px-1 py-1 hover:bg-accent/70 has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors">
+                <div className="flex items-center gap-2 rounded px-1 py-1 transition-colors hover:bg-accent/70 has-checked:bg-accent/60 has-checked:text-accent-foreground">
                   <FilterCheckbox
                     checked={checked}
                     indeterminate={indeterminate}
                     label={groupLabel}
                     onChange={(value) => toggleTypes(group.types, value)}
                   />
+
                   <VesselSymbol color={group.color} />
+
                   {hasChildren ? (
                     <button
                       type="button"
@@ -132,7 +145,9 @@ export function VesselTypeFilter() {
                       <span>{groupLabel}</span>
                       <ChevronDown
                         aria-hidden="true"
-                        className={`size-3 shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                        className={`size-3 shrink-0 transition-transform ${
+                          isExpanded ? "rotate-180" : ""
+                        }`}
                       />
                     </button>
                   ) : (
@@ -145,12 +160,13 @@ export function VesselTypeFilter() {
                     </button>
                   )}
                 </div>
+
                 {hasChildren && isExpanded && (
                   <div id={groupId} className="ms-7 grid gap-0.5 pb-1">
                     {group.types.map((type) => (
                       <label
                         key={type}
-                        className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-[11px] text-muted-foreground hover:bg-accent/70 has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors hover:text-accent-foreground"
+                        className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-[11px] text-muted-foreground transition-colors hover:bg-accent/70 hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground"
                       >
                         <FilterCheckbox
                           checked={selected.has(type)}
@@ -160,7 +176,9 @@ export function VesselTypeFilter() {
                           onChange={(value) => toggleTypes([type], value)}
                         />
                         <span>
-                          {t(`vesselTypeNames.${type}`, { defaultValue: type })}
+                          {t(`vesselTypeNames.${type}`, {
+                            defaultValue: type,
+                          })}
                         </span>
                       </label>
                     ))}
@@ -170,6 +188,7 @@ export function VesselTypeFilter() {
             );
           })}
         </div>
+
         <div className="flex shrink-0 gap-3 border-t px-3 py-2">
           <button
             type="button"

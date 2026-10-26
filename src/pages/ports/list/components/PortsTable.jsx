@@ -1,8 +1,12 @@
-import { useState } from "react";
 import { Eye, Tags } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -15,7 +19,7 @@ import { useLocale } from "@/context/LocaleContext";
 import { VesselFlag } from "@/components/VesselFlag";
 
 export default function PortsTable({
-  rows,
+  rows = [],
   columns,
   isPending,
   isError,
@@ -23,7 +27,6 @@ export default function PortsTable({
 }) {
   const { t, formatNumber, direction } = useLocale();
   const navigate = useNavigate();
-  const [openAlternatives, setOpenAlternatives] = useState(null);
 
   if (isPending) {
     return (
@@ -59,43 +62,43 @@ export default function PortsTable({
         ? port.alternative_names
         : [];
 
-      const isOpen = openAlternatives === port.id;
-
       return (
-        <div className="relative flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <span className="truncate font-medium" title={value}>
             {value}
           </span>
 
           {names.length > 0 && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="size-8 shrink-0 rounded-full text-muted-foreground"
-              aria-label={`${isOpen ? "Hide" : "Show"} alternative names for ${port.name}`}
-              aria-expanded={isOpen}
-              title="Alternative names"
-              onClick={() => setOpenAlternatives(isOpen ? null : port.id)}
-            >
-              <Tags className="size-4" aria-hidden="true" />
-            </Button>
-          )}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 shrink-0 rounded-full text-muted-foreground"
+                  aria-label={`Show alternative names for ${port.name}`}
+                  title="Alternative names"
+                >
+                  <Tags className="size-4" aria-hidden="true" />
+                </Button>
+              </PopoverTrigger>
 
-          {isOpen && (
-            <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-lg border bg-popover p-3 text-popover-foreground shadow-lg">
-              <p className="mb-2 text-sm font-semibold">Alternative names</p>
-              <ul className="space-y-1">
-                {names.map((name, index) => (
-                  <li
-                    key={`${name}-${index}`}
-                    className="rounded px-2 py-1 text-sm hover:bg-muted"
-                  >
-                    {name}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              <PopoverContent align="start" className="w-56">
+                <p className="mb-2 text-sm font-semibold">
+                  Alternative names
+                </p>
+                <ul className="space-y-1">
+                  {names.map((name, index) => (
+                    <li
+                      key={`${name}-${index}`}
+                      className="rounded px-2 py-1 text-sm hover:bg-muted"
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              </PopoverContent>
+            </Popover>
           )}
         </div>
       );
@@ -151,6 +154,7 @@ export default function PortsTable({
 
               <TableCell className="text-end">
                 <Button
+                  type="button"
                   variant="ghost"
                   size="icon"
                   aria-label={`View details for ${port.name}`}

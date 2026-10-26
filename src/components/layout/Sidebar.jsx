@@ -23,18 +23,18 @@ import { Navigation } from "lucide-react";
 
 const items = [
   {
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    to: "/",
-  },
-  {
     label: "Map",
     icon: PanelsTopLeft,
     to: "/dashboard/0/0/0",
     activePaths: ["/dashboard"],
   },
   {
-    label: "Ships",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    to: "/home",
+  },
+  {
+    label: "Vessels",
     icon: Ship,
     to: "/ships",
   },

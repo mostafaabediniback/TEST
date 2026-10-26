@@ -1,4 +1,16 @@
+import anchorIcon from "@/assets/port-anchor.svg";
+import { useLocale } from "@/context/LocaleContext";
+import { useMapController } from "@/context/MapControllerContext";
+import { usePortDetails } from "@/hooks/usePortDetails";
 import { formatTimestamp } from "@/lib/dateTime";
+import {
+  clearMapSelection,
+  getMapSelectionCoordinates,
+  getMapSelectionSearch,
+} from "@/lib/map/mapSelection";
+import { getPortCoordinates, getPortKey } from "@/lib/map/portMarkers";
+import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { Anchor, X } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -7,19 +19,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
-import { Anchor, X } from "lucide-react";
-import { useLocale } from "@/context/LocaleContext";
-import anchorIcon from "@/assets/port-anchor.svg";
 import MapPopup from "./MapPopup";
-import { useMapController } from "@/context/MapControllerContext";
-import { usePortDetails } from "@/hooks/usePortDetails";
-import {
-  clearMapSelection,
-  getMapSelectionCoordinates,
-  getMapSelectionSearch,
-} from "@/lib/map/mapSelection";
-import { getPortCoordinates, getPortKey } from "@/lib/map/portMarkers";
 
 const PORT_ICON = {
   url: anchorIcon,
@@ -51,7 +51,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     [map],
   );
 
-  const getZoomSnapshot = useCallback(() => (map ? Math.floor(map.getZoom()) : 5), [map]);
+  const getZoomSnapshot = useCallback(() => (map ? map.getZoom() : 5), [map]);
 
   const zoom = useSyncExternalStore(
     subscribeToZoom,
@@ -382,4 +382,3 @@ function PortPreview({ port, onDetailsClick }) {
     </article>
   );
 }
-

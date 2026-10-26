@@ -42,14 +42,14 @@ export default function VesselDetailHeader({
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            {/* <button
               type="button"
               onClick={onAddNote}
               className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm hover:bg-slate-50"
             >
               <MessageSquarePlus size={15} />
               <span className="hidden sm:inline">Add notes</span>
-            </button>
+            </button> */}
 
 
           </div>

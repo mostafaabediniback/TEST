@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import {
   VESSEL_TYPE_GROUPS,
   getVesselTypeGroupState,
   updateVesselTypeSelection,
 } from "@/lib/vesselTypes";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Trash2 } from "lucide-react";
 
 export default function VesselTypeDropdown({ selected, onChange }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [menuStyle, setMenuStyle] = useState({});
+  const containerRef = useRef(null);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const searchRef = useRef(null);
@@ -28,20 +30,20 @@ export default function VesselTypeDropdown({ selected, onChange }) {
 
   const label =
     selected.length === 0
-      ? "Any vessel type"
+      ? "selected Vessel Type/Subtype"
       : `${selected.length} vessel type${selected.length === 1 ? "" : "s"} selected`;
 
   useEffect(() => {
     if (!open) return;
 
     function positionMenu() {
-      const rect = buttonRef.current?.getBoundingClientRect();
+      const rect = containerRef.current?.getBoundingClientRect();
       if (!rect) return;
 
       const menuWidth = Math.min(rect.width, window.innerWidth - 16);
       const left = Math.min(
         Math.max(8, rect.left),
-        window.innerWidth - menuWidth - 8
+        window.innerWidth - menuWidth - 8,
       );
 
       setMenuStyle({
@@ -55,7 +57,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
 
     function closeOnOutsideClick(event) {
       if (
-        !buttonRef.current?.contains(event.target) &&
+        !containerRef.current?.contains(event.target) &&
         !menuRef.current?.contains(event.target)
       ) {
         setOpen(false);
@@ -85,19 +87,47 @@ export default function VesselTypeDropdown({ selected, onChange }) {
 
   return (
     <>
-      <button
-        ref={buttonRef}
-        type="button"
-        aria-expanded={open}
-        onClick={() => {
-          setSearch("");
-          setOpen((value) => !value);
-        }}
-        className="flex h-8 w-full min-w-0 items-center justify-between gap-2 rounded-lg border bg-background px-2.5 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring"
+      <div
+        ref={containerRef}
+        className={`flex h-8 w-full min-w-0 items-center gap-2 rounded-lg border bg-background px-2.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground ${
+          open ? "bg-accent text-accent-foreground" : ""
+        }`}
       >
-        <span className={selected.length === 0 ? "truncate text-muted-foreground" : "truncate"}>{label}</span>
-        <span className="shrink-0" aria-hidden="true">▾</span>
-      </button>
+        <button
+          ref={buttonRef}
+          type="button"
+          aria-expanded={open}
+          onClick={() => {
+            setSearch("");
+            setOpen((value) => !value);
+          }}
+          className="flex h-full min-w-0 flex-1 items-center justify-between gap-2 text-left focus-visible:outline-2 focus-visible:outline-ring"
+        >
+          <span
+            className={
+              selected.length === 0
+                ? "truncate text-muted-foreground"
+                : "truncate"
+            }
+          >
+            {label}
+          </span>
+          <span className="shrink-0" aria-hidden="true">
+            ▾
+          </span>
+        </button>
+
+        {selected.length > 0 && (
+          <button
+            type="button"
+            aria-label="Clear selected vessel types"
+            onClick={() => onChange([])}
+            className="inline-flex shrink-0 items-center justify-center rounded p-1 text-muted-foreground hover:bg-accent hover:text-red-600 focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            <Trash2 aria-hidden="true" className="h-4 w-4" />
+          </button>
+        )}
+      </div>
 
       {open &&
         createPortal(
@@ -133,7 +163,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
 
                 return (
                   <fieldset key={group.id} className="mb-2 last:mb-0">
-                    <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors">
+                    <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground">
                       <input
                         type="checkbox"
                         className="accent-primary"
@@ -160,7 +190,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
                       {group.types.map((type) => (
                         <label
                           key={type}
-                          className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground transition-colors"
+                          className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground has-checked:bg-accent/60 has-checked:text-accent-foreground"
                         >
                           <input
                             type="checkbox"
@@ -179,13 +209,16 @@ export default function VesselTypeDropdown({ selected, onChange }) {
               })}
 
               {filteredGroups.length === 0 && (
-                <p role="status" className="px-3 py-2 text-sm text-muted-foreground">
+                <p
+                  role="status"
+                  className="px-3 py-2 text-sm text-muted-foreground"
+                >
                   No vessel types found.
                 </p>
               )}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );

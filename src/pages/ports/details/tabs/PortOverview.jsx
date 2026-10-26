@@ -1,9 +1,16 @@
+import BusinessesCard from "../components/BusinessesCard";
 import PortCard from "../components/PortCard";
 import PortMap from "../components/PortMap";
-import BusinessesCard from "../components/BusinessesCard";
 
-export default function PortOverview({ port, onShowOnMap, canShowOnMap }) {
-  const alternativeNames = port.alternativeNames ?? [];
+export default function PortOverview({
+  port = {},
+  onShowOnMap,
+  canShowOnMap = false,
+}) {
+  const alternativeNames = Array.isArray(port.alternativeNames)
+    ? port.alternativeNames
+    : [];
+
   const companies =
     port.businesses ?? port.companies ?? port.relations?.businesses ?? [];
 
@@ -20,11 +27,11 @@ export default function PortOverview({ port, onShowOnMap, canShowOnMap }) {
             onShowOnMap={onShowOnMap}
             canShowOnMap={canShowOnMap}
           />
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+
+          <div className="mt-3">
             <p className="text-xs text-slate-500">
               Port coordinates: {port.lat ?? "—"}, {port.lon ?? "—"}
             </p>
-
           </div>
         </PortCard>
 
@@ -44,7 +51,6 @@ export default function PortOverview({ port, onShowOnMap, canShowOnMap }) {
               : "."}
           </p>
         </PortCard>
-
         <PortCard title="Port information">
           <dl className="divide-y divide-slate-100">
             {[

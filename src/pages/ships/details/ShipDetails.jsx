@@ -1,5 +1,10 @@
-import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import { useShipPreview } from "@/hooks/useShipPreview";
 import {
@@ -19,12 +24,27 @@ function getCompanies(companyData) {
   return companyData?.items ?? companyData?.companies ?? [];
 }
 
+function getPhotoBlob(photo) {
+  if (typeof Blob === "undefined") return null;
+
+  if (photo instanceof Blob) return photo;
+  if (photo?.data instanceof Blob) return photo.data;
+  if (photo?.binary instanceof Blob) return photo.binary;
+
+  return null;
+}
+
 export default function ShipDetails() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const { t } = useLocale();
   const { setSelectedShip, setSelectedPort } = useMapController();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get("tab");
+  const activeUrlTab = tabs.includes(tabFromUrl) ? tabFromUrl : "Overview";
+  const [activeTab, setActiveTab] = useState(activeUrlTab);
 
   const seed =
     String(location.state?.ship?.id) === id ? location.state.ship : { id };
@@ -45,8 +65,60 @@ export default function ShipDetails() {
     coordinates,
   );
 
+  const photo = preview.photo;
+  const photoBlob = getPhotoBlob(photo);
+
+  const directImageUrl =
+    typeof photo === "string"
+      ? photo
+      : photo?.url ?? photo?.photo_url ?? photo?.image_url ?? null;
+
+  const [photoObjectUrl, setPhotoObjectUrl] = useState("");
+
+  useEffect(() => {
+    setActiveTab(activeUrlTab);
+  }, [activeUrlTab]);
+
+  useEffect(() => {
+    if (!photoBlob) {
+      setPhotoObjectUrl("");
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(photoBlob);
+    setPhotoObjectUrl(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photoBlob]);
+
+  const imageUrl = directImageUrl || photoObjectUrl;
+  const ActiveTabPage = tabPages[activeTab];
+
+  const returnTo = getDetailsReturnTarget(location.search, location.state);
+
+  function handleTabChange(tab) {
+    if (!tabs.includes(tab)) return;
+
+    setActiveTab(tab);
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+
+        if (tab === "Overview") {
+          next.delete("tab");
+        } else {
+          next.set("tab", tab);
+        }
+
+        return next;
+      },
+      { replace: true },
+    );
+  }
+
   function handleShowOnMap() {
     if (!mapTarget) return;
+
     setSelectedPort(null);
     setSelectedShip({
       ...ship,
@@ -57,14 +129,6 @@ export default function ShipDetails() {
     });
     navigate(mapTarget.to);
   }
-
-  const imageUrl =
-    preview.photo?.url ?? preview.photo?.photo_url ?? preview.photo?.image_url;
-
-  const [activeTab, setActiveTab] = useState("Overview");
-  const ActiveTabPage = tabPages[activeTab];
-
-  const returnTo = getDetailsReturnTarget(location.search, location.state);
 
   function handleBack() {
     if (
@@ -81,9 +145,7 @@ export default function ShipDetails() {
   }
 
   function handleAddNote() {
-    setActiveTab("Overview");
-
-    // NotesCard contains its own editor. This event opens it.
+    handleTabChange("Overview");
     window.dispatchEvent(new CustomEvent("open-vessel-note"));
   }
 
@@ -91,25 +153,19 @@ export default function ShipDetails() {
     <main className="flex h-full min-h-0 flex-col overflow-hidden bg-slate-50 text-slate-800">
       <VesselDetailHeader
         name={ship.name || t("unnamedShip")}
-        vesselType={ship.vessel_type || "Vessel"}
+        vesselType={`${ship.vessel_type || "Vessel"}${
+          ship.vessel_subtype ? ` / ${ship.vessel_subtype}` : ""
+        }`}
         imo={ship.imo}
         mmsi={ship.mmsi}
         activeTab={activeTab}
         tabs={tabs}
         onBack={handleBack}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
         onAddNote={handleAddNote}
       />
 
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-        {(preview.isLoading || preview.isError) && (
-          <div role="status" className="mx-auto max-w-[1600px] px-4 pt-4">
-            <p className="rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-800">
-              {preview.isLoading ? t("loadingShips") : t("partialShipData")}
-            </p>
-          </div>
-        )}
-
         <div className="mx-auto max-w-[1600px] p-4 md:p-6">
           {activeTab === "Overview" ? (
             <VesselOverview

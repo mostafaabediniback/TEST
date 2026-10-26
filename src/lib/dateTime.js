@@ -95,6 +95,27 @@ export function formatTimestamp(value, {
   }).format(date);
 }
 
+
+export function formatVesselTimestamp(timestampSeconds, timezoneOffsetHours = 0) {
+  if (timestampSeconds == null) return "";
+
+  const date = new Date(
+    (Number(timestampSeconds) + Number(timezoneOffsetHours) * 3600) * 1000,
+  );
+
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).format(date);
+}
+
+
 const RELATIVE_TIME_UNITS = [
   ["year", 365 * 24 * 60 * 60],
   ["month", 30 * 24 * 60 * 60],

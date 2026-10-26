@@ -10,13 +10,14 @@ import { useLocale } from "@/context/LocaleContext";
 import { cn } from "@/lib/utils";
 
 export const languages = [
+  { value: "en", label: "English", direction: "ltr" },
   { value: "fa", label: "فارسی", direction: "rtl" },
   { value: "ar", label: "عربی", direction: "rtl" },
-  { value: "en", label: "English", direction: "ltr" },
 ];
 
 export function LanguageOptions({ className }) {
   const { locale, setLocale, t } = useLocale();
+const selectedLanguage = languages.find((language) => language.value === locale);
 
   return (
     <div
@@ -33,9 +34,13 @@ export function LanguageOptions({ className }) {
           aria-pressed={locale === language.value}
           className="justify-between gap-3"
         >
-          <span lang={language.value} dir={language.direction}>
+          {/* <span lang={language.value} dir={language.direction}>
             {language.label}
-          </span>
+          </span> */}
+
+          <span className="hidden sm:inline" lang={locale}>
+  {selectedLanguage?.label}
+</span>
           <Check
             aria-hidden="true"
             className={cn("size-4", locale !== language.value && "invisible")}
@@ -48,6 +53,8 @@ export function LanguageOptions({ className }) {
 
 export function LanguageSwitcher() {
   const { locale, direction, t } = useLocale();
+  console.log(locale)
+  console.log(direction)
 
   return (
     <Popover>

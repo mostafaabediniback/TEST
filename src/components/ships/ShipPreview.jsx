@@ -1,27 +1,74 @@
-// ShipPreview.jsx
-import { AIS_TIMESTAMP_FORMAT } from "@/lib/dateTime";
+import { useEffect, useState } from "react";
 import TimestampWithRelative from "@/components/TimestampWithRelative";
-import VoyageTimeline from "./VoyageTimeline";
 import { useLocale } from "@/context/LocaleContext";
-import { useShipPreview } from "@/hooks/useShipPreview";
+import { AIS_TIMESTAMP_FORMAT } from "@/lib/dateTime";
 import { VesselFlag } from "../VesselFlag";
+import VoyageTimeline from "./VoyageTimeline";
+
+function isBinary(value) {
+  return (
+    (typeof Blob !== "undefined" && value instanceof Blob) ||
+    (typeof ArrayBuffer !== "undefined" &&
+      (value instanceof ArrayBuffer || ArrayBuffer.isView(value)))
+  );
+}
 
 export default function ShipPreview({
   ship,
+  photo,
+  position,
+  voyage,
   onDetailsClick,
   detailsLabel = "Vessel details",
   onPastTrackClick,
   isPastTrackActive = false,
 }) {
   const { t } = useLocale();
-  const preview = useShipPreview(ship, Boolean(ship?.id));
+  const shipData = ship;
 
-  const shipData = preview.ship ?? ship;
-  const photo = preview.photo;
-  const voyage = preview.voyage;
-  const position = preview.position;
+  // Supports a direct URL or an object containing a URL.
+  const imageUrl =
+    typeof photo === "string"
+      ? photo
+      : (photo?.url ?? photo?.photo_url ?? photo?.image_url ?? null);
 
-  const imageUrl = photo?.url ?? photo?.photo_url ?? photo?.image_url;
+  // Supports a Blob, ArrayBuffer, or typed array from the image endpoint.
+  const binaryPhoto = isBinary(photo)
+    ? photo
+    : isBinary(photo?.data)
+      ? photo.data
+      : isBinary(photo?.binary)
+        ? photo.binary
+        : null;
+
+  const [binaryImageUrl, setBinaryImageUrl] = useState("");
+
+  useEffect(() => {
+    if (!binaryPhoto) {
+      setBinaryImageUrl("");
+      return;
+    }
+
+    const contentType =
+      (typeof Blob !== "undefined" && binaryPhoto instanceof Blob
+        ? binaryPhoto.type
+        : null) ||
+      photo?.mimeType ||
+      photo?.contentType ||
+      "image/jpeg";
+
+    const blob =
+      typeof Blob !== "undefined" && binaryPhoto instanceof Blob
+        ? binaryPhoto
+        : new Blob([binaryPhoto], { type: contentType });
+
+    const objectUrl = URL.createObjectURL(blob);
+    setBinaryImageUrl(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [binaryPhoto, photo]);
+
+  const displayImageUrl = imageUrl || binaryImageUrl;
   const speed = position?.speed ?? shipData?.speed;
   const course = position?.course ?? shipData?.course;
   const draught = shipData?.draft ?? position?.draught;
@@ -29,24 +76,26 @@ export default function ShipPreview({
   return (
     <article className="map-popup-preview w-full font-sans">
       {/* Photo and vessel header */}
-      {imageUrl ? (
-        <div className="relative h-36 overflow-hidden rounded-t-lg">
+      {displayImageUrl ? (
+        <div className="relative h-36 w-full overflow-hidden rounded-t-lg bg-slate-200">
           <img
-            src={imageUrl}
+            src={displayImageUrl}
             alt={shipData?.name || "Vessel"}
-            className="h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
           />
 
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-3 pt-10 text-white">
-            <h2 className="text-lg font-bold">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-3 pb-3 pt-10 text-white">
+            <h2 className="text-lg font-bold leading-tight">
               {shipData?.name || "Unnamed vessel"}
             </h2>
-            <p className="text-xs">
-              {shipData?.vessel_type || "Vessel"}
-              {shipData?.flag ? ` · ${shipData.flag}` : ""}
-                    <VesselFlag country={shipData.flag} />
 
-            </p>
+            <div className="mt-1 flex items-center gap-1.5 text-xs">
+              <span>{shipData?.vessel_type || "Vessel"}</span>
+              {shipData?.flag && <VesselFlag country={shipData.flag} />}
+            </div>
           </div>
         </div>
       ) : (
@@ -54,90 +103,79 @@ export default function ShipPreview({
           <h2 className="text-lg font-bold">
             {shipData?.name || "Unnamed vessel"}
           </h2>
-          <p className="text-xs">
-            {shipData?.vessel_type || "Vessel"}
-            {shipData?.flag ? ` · ${shipData.flag}` : ""}
-          </p>
+          <div className="mt-1 flex items-center gap-1.5 text-xs">
+            <span>{shipData?.vessel_type || "Vessel"}</span>
+            {shipData?.flag && <VesselFlag country={shipData.flag} />}
+          </div>
         </div>
       )}
 
-      {/* {preview.isLoading && (
-        <p className="px-3 pt-2 text-xs text-slate-500">
-          Loading vessel information…
-        </p>
-      )} */}
+      {/* Voyage route */}
+      <div className="my-3 flex min-w-0 items-center" aria-label="Voyage route">
+        <VoyageTimeline voyage={voyage} compact />
+      </div>
 
-      {/* Name, destination, and voyage times */}
-      <div>
-        {/* Route progress */}
-        <div className="my-3 flex min-w-0 items-center" aria-label="Voyage route">
-          <VoyageTimeline voyage={voyage} compact />
-        </div>
+      {/* Actions */}
+      <div className="mb-3 flex gap-2">
+        <button
+          type="button"
+          onClick={onPastTrackClick}
+          disabled={!onPastTrackClick || shipData?.id == null}
+          aria-pressed={isPastTrackActive}
+          className={`flex-1 rounded-md border px-3 py-2 text-sm font-semibold disabled:opacity-50 ${
+            isPastTrackActive
+              ? "border-orange-500 bg-orange-50 text-orange-700"
+              : "border-slate-300 hover:bg-slate-50"
+          }`}
+        >
+          {t(isPastTrackActive ? "hidePastTrack" : "pastTrack")}
+        </button>
 
-        {/* Actions */}
-        <div className="mb-3 flex gap-2">
+        {onDetailsClick && (
           <button
             type="button"
-            onClick={onPastTrackClick}
-            disabled={!onPastTrackClick || shipData?.id == null}
-            aria-pressed={isPastTrackActive}
-            className={`flex-1 rounded-md border px-3 py-2 text-sm font-semibold disabled:opacity-50 ${isPastTrackActive ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 hover:bg-slate-50"}`}
+            onClick={onDetailsClick}
+            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
           >
-            {t(isPastTrackActive ? "hidePastTrack" : "pastTrack")}
+            {detailsLabel}
           </button>
+        )}
+      </div>
 
-          <button
-            type="button"
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50"
-          >
-            Use route tool
-          </button>
-
-          {onDetailsClick && (
-            <button
-              type="button"
-              onClick={onDetailsClick}
-              className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-            >
-              {detailsLabel}
-            </button>
-          )}
+      {/* Vessel status */}
+      <div className="grid grid-cols-3 divide-x rounded-md border text-xs rtl:divide-x-reverse">
+        <div className="min-w-0 p-2">
+          <p className="text-slate-500">Navigational status</p>
+          <p className="font-semibold">
+            {position?.navigational_status ?? shipData?.status ?? "Unavailable"}
+          </p>
         </div>
 
-        {/* Vessel status */}
-        <div className="grid grid-cols-3 divide-x rounded-md border text-xs rtl:divide-x-reverse">
-          <div className="min-w-0 p-2">
-            <p className="text-slate-500">Navigational status</p>
-            <p className="font-semibold">
-              {position?.navigational_status ??
-                shipData?.status ??
-                "Unavailable"}
-            </p>
-          </div>
-
-          <div className="min-w-0 p-2">
-            <p className="text-slate-500">Speed / Course</p>
-            <p className="font-semibold">
-              {speed != null ? `${speed} kn` : "—"}
-              {" / "}
-              {course != null ? `${course}°` : "—"}
-            </p>
-          </div>
-
-          <div className="min-w-0 p-2">
-            <p className="text-slate-500">Draught</p>
-            <p className="font-semibold">
-              {draught != null ? `${draught} m` : "—"}
-            </p>
-          </div>
+        <div className="min-w-0 p-2">
+          <p className="text-slate-500">Speed / Course</p>
+          <p className="font-semibold">
+            {speed != null ? `${speed} kn` : "—"}
+            {" / "}
+            {course != null ? `${course}°` : "—"}
+          </p>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t pt-2 text-xs text-slate-500">
-          <span>Received:</span>
-          <TimestampWithRelative value={position?.time} {...AIS_TIMESTAMP_FORMAT} />
+        <div className="min-w-0 p-2">
+          <p className="text-slate-500">Draught</p>
+          <p className="font-semibold">
+            {draught != null ? `${draught} m` : "—"}
+          </p>
         </div>
+      </div>
+
+      {/* Position timestamp */}
+      <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t pt-2 text-xs text-slate-500">
+        <span>Received:</span>
+        <TimestampWithRelative
+          value={position?.time}
+          {...AIS_TIMESTAMP_FORMAT}
+        />
       </div>
     </article>
   );
 }
-
