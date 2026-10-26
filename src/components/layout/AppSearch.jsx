@@ -16,6 +16,7 @@ import { useMapController } from "@/context/MapControllerContext";
 import { useShips } from "@/hooks/useShips";
 import { usePorts } from "@/hooks/usePorts";
 import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
+import { getSearchMapFocus } from "@/lib/map/mapFocus";
 import { getPortCoordinates } from "@/lib/map/portMarkers";
 import { cn } from "@/lib/utils";
 import { VesselFlag } from "../VesselFlag";
@@ -127,6 +128,7 @@ function getZoomedSelectionPath(_mapTarget, type, id, coordinates) {
 
   url.searchParams.delete("shipId");
   url.searchParams.delete("portId");
+  url.searchParams.delete("pastTrack");
   url.searchParams.set(`${type}Id`, String(id));
   url.searchParams.set("lng", String(lng));
   url.searchParams.set("lat", String(lat));
@@ -154,7 +156,7 @@ export default function AppSearch({ className }) {
     React.useState(getRecentSearches);
 
   const navigate = useNavigate();
-  const { setSelectedShip, setSelectedPort } = useMapController();
+  const { setSelectedShip, setSelectedPort, requestMapFocus } = useMapController();
 
   const debouncedQuery = useDebouncedValue(query.trim());
   const hasQuery = debouncedQuery.length > 0;
@@ -219,6 +221,11 @@ export default function AppSearch({ className }) {
     if (!open) setQuery("");
   }, [open]);
 
+  function navigateSearchResult(path) {
+    requestMapFocus(getSearchMapFocus(path));
+    navigate(path);
+  }
+
   function selectResult(path, title, type, extra = {}) {
     setRecentSearches((current) =>
       [
@@ -230,7 +237,7 @@ export default function AppSearch({ className }) {
     );
 
     setOpen(false);
-    navigate(path);
+    navigateSearchResult(path);
   }
 
   function selectShipDetails(ship) {
@@ -370,7 +377,7 @@ export default function AppSearch({ className }) {
 
     // Fallback for older recent-search entries.
     setOpen(false);
-    navigate(item.mapPath ?? item.path);
+    navigateSearchResult(item.mapPath ?? item.path);
   }
 
   return (

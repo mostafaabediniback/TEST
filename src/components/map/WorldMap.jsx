@@ -180,6 +180,7 @@ import { MapLibreOverlay } from "@deck.gl/maplibre";
 import { useMapController } from "@/context/MapControllerContext";
 import { tileToLngLat } from "@/lib/map/mapTiles";
 import { getMapSelectionCoordinates } from "@/lib/map/mapSelection";
+import { getInitialMapView } from "@/lib/map/mapFocus";
 import MapInstance from "./MapInstance";
 import MapDataLayers from "./MapDataLayers";
 
@@ -187,7 +188,6 @@ setWorkerUrl(maplibreWorkerUrl);
 
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 19;
-const SELECTION_ZOOM = 12;
 
 function getValidTileView(z, x, y) {
   const zoom = Number(z);
@@ -225,31 +225,16 @@ export default function WorldMap({ geoData }) {
   const container = useRef(null);
   const { z, x, y } = useParams();
   const { pathname, search } = useLocation();
-  const { mapView } = useMapController();
+  const { mapView, mapFocusRequest, consumeMapFocus } = useMapController();
+  const handledFocus = useRef(null);
 
-  const [initialView] = useState(() => {
-    const selectionCoordinates = getMapSelectionCoordinates(search);
-
-    if (selectionCoordinates) {
-      return {
-        center: selectionCoordinates,
-        zoom: SELECTION_ZOOM,
-      };
-    }
-
-    const tileView = getValidTileView(z, x, y);
-    if (tileView) return tileView;
-
-    if (mapView?.pathname === pathname) {
-      return mapView;
-    }
-
-    // Default tile: z/x/y = 2/2/1.
-    return {
-      center: tileToLngLat(2, 2.5, 1.5),
-      zoom: 2,
-    };
-  });
+  const [initialView] = useState(() => getInitialMapView({
+    focusRequest: mapFocusRequest,
+    mapView,
+    pathname,
+    tileView: getValidTileView(z, x, y),
+    coordinates: getMapSelectionCoordinates(search),
+  }));
 
   const [engine, setEngine] = useState(null);
 
@@ -259,10 +244,9 @@ export default function WorldMap({ geoData }) {
     const map = new MapLibreMap({
       container: container.current,
       ...initialView,
-      zoom: Math.round(initialView.zoom),
+      zoom: initialView.zoom,
       minZoom: MIN_ZOOM,
       maxZoom: MAX_ZOOM,
-      zoomSnap: 1,
       scrollZoom: true,
       style:
         import.meta.env.VITE_MAP_STYLE_URL ||
@@ -309,21 +293,18 @@ export default function WorldMap({ geoData }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Recenter for a selected ship or port, but not when z/x/y change
-  // as a result of panning the map.
+  // Only a fresh search action can move the camera. Selection/query-string
+  // changes, past-track controls, popup closes and URL tile sync do not.
   useEffect(() => {
-    if (!engine) return;
-
-    const coordinates = getMapSelectionCoordinates(search);
-
-    if (coordinates) {
-      engine.map.flyTo({
-        center: coordinates,
-        zoom: SELECTION_ZOOM,
-        essential: true,
-      });
-    }
-  }, [engine, search]);
+    if (!engine || !mapFocusRequest || handledFocus.current === mapFocusRequest.id) return;
+    handledFocus.current = mapFocusRequest.id;
+    consumeMapFocus(mapFocusRequest.id);
+    engine.map.flyTo({
+      center: mapFocusRequest.center,
+      zoom: mapFocusRequest.zoom,
+      essential: true,
+    });
+  }, [engine, mapFocusRequest, consumeMapFocus]);
 
   useEffect(() => {
     if (!engine || !geoData) return;

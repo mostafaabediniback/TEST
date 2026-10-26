@@ -213,6 +213,32 @@ function readFillColor(colorCode) {
     .concat(255);
 }
 
+// Overview markers keep one position per ship. Pixel-sized shapes are drawn by
+// instanced GPU layers instead of tessellating two polygons for every record.
+export function readShipOverview(ship) {
+  const positionCoordinates = getShipCoordinates(ship);
+  if (
+    !positionCoordinates ||
+    Math.abs(positionCoordinates[0]) > 180 ||
+    Math.abs(positionCoordinates[1]) > MAX_MAP_LATITUDE
+  ) return null;
+
+  const { courseDegrees, speedKnots, navigationStatus } = readShipMovement(ship);
+  const shipType = String(ship.kind ?? ship.vessel_type ?? ship.type ?? "")
+    .trim().toLowerCase();
+  const isNavigationAid = navigationStatus === NAVIGATION_AID_STATUS ||
+    ["aton", "aid to navigation", "navigation aid"].includes(shipType);
+
+  return {
+    positionCoordinates,
+    shapeType: isNavigationAid ? "diamond" :
+      speedKnots !== null && speedKnots > SHIP_MARKER_OPTIONS.movingSpeedThresholdKnots &&
+      courseDegrees !== null ? "arrow" : "circle",
+    rotationDegrees: courseDegrees ?? 0,
+    fillColor: readFillColor(ship.color_code),
+  };
+}
+
 // Convert hull sizes from metres to pixels, then place the points on the map.
 function createMapPointConverter(positionCoordinates, mapZoom) {
   const latitudeRadians = (positionCoordinates[1] * Math.PI) / 180;

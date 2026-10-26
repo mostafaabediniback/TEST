@@ -20,6 +20,8 @@ import {
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MapPopup from "./MapPopup";
+import { usePortOverview } from "@/hooks/usePortOverview";
+import { createPortOverviewLayer } from "@/lib/map/portOverviewLayers";
 
 const PORT_ICON = {
   url: anchorIcon,
@@ -51,7 +53,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     [map],
   );
 
-  const getZoomSnapshot = useCallback(() => (map ? map.getZoom() : 5), [map]);
+  const getZoomSnapshot = useCallback(() => (map ? Math.floor(map.getZoom()) : 5), [map]);
 
   const zoom = useSyncExternalStore(
     subscribeToZoom,
@@ -86,26 +88,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     [selected, search],
   );
 
-  const markers = useMemo(() => {
-    const visiblePorts = [...ports];
-    if (
-      selected &&
-      selectedCoordinates &&
-      !visiblePorts.some((port) => getPortKey(port) === selectedId)
-    ) {
-      visiblePorts.push({
-        ...selected,
-        lon: selectedCoordinates[0],
-        lat: selectedCoordinates[1],
-      });
-    }
-    return visiblePorts
-      .map((port) => ({
-        port,
-        coordinates: getPortCoordinates(port),
-      }))
-      .filter((marker) => marker.coordinates);
-  }, [ports, selected, selectedId, selectedCoordinates]);
+  const { data: markers, isPending: isPreparingPorts } = usePortOverview(ports);
 
   const closeSelection = useCallback(() => {
     setSearch((current) => clearMapSelection(current), { replace: true });
@@ -113,6 +96,34 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     setSelectedPort(null);
     setHoveredPort(null);
   }, [setSearch, setSelectedPort]);
+
+  const handlePortClick = useCallback(({ object }) => {
+    if (!object?.port) return false;
+
+    const port = object.port;
+    const id = getPortKey(port);
+
+    if (id === selectedId) {
+      closeSelection();
+      return true;
+    }
+
+    setSelectedPort(port);
+    setHoveredPort(null);
+
+    setSearch(
+      (current) =>
+        getMapSelectionSearch(
+          "port",
+          id,
+          getPortCoordinates(port),
+          current,
+        ),
+      { replace: true },
+    );
+
+    return true;
+  }, [selectedId, closeSelection, setSelectedPort, setSearch]);
 
   useEffect(() => {
     layerManager.setGroup("ports", {
@@ -152,48 +163,24 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
           pickable: false,
         }),
 
+        createPortOverviewLayer(markers, ports, portIconSize, handlePortClick),
         new IconLayer({
-          id: "port-markers",
-          data: markers,
+          id: "selected-port-marker",
+          data: selected && selectedCoordinates ? [{ port: selected, coordinates: selectedCoordinates }] : [],
           getPosition: (marker) => marker.coordinates,
           getIcon: () => PORT_ICON,
           getSize: portIconSize,
           sizeUnits: "pixels",
           billboard: true,
           pickable: true,
-
-          onClick: ({ object }) => {
-            if (!object?.port) return false;
-
-            const port = object.port;
-            const id = getPortKey(port);
-
-            if (id === selectedId) {
-              closeSelection();
-              return true;
-            }
-
-            setSelectedPort(port);
-            setHoveredPort(null);
-
-            setSearch(
-              (current) =>
-                getMapSelectionSearch(
-                  "port",
-                  id,
-                  getPortCoordinates(port),
-                  current,
-                ),
-              { replace: true },
-            );
-
-            return true;
-          },
+          onClick: handlePortClick,
         }),
       ],
     });
   }, [
     markers,
+    ports,
+    handlePortClick,
     selected,
     selectedCoordinates,
     selectedId,
@@ -210,6 +197,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
 
   return (
     <>
+      {isPreparingPorts && <div role="status" className="pointer-events-none absolute left-4 top-16 z-[1000] rounded bg-white px-3 py-2 text-sm shadow">{t("loadingPorts")}</div>}
       {hoverCoordinates && getPortKey(hoveredPort) !== selectedId && (
         <MapPopup
           map={map}
