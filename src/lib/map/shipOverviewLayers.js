@@ -4,11 +4,9 @@ import { getOverviewPickedShip } from "./shipOverviewData.js";
 
 const ICON_MAPPING = {
   "arrow-fill": { x: 0, y: 0, width: 40, height: 40, mask: true },
-  "arrow-outline": { x: 40, y: 0, width: 40, height: 40, mask: false },
-  "navigation-aid": { x: 80, y: 0, width: 40, height: 40, mask: false },
+  "navigation-aid": { x: 40, y: 0, width: 40, height: 40, mask: false },
 };
 const arrowFill = () => "arrow-fill";
-const arrowOutline = () => "arrow-outline";
 const navigationAid = () => "navigation-aid";
 
 // Binary GPU data does not have array elements. Resolve picking indices back
@@ -58,24 +56,13 @@ export function createShipOverviewLayers(overview, ships, zoom, onClick) {
       radiusUnits: "pixels",
       getRadius: 4,
       radiusScale: iconScale,
-      stroked: true,
-      lineWidthUnits: "pixels",
-      getLineWidth: 0.5,
-      getLineColor: [82, 99, 108, 255],
+      stroked: false,
     }),
     new ShipOverviewIconLayer({
       ...icons,
       id: "ship-overview-arrows",
       data: overview.arrows,
       getIcon: arrowFill,
-    }),
-    new ShipOverviewIconLayer({
-      ...icons,
-      id: "ship-overview-arrow-outlines",
-      data: overview.arrows,
-      getIcon: arrowOutline,
-      pickable: false,
-      autoHighlight: false,
     }),
     new ShipOverviewIconLayer({
       ...icons,
