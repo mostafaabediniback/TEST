@@ -8,7 +8,7 @@ function formatVoyageTime(value) {
   });
 }
 
-export default function VoyageTimeline({ voyage }) {
+export default function VoyageTimeline({ voyage, compact = false }) {
   const [now, setNow] = useState(Date.now);
 
   useEffect(() => {
@@ -34,11 +34,13 @@ export default function VoyageTimeline({ voyage }) {
     : 0;
 
   return (
-    <section className="rounded-lg border bg-white p-4 shadow-sm w-full">
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <div className="">
+    <section
+      className={`w-full min-w-0 rounded-lg border bg-white shadow-sm ${compact ? "p-3" : "p-4"}`}
+    >
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+        <div className="min-w-0">
           <p className="text-xs text-slate-500">Departure from</p>
-          <p className="truncate text-sm font-semibold text-slate-900">
+          <p className="break-words text-sm font-semibold text-slate-900">
             {voyage?.departure_port_name ||
               (voyage?.departure_port_id != null
                 ? `Port ${voyage.departure_port_id}`
@@ -52,7 +54,7 @@ export default function VoyageTimeline({ voyage }) {
 
         <div className="min-w-0 text-right">
           <p className="text-xs text-slate-500">Arrival at</p>
-          <p className="truncate text-sm font-semibold text-slate-900">
+          <p className="break-words text-sm font-semibold text-slate-900">
             {voyage?.arrival_port_name ||
               (voyage?.arrival_port_id != null
                 ? `Port ${voyage.arrival_port_id}`
@@ -61,10 +63,10 @@ export default function VoyageTimeline({ voyage }) {
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className={compact ? "mt-3" : "mt-5"}>
         <div className="flex justify-between gap-4 text-xs text-slate-500">
-          <span>Start: {formatVoyageTime(voyage?.departure_time)}</span>
-          <span className="text-right">
+          <span className="min-w-0 flex-1 break-words">Start: {formatVoyageTime(voyage?.departure_time)}</span>
+          <span className="min-w-0 flex-1 break-words text-right">
             End: {formatVoyageTime(voyage?.arrival_time)}
           </span>
         </div>
@@ -107,13 +109,13 @@ export default function VoyageTimeline({ voyage }) {
         </p>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-4 border-t pt-3 text-xs">
-        <p className="text-slate-600">
+      <div className={`${compact ? "mt-3 pt-2" : "mt-4 pt-3"} grid grid-cols-2 gap-4 border-t text-xs`}>
+        <p className="min-w-0 break-words text-slate-600">
           <span className="mb-1 block text-slate-500">Departure</span>
           {formatVoyageTime(voyage?.departure_time)}
         </p>
 
-        <p className="text-right text-slate-600">
+        <p className="min-w-0 break-words text-right text-slate-600">
           <span className="mb-1 block text-slate-500">Reported ETA</span>
           {formatVoyageTime(voyage?.arrival_time)}
         </p>

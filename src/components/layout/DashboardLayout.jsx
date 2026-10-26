@@ -29,8 +29,8 @@ export function DashboardLayout() {
       >
         <Sidebar />
 
-        <SidebarInset className="relative isolate h-dvh min-w-0 overflow-hidden">
-          <header className="pointer-events-none absolute inset-x-0 top-0 z-[9999] flex h-16 items-center gap-2 border-b border-white/20 bg-transparent px-3 shadow-none backdrop-blur-0 sm:gap-3 sm:px-4">
+        <SidebarInset data-map-popup-boundary className="relative isolate h-dvh min-w-0 overflow-hidden">
+          <header data-map-popup-obstacle={isDashboard ? "" : undefined} className="pointer-events-none absolute inset-x-0 top-0 z-[9999] flex h-16 items-center gap-2 border-b border-white/20 bg-transparent px-3 shadow-none backdrop-blur-0 sm:gap-3 sm:px-4">
             <SidebarTrigger
               label={t("Toggle sidebar")}
               className="pointer-events-auto relative z-[10000] shrink-0 md:hidden"

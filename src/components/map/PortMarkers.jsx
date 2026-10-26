@@ -319,9 +319,9 @@ function PortPreview({ port, onDetailsClick }) {
     [t("recentPortCalls"), port.recent_port_calls ?? port.recentPortCalls],
   ];
   return (
-    <article className="w-full font-sans">
+    <article className="map-popup-preview w-full font-sans">
       {imageUrl && imageUrl !== failedImage ? (
-        <div className="relative h-52">
+        <div className="relative h-36 overflow-hidden rounded-t-lg">
           <img
             src={imageUrl}
             alt={name}
@@ -337,7 +337,7 @@ function PortPreview({ port, onDetailsClick }) {
           </div>
         </div>
       ) : (
-        <div className="p-3">
+        <div className="p-3 pe-7">
           <h2 className="text-lg font-bold">{name}</h2>
           <p className="text-xs">
             {port.type || t("port")}
@@ -345,7 +345,7 @@ function PortPreview({ port, onDetailsClick }) {
           </p>
         </div>
       )}
-      <div className="my-4 grid grid-cols-2 divide-x rounded-md border text-xs rtl:divide-x-reverse">
+      <div className="my-3 grid grid-cols-2 divide-x rounded-md border text-xs rtl:divide-x-reverse">
         <div className="min-w-0 p-2">
           <p className="text-slate-500">{t("unloCode")}</p>
           <p className="break-words font-semibold">
@@ -382,3 +382,4 @@ function PortPreview({ port, onDetailsClick }) {
     </article>
   );
 }
+

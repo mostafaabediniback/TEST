@@ -27,10 +27,10 @@ export default function ShipPreview({
   const draught = shipData?.draft ?? position?.draught;
 
   return (
-    <article className="w-full  font-sans">
+    <article className="map-popup-preview w-full font-sans">
       {/* Photo and vessel header */}
       {imageUrl ? (
-        <div className="relative h-52">
+        <div className="relative h-36 overflow-hidden rounded-t-lg">
           <img
             src={imageUrl}
             alt={shipData?.name || "Vessel"}
@@ -50,7 +50,7 @@ export default function ShipPreview({
           </div>
         </div>
       ) : (
-        <div className="p-3">
+        <div className="p-3 pe-7">
           <h2 className="text-lg font-bold">
             {shipData?.name || "Unnamed vessel"}
           </h2>
@@ -70,8 +70,8 @@ export default function ShipPreview({
       {/* Name, destination, and voyage times */}
       <div>
         {/* Route progress */}
-        <div className="my-4 flex items-center" aria-label="Voyage route">
-          <VoyageTimeline voyage={voyage} />
+        <div className="my-3 flex min-w-0 items-center" aria-label="Voyage route">
+          <VoyageTimeline voyage={voyage} compact />
         </div>
 
         {/* Actions */}
@@ -105,8 +105,8 @@ export default function ShipPreview({
         </div>
 
         {/* Vessel status */}
-        <div className="grid grid-cols-3 divide-x rounded-md border text-xs">
-          <div className="p-2">
+        <div className="grid grid-cols-3 divide-x rounded-md border text-xs rtl:divide-x-reverse">
+          <div className="min-w-0 p-2">
             <p className="text-slate-500">Navigational status</p>
             <p className="font-semibold">
               {position?.navigational_status ??
@@ -115,7 +115,7 @@ export default function ShipPreview({
             </p>
           </div>
 
-          <div className="p-2">
+          <div className="min-w-0 p-2">
             <p className="text-slate-500">Speed / Course</p>
             <p className="font-semibold">
               {speed != null ? `${speed} kn` : "—"}
@@ -124,7 +124,7 @@ export default function ShipPreview({
             </p>
           </div>
 
-          <div className="p-2">
+          <div className="min-w-0 p-2">
             <p className="text-slate-500">Draught</p>
             <p className="font-semibold">
               {draught != null ? `${draught} m` : "—"}
@@ -140,3 +140,4 @@ export default function ShipPreview({
     </article>
   );
 }
+
