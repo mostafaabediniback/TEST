@@ -6,6 +6,7 @@ import { useQueries } from "@tanstack/react-query";
 import { getShipsInTile } from "@/api/ships";
 import { useFilters } from "@/context/FilterContext";
 import { getVesselTypeFilter } from "@/lib/vesselTypes";
+import { createTileQueryCombiner } from "@/lib/map/tileQueryResults";
 
 function getTileKeys(tiles) {
   return tiles
@@ -54,7 +55,9 @@ export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
     };
   }, [map]);
 
-  const queries = useQueries({
+  const combine = useMemo(() => createTileQueryCombiner("ships"), []);
+  const combined = useQueries({
+    combine,
     queries: (vessel_type?.length === 0 ? [] : tiles).map(({ z, x, y }) => ({
       queryKey: [
         "ships",
@@ -85,32 +88,9 @@ export function useShipsInVisibleTiles({ map, limit = 1000 } = {}) {
     })),
   });
 
-  const ships = useMemo(() => {
-    const allShips = queries.flatMap(
-      (query) => query.data?.ships ?? query.data?.items ?? [],
-    );
-
-    const uniqueShips = new Map();
-
-    for (const ship of allShips) {
-      const id = ship.id ?? ship.mmsi ?? ship.imo;
-
-      if (id !== undefined && id !== null) {
-        uniqueShips.set(String(id), ship);
-      }
-    }
-
-    return Array.from(uniqueShips.values());
-  }, [queries]);
-
   return {
-    ships,
+    ...combined,
     tiles,
-    isPending: queries.some((query) => query.isPending),
-    isFetching: queries.some((query) => query.isFetching),
-    isError: queries.some((query) => query.isError),
-    errors: queries
-      .filter((query) => query.isError)
-      .map((query) => query.error),
   };
 }
+

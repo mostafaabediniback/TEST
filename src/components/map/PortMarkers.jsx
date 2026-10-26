@@ -51,7 +51,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
     [map],
   );
 
-  const getZoomSnapshot = useCallback(() => (map ? map.getZoom() : 5), [map]);
+  const getZoomSnapshot = useCallback(() => (map ? Math.floor(map.getZoom()) : 5), [map]);
 
   const zoom = useSyncExternalStore(
     subscribeToZoom,
