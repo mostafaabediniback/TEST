@@ -1,10 +1,11 @@
 import { IconLayer, ScatterplotLayer } from "@deck.gl/layers";
-import atlas from "../../assets/ship-overview.svg";
+import arrowIcon from "../../assets/ship-overview-arrow.svg";
+import navigationAidIcon from "../../assets/ship-overview-navigation-aid.svg";
 import { getOverviewPickedShip } from "./shipOverviewData.js";
 
 const ICON_MAPPING = {
   "arrow-fill": { x: 0, y: 0, width: 40, height: 40, mask: true },
-  "navigation-aid": { x: 40, y: 0, width: 40, height: 40, mask: false },
+  "navigation-aid": { x: 0, y: 0, width: 40, height: 40, mask: false },
 };
 const arrowFill = () => "arrow-fill";
 const navigationAid = () => "navigation-aid";
@@ -39,7 +40,6 @@ export function createShipOverviewLayers(overview, ships, zoom, onClick) {
   };
   const icons = {
     ...common,
-    iconAtlas: atlas,
     iconMapping: ICON_MAPPING,
     sizeUnits: "pixels",
     getSize: 20,
@@ -61,12 +61,14 @@ export function createShipOverviewLayers(overview, ships, zoom, onClick) {
     new ShipOverviewIconLayer({
       ...icons,
       id: "ship-overview-arrows",
+      iconAtlas: arrowIcon,
       data: overview.arrows,
       getIcon: arrowFill,
     }),
     new ShipOverviewIconLayer({
       ...icons,
       id: "ship-overview-navigation-aids",
+      iconAtlas: navigationAidIcon,
       data: overview.navigationAids,
       getIcon: navigationAid,
       getColor: [255, 255, 255, 255],
