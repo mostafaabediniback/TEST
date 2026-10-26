@@ -1,9 +1,9 @@
 import { Anchor, ArrowLeft, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function PortDetailHeader({
+  onBack,
   port,
   tabs,
   activeTab,
@@ -13,10 +13,8 @@ export default function PortDetailHeader({
     <header className="sticky top-0 z-20 border-b bg-white">
       <div className="mx-auto max-w-[1600px] px-4">
         <div className="flex min-h-16 flex-wrap items-center gap-3 py-3">
-          <Button asChild variant="ghost" size="icon" aria-label="Back to port">
-            <Link to="/port">
+          <Button onClick={onBack} variant="ghost" size="icon" aria-label="Back">
               <ArrowLeft className="size-4" />
-            </Link>
           </Button>
 
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">

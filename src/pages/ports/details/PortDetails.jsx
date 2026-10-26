@@ -1,3 +1,4 @@
+import { usePageBack, usePageScroll } from "@/hooks/usePageReturn";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useMapController } from "@/context/MapControllerContext";
@@ -7,7 +8,7 @@ import { getPortCoordinates } from "@/lib/map/portMarkers";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-  Link,
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -18,10 +19,13 @@ import PortOverview from "./tabs/PortOverview";
 
 export default function PortDetails() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const handleBack = usePageBack("/port");
   const { setSelectedShip, setSelectedPort } = useMapController();
   const { id } = useParams();
   const { data, isPending, isError, error } = usePortDetails(id);
   const port = data?.body;
+  const scrollRef = usePageScroll("port-details", Boolean(port));
 
   const [searchParams, setSearchParams] = useSearchParams();
   const tabFromUrl = searchParams.get("tab");
@@ -48,7 +52,7 @@ export default function PortDetails() {
 
         return next;
       },
-      { replace: true },
+      { replace: true, state: location.state },
     );
   }
 
@@ -90,11 +94,9 @@ export default function PortDetails() {
   if (isError || !port) {
     return (
       <main className="mx-auto max-w-5xl space-y-4 p-6">
-        <Button asChild variant="outline">
-          <Link to="/port">
+        <Button onClick={handleBack} variant="outline">
             <ArrowLeft className="me-2 size-4" />
             Back to ports
-          </Link>
         </Button>
         <Card className="p-6">
           <p className="text-sm text-destructive">
@@ -108,13 +110,14 @@ export default function PortDetails() {
   return (
     <main className="flex h-full min-h-0 flex-col overflow-hidden bg-slate-50 text-slate-800">
       <PortDetailHeader
+        onBack={handleBack}
         port={port}
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={handleTabChange}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <div className="mx-auto max-w-[1600px] p-4 md:p-6">
           {activeTab === "Overview" ? (
             <PortOverview

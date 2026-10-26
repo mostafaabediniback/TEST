@@ -1,3 +1,4 @@
+import { usePageScroll } from "@/hooks/usePageReturn";
 import {
   SidebarInset,
   SidebarProvider,
@@ -18,6 +19,8 @@ export function DashboardLayout() {
 
   const isDashboard =
     pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+
+  const scrollRef = usePageScroll("layout", !isDashboard);
 
   return (
     <SearchProvider>
@@ -65,7 +68,7 @@ export function DashboardLayout() {
                 <Outlet />
               </div>
             ) : (
-              <div className="h-full w-full overflow-y-auto pt-4">
+              <div ref={scrollRef} className="h-full w-full overflow-y-auto pt-4">
                 <Outlet />
               </div>
             )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { usePageState, usePageScroll } from "@/hooks/usePageReturn";
 import {
   useLocation,
   useNavigate,
@@ -59,6 +59,7 @@ function filtersFromSearchParams(searchParams, fallback = {}) {
 
 export default function Ships() {
   const { t, direction } = useLocale();
+  const scrollRef = usePageScroll("table");
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -68,14 +69,14 @@ export default function Ships() {
 
   const initialFilters = filtersFromSearchParams(searchParams, savedFilters);
 
-  const [page, setPage] = useState(savedTable?.page ?? 1);
-  const [pageSize, setPageSize] = useState(savedTable?.pageSize ?? 20);
-  const [visibleColumns, setVisibleColumns] = useState(
+  const [page, setPage] = usePageState("page", savedTable?.page ?? 1);
+  const [pageSize, setPageSize] = usePageState("pageSize", savedTable?.pageSize ?? 20);
+  const [visibleColumns, setVisibleColumns] = usePageState("visibleColumns", 
     savedTable?.visibleColumns ?? columns.map((column) => column.key),
   );
 
-  const [filters, setFilters] = useState(initialFilters);
-  const [appliedFilters, setAppliedFilters] = useState(initialFilters);
+  const [filters, setFilters] = usePageState("filters", initialFilters);
+  const [appliedFilters, setAppliedFilters] = usePageState("appliedFilters", initialFilters);
 
   function writeFiltersToUrl(nextFilters) {
     setSearchParams(
@@ -228,6 +229,7 @@ export default function Ships() {
 
   return (
     <section
+      ref={scrollRef}
       dir={direction}
       className="h-full overflow-y-auto bg-muted/30 p-4 sm:p-6"
     >

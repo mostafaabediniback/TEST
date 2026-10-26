@@ -6,6 +6,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
+import { usePageBack, usePageScroll } from "@/hooks/usePageReturn";
 import { useShipPreview } from "@/hooks/useShipPreview";
 import {
   getDetailsReturnTarget,
@@ -96,6 +97,9 @@ export default function ShipDetails() {
 
   const returnTo = getDetailsReturnTarget(location.search, location.state);
 
+  const handleBack = usePageBack(returnTo);
+  const scrollRef = usePageScroll("ship-details");
+
   function handleTabChange(tab) {
     if (!tabs.includes(tab)) return;
 
@@ -112,7 +116,7 @@ export default function ShipDetails() {
 
         return next;
       },
-      { replace: true },
+      { replace: true, state: location.state },
     );
   }
 
@@ -128,20 +132,6 @@ export default function ShipDetails() {
       position,
     });
     navigate(mapTarget.to);
-  }
-
-  function handleBack() {
-    if (
-      location.state?.returnTo === returnTo &&
-      window.history.state?.idx > 0
-    ) {
-      navigate(-1);
-    } else {
-      navigate(returnTo, {
-        replace: true,
-        state: { tableState: location.state?.tableState },
-      });
-    }
   }
 
   function handleAddNote() {
@@ -165,7 +155,7 @@ export default function ShipDetails() {
         onAddNote={handleAddNote}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <div className="mx-auto max-w-[1600px] p-4 md:p-6">
           {activeTab === "Overview" ? (
             <VesselOverview

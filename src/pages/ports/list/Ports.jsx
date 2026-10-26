@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { usePageState, usePageScroll } from "@/hooks/usePageReturn";
 import { useSearchParams } from "react-router-dom";
 import { Anchor } from "lucide-react";
 
@@ -27,25 +27,18 @@ function readFilters(params) {
 
 export default function Ports() {
   const { t, direction } = useLocale();
+  const scrollRef = usePageScroll("table");
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [filters, setFilters] = useState(() => readFilters(searchParams));
-  const [appliedFilters, setAppliedFilters] = useState(() =>
+  const [filters, setFilters] = usePageState("filters", () => readFilters(searchParams));
+  const [appliedFilters, setAppliedFilters] = usePageState("appliedFilters", () =>
     readFilters(searchParams),
   );
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-  const [visibleColumns, setVisibleColumns] = useState(
+  const [page, setPage] = usePageState("page", 1);
+  const [pageSize, setPageSize] = usePageState("pageSize", 20);
+  const [visibleColumns, setVisibleColumns] = usePageState("visibleColumns", 
     columns.map((column) => column.key),
   );
-
-  // Keep the filter inputs in sync when loading a URL or using browser back/forward.
-  useEffect(() => {
-    const urlFilters = readFilters(searchParams);
-    setFilters(urlFilters);
-    setAppliedFilters(urlFilters);
-    setPage(1);
-  }, [searchParams]);
 
   const { data, isPending, isError, error } = usePorts({
     page,
@@ -125,6 +118,7 @@ export default function Ports() {
 
   return (
     <section
+      ref={scrollRef}
       dir={direction}
       className="h-full overflow-y-auto bg-muted/30 p-4 sm:p-6"
     >

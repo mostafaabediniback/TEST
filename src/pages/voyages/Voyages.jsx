@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { usePageState, usePageScroll } from "@/hooks/usePageReturn";
 import {
   useLocation,
   useNavigate,
@@ -19,6 +19,7 @@ import VoyagesPagination from "./components/VoyagesPagination";
 
 export default function Voyages() {
   const { t, direction } = useLocale();
+  const scrollRef = usePageScroll("table");
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,26 +59,26 @@ export default function Voyages() {
     ...urlFilters,
   };
 
-  const [filters, setFilters] = useState(savedFilters);
-  const [appliedFilters, setAppliedFilters] = useState(savedFilters);
+  const [filters, setFilters] = usePageState("filters", savedFilters);
+  const [appliedFilters, setAppliedFilters] = usePageState("appliedFilters", savedFilters);
 
-  const [departureRange, setDepartureRange] = useState(() =>
+  const [departureRange, setDepartureRange] = usePageState("departureRange", () =>
     savedDateRange(savedFilters, "departure"),
   );
-  const [appliedDepartureRange, setAppliedDepartureRange] = useState(() =>
+  const [appliedDepartureRange, setAppliedDepartureRange] = usePageState("appliedDepartureRange", () =>
     savedDateRange(savedFilters, "departure"),
   );
 
-  const [arrivalRange, setArrivalRange] = useState(() =>
+  const [arrivalRange, setArrivalRange] = usePageState("arrivalRange", () =>
     savedDateRange(savedFilters, "arrival"),
   );
-  const [appliedArrivalRange, setAppliedArrivalRange] = useState(() =>
+  const [appliedArrivalRange, setAppliedArrivalRange] = usePageState("appliedArrivalRange", () =>
     savedDateRange(savedFilters, "arrival"),
   );
 
-  const [page, setPage] = useState(savedTable?.page ?? 1);
-  const [pageSize, setPageSize] = useState(savedTable?.pageSize ?? 20);
-  const [visibleColumns, setVisibleColumns] = useState(
+  const [page, setPage] = usePageState("page", savedTable?.page ?? 1);
+  const [pageSize, setPageSize] = usePageState("pageSize", savedTable?.pageSize ?? 20);
+  const [visibleColumns, setVisibleColumns] = usePageState("visibleColumns", 
     savedTable?.visibleColumns ?? columns.map((column) => column.key),
   );
 
@@ -196,6 +197,7 @@ export default function Voyages() {
 
   return (
     <section
+      ref={scrollRef}
       dir={direction}
       className="h-full overflow-y-auto bg-muted/30 p-4 sm:p-6"
     >
