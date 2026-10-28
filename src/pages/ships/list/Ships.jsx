@@ -1,9 +1,5 @@
 import { usePageState, usePageScroll } from "@/hooks/usePageReturn";
-import {
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { getShipDetailsNavigation } from "@/lib/shipNavigation";
 import { getVesselTypeFilter } from "@/lib/vesselTypes";
 import { Ship } from "lucide-react";
@@ -24,11 +20,6 @@ function imoToApiValue(status) {
   return undefined;
 }
 
-function getImoApiValue(filters) {
-  const typedImo = filtersToValue(filters.imo);
-  return typedImo || imoToApiValue(filters.imo_status);
-}
-
 function filtersFromSearchParams(searchParams, fallback = {}) {
   const result = {
     ...emptyFilters,
@@ -38,7 +29,8 @@ function filtersFromSearchParams(searchParams, fallback = {}) {
   };
 
   for (const key of Object.keys(emptyFilters)) {
-    const values = searchParams.getAll(key);
+    const paramKey = key === "imo" ? "imo_like" : key;
+    const values = searchParams.getAll(paramKey);
 
     if (key === "vessel_type") {
       if (values.length > 0) result[key] = values;
@@ -47,7 +39,6 @@ function filtersFromSearchParams(searchParams, fallback = {}) {
     }
   }
 
-  // These filters may not be included in emptyFilters.
   const imoStatus = searchParams.get("imo_status");
   if (imoStatus !== null) result.imo_status = imoStatus;
 
@@ -60,23 +51,28 @@ function filtersFromSearchParams(searchParams, fallback = {}) {
 export default function Ships() {
   const { t, direction } = useLocale();
   const scrollRef = usePageScroll("table");
-  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const savedTable = location.state?.tableState;
   const savedFilters = savedTable?.filters;
-
   const initialFilters = filtersFromSearchParams(searchParams, savedFilters);
 
   const [page, setPage] = usePageState("page", savedTable?.page ?? 1);
-  const [pageSize, setPageSize] = usePageState("pageSize", savedTable?.pageSize ?? 20);
-  const [visibleColumns, setVisibleColumns] = usePageState("visibleColumns", 
+  const [pageSize, setPageSize] = usePageState(
+    "pageSize",
+    savedTable?.pageSize ?? 20,
+  );
+  const [visibleColumns, setVisibleColumns] = usePageState(
+    "visibleColumns",
     savedTable?.visibleColumns ?? columns.map((column) => column.key),
   );
 
   const [filters, setFilters] = usePageState("filters", initialFilters);
-  const [appliedFilters, setAppliedFilters] = usePageState("appliedFilters", initialFilters);
+  const [appliedFilters, setAppliedFilters] = usePageState(
+    "appliedFilters",
+    initialFilters,
+  );
 
   function writeFiltersToUrl(nextFilters) {
     setSearchParams(
@@ -84,11 +80,11 @@ export default function Ships() {
         const nextParams = new URLSearchParams(currentParams);
         const filterKeys = new Set([
           ...Object.keys(emptyFilters),
+          "imo_like",
           "imo_status",
           "vessel_type",
         ]);
 
-        // Remove old filter values but preserve unrelated query parameters.
         for (const key of filterKeys) {
           nextParams.delete(key);
         }
@@ -96,14 +92,16 @@ export default function Ships() {
         for (const [key, value] of Object.entries(nextFilters)) {
           if (!filterKeys.has(key)) continue;
 
+          const paramKey = key === "imo" ? "imo_like" : key;
+
           if (Array.isArray(value)) {
             value.forEach((item) => {
               if (item !== "" && item != null) {
-                nextParams.append(key, String(item));
+                nextParams.append(paramKey, String(item));
               }
             });
           } else if (value !== "" && value != null && value !== "any") {
-            nextParams.set(key, String(value));
+            nextParams.set(paramKey, String(value));
           }
         }
 
@@ -117,7 +115,13 @@ export default function Ships() {
     page,
     page_size: pageSize,
     name: filtersToValue(appliedFilters.name),
-    imo: getImoApiValue(appliedFilters),
+
+    // Typed IMO input is sent as imo_like.
+    imo_like: filtersToValue(appliedFilters.imo),
+
+    // IMO status selection is sent as imo.
+    imo: imoToApiValue(appliedFilters.imo_status),
+
     flag: filtersToValue(appliedFilters.flag),
     vessel_type: getVesselTypeFilter(appliedFilters.vessel_type),
     vessel_class: filtersToValue(appliedFilters.vessel_class),
@@ -145,23 +149,12 @@ export default function Ships() {
   );
 
   function updateFilter(key, value) {
-    if (key === "imo") {
-      const nextFilters = {
-        ...filters,
+    if (key === "imo_like") {
+      setFilters((current) => ({
+        ...current,
         imo: value,
         imo_status: "any",
-      };
-
-      const nextAppliedFilters = {
-        ...appliedFilters,
-        imo: value,
-        imo_status: "any",
-      };
-
-      setFilters(nextFilters);
-      setAppliedFilters(nextAppliedFilters);
-      writeFiltersToUrl(nextAppliedFilters);
-      setPage(1);
+      }));
       return;
     }
 
@@ -207,23 +200,20 @@ export default function Ships() {
     setPage(1);
   }
 
-  function showDetails(ship) {
+  function getDetailsNavigation(ship) {
     const tableState = { filters, page, pageSize, visibleColumns };
 
-    const target = getShipDetailsNavigation(ship, {
+    return getShipDetailsNavigation(ship, {
       source: "table",
       returnTo: location.pathname + location.search,
       tableState,
     });
 
-    navigate(target.to, { state: target.state });
   }
 
   function toggleColumn(key, checked) {
     setVisibleColumns((current) =>
-      checked
-        ? [...current, key]
-        : current.filter((column) => column !== key),
+      checked ? [...current, key] : current.filter((column) => column !== key),
     );
   }
 
@@ -269,7 +259,7 @@ export default function Ships() {
             error={error}
             filters={filters}
             onImoStatusChange={handleImoStatusChange}
-            onViewDetails={showDetails}
+            getDetailsNavigation={getDetailsNavigation}
           />
         </Card>
 

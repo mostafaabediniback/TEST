@@ -108,7 +108,7 @@ function StatisticTable({ portId, config, dateOptions, pageSize }) {
         </p>
       )}
 
-      <div className="overflow-x-auto">
+      <div tabIndex={0} className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-ring">
         <table className="w-full min-w-[250px] text-left text-sm">
           <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
             <tr>
@@ -246,15 +246,16 @@ export default function StatisticsTab({ portId }) {
       <form onSubmit={handleSearch}>
         <Card className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
           <div className="flex flex-wrap items-end gap-3">
-            <label className="flex max-w-full flex-col gap-1.5 text-sm">
+            <div className="flex w-full min-w-0 flex-col gap-1.5 text-sm sm:w-80">
               <span className="font-medium text-slate-700">
                 Date and time range
               </span>
               <DateRangeFilter
+                label="Date and time range"
                 dateRange={dateRange}
                 onDateRangeChange={setDateRange}
               />
-            </label>
+            </div>
 
             <div className="flex flex-col gap-1.5 text-sm">
               <label

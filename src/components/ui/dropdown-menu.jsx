@@ -7,8 +7,8 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { CheckIcon, ChevronRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-function DropdownMenu({ ...props }) {
-  return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+function DropdownMenu({ modal = false, ...props }) {
+  return <MenuPrimitive.Root data-slot="dropdown-menu" modal={modal} {...props} />;
 }
 
 function DropdownMenuTrigger({ ...props }) {

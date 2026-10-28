@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Map as MapLibreMap, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { MapPin } from "lucide-react";
@@ -9,6 +10,7 @@ import { useLocale } from "@/context/LocaleContext";
 export default function PortMap({
   port = {},
   onShowOnMap,
+  mapTo,
   canShowOnMap = false,
 }) {
   const { t } = useLocale();
@@ -70,6 +72,8 @@ export default function PortMap({
         variant="outline"
         onClick={onShowOnMap}
         disabled={!canShowOnMap}
+        nativeButton={false}
+        render={mapTo ? <Link to={mapTo} /> : <span />}
         className="absolute end-3 top-3 z-10 bg-background/95 shadow-sm"
       >
         <MapPin aria-hidden="true" />

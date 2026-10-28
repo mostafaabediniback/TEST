@@ -1,4 +1,6 @@
 import { ArrowLeft, MessageSquarePlus, Ship } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { getDetailTabTarget, isPlainLinkClick } from "@/lib/navigation";
 
 export default function VesselDetailHeader({
   name,
@@ -8,22 +10,29 @@ export default function VesselDetailHeader({
   activeTab,
   tabs,
   onBack,
+  backTo = "/ships",
   onTabChange,
   onAddNote,
 }) {
+  const location = useLocation();
   return (
     <header className="sticky top-0 z-20 border-b bg-white">
       <div className="mx-auto max-w-[1600px] px-4">
         <div className="flex min-h-16 flex-wrap items-center justify-between gap-4 py-3">
           <div className="flex min-w-0 items-center gap-3">
-            <button
-              type="button"
-              onClick={onBack}
+            <Link
+              to={backTo}
+              onClick={(event) => {
+                if (isPlainLinkClick(event)) {
+                  event.preventDefault();
+                  onBack();
+                }
+              }}
               aria-label="Back"
               className="rounded-md p-2 text-slate-600 hover:bg-slate-100"
             >
               <ArrowLeft size={18} />
-            </button>
+            </Link>
 
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700">
               <Ship size={19} />
@@ -60,10 +69,16 @@ export default function VesselDetailHeader({
           className="flex gap-6 overflow-x-auto"
         >
           {tabs.map((tab) => (
-            <button
+            <Link
               key={tab}
-              type="button"
-              onClick={() => onTabChange(tab)}
+              to={getDetailTabTarget(location, tab)}
+              state={location.state}
+              onClick={(event) => {
+                if (isPlainLinkClick(event)) {
+                  event.preventDefault();
+                  onTabChange(tab);
+                }
+              }}
               aria-current={activeTab === tab ? "page" : undefined}
               className={`whitespace-nowrap border-b-2 px-1 py-3 text-sm ${
                 activeTab === tab
@@ -72,7 +87,7 @@ export default function VesselDetailHeader({
               }`}
             >
               {tab}
-            </button>
+            </Link>
           ))}
         </nav>
       </div>

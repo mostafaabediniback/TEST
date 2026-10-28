@@ -446,11 +446,11 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
                 onDetailsClick={showShipDetails}
               />
 
-              {preview.isError && (
+              {/* {preview.isError && (
                 <p role="status" className="mt-2 text-xs text-amber-700">
                   {t("partialShipData")}
                 </p>
-              )}
+              )} */}
             </div>
           </MapPopup>
         )}

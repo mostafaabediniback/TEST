@@ -74,7 +74,7 @@ export function Sidebar() {
             <SidebarMenuButton
               size="lg"
               className="tooba-brand"
-              render={<Link to="/" />}
+              render={<Link to="/dashboard/3/5/3" />}
               onClick={closeMobile}
               tooltip="Tooba"
             >

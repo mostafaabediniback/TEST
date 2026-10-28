@@ -5,7 +5,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import {
   IconLayer,
   PathLayer,
@@ -63,7 +63,6 @@ const NAVIGATION_STATUS_ICONS = {
 // Draw the markers and handle selection, hover, and popups.
 // shipMarkers.js calculates the shapes and map coordinates.
 export default function ShipMarkers({ ships = [], map, layerManager }) {
-  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { selectedShip, setSelectedShip } = useMapController();
@@ -186,14 +185,10 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
     return visibleShipMarkers;
   }, [ships, vesselTypes, selectedShipId, selectedShipMarker, mapZoom, showDetails]);
 
-  function openShipDetails() {
-    setSelectedShip(shipForPopup);
-    const detailsPage = getShipDetailsNavigation(shipForPopup, {
-      source: "map",
-      returnTo: location.pathname + location.search,
-    });
-    navigate(detailsPage.to, { state: detailsPage.state });
-  }
+  const detailsNavigation = getShipDetailsNavigation(shipForPopup, {
+    source: "map",
+    returnTo: location.pathname + location.search,
+  });
 
   const clearShipSelection = useCallback(() => {
     setSearchParams((current) => clearMapSelection(current), { replace: true });
@@ -378,7 +373,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
           shipName={shipForPopup.name || t("unnamedShip")}
           track={pastTrack}
           onHide={togglePastTrackVisibility}
-          onDetails={openShipDetails}
+          detailsNavigation={detailsNavigation}
           onClose={clearShipSelection}
         />
       )}
@@ -428,7 +423,7 @@ export default function ShipMarkers({ ships = [], map, layerManager }) {
                 detailsLabel={t("viewDetails")}
                 onPastTrackClick={togglePastTrackVisibility}
                 isPastTrackActive={isPastTrackActive}
-                onDetailsClick={openShipDetails}
+                detailsNavigation={detailsNavigation}
               />
 
               {shipPreview.isError && (

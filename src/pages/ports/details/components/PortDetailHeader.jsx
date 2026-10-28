@@ -1,4 +1,6 @@
 import { Anchor, ArrowLeft, MapPin } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { getDetailTabTarget, isPlainLinkClick } from "@/lib/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -9,11 +11,22 @@ export default function PortDetailHeader({
   activeTab,
   onTabChange,
 }) {
+  const location = useLocation();
   return (
     <header className="sticky top-0 z-20 border-b bg-white">
       <div className="mx-auto max-w-[1600px] px-4">
         <div className="flex min-h-16 flex-wrap items-center gap-3 py-3">
-          <Button onClick={onBack} variant="ghost" size="icon" aria-label="Back">
+          <Button
+            nativeButton={false}
+            render={<Link to="/port" />}
+            onClick={(event) => {
+              if (isPlainLinkClick(event)) {
+                event.preventDefault();
+                onBack();
+              }
+            }}
+            variant="ghost" size="icon" aria-label="Back"
+          >
               <ArrowLeft className="size-4" />
           </Button>
 
@@ -44,10 +57,16 @@ export default function PortDetailHeader({
           className="flex gap-6 overflow-x-auto"
         >
           {tabs.map((tab) => (
-            <button
+            <Link
               key={tab}
-              type="button"
-              onClick={() => onTabChange(tab)}
+              to={getDetailTabTarget(location, tab)}
+              state={location.state}
+              onClick={(event) => {
+                if (isPlainLinkClick(event)) {
+                  event.preventDefault();
+                  onTabChange(tab);
+                }
+              }}
               aria-current={activeTab === tab ? "page" : undefined}
               className={`whitespace-nowrap border-b-2 px-1 py-3 text-sm ${
                 activeTab === tab
@@ -56,7 +75,7 @@ export default function PortDetailHeader({
               }`}
             >
               {tab}
-            </button>
+            </Link>
           ))}
         </nav>
       </div>

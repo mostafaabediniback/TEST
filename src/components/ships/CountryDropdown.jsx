@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useDropdownPosition } from "@/hooks/useDropdownPosition";
+import { useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Trash2 } from "lucide-react";
 import { useCountryFlags } from "@/hooks/useCountryFlags";
@@ -11,13 +12,12 @@ export default function CountryDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [menuStyle, setMenuStyle] = useState({});
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const searchRef = useRef(null);
 
   const { data, isPending, isError, error } = useCountryFlags();
-  const countries = Array.isArray(data) ? data : [];
+  const countries = useMemo(() => Array.isArray(data) ? data : [], [data]);
 
   const filteredCountries = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -27,50 +27,13 @@ export default function CountryDropdown({
     return countries.filter((country) => country.toLowerCase().includes(query));
   }, [countries, search]);
 
-  useEffect(() => {
-    if (!open) return;
-
-    function positionMenu() {
-      const rect = buttonRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      const width = Math.min(rect.width, window.innerWidth - 16);
-      const left = Math.min(
-        Math.max(8, rect.left),
-        window.innerWidth - width - 8,
-      );
-
-      setMenuStyle({
-        position: "fixed",
-        top: rect.bottom + 4,
-        left,
-        width,
-        zIndex: 9999,
-      });
-    }
-
-    function closeOnOutsideClick(event) {
-      if (
-        !buttonRef.current?.contains(event.target) &&
-        !menuRef.current?.contains(event.target)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    positionMenu();
-    searchRef.current?.focus();
-
-    window.addEventListener("resize", positionMenu);
-    window.addEventListener("scroll", positionMenu, true);
-    document.addEventListener("mousedown", closeOnOutsideClick);
-
-    return () => {
-      window.removeEventListener("resize", positionMenu);
-      window.removeEventListener("scroll", positionMenu, true);
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-    };
-  }, [open]);
+  const menuStyle = useDropdownPosition({
+    open,
+    setOpen,
+    anchorRef: buttonRef,
+    menuRef,
+    searchRef,
+  });
 
   function selectCountry(country) {
     onChange?.(country);
@@ -90,7 +53,7 @@ export default function CountryDropdown({
           type="button"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="flex h-full min-w-0 flex-1 items-center justify-between text-left focus-visible:outline-2 focus-visible:outline-ring"
+          className="flex h-full min-w-0 flex-1 items-center justify-between text-start focus-visible:outline-2 focus-visible:outline-ring"
         >
           {selected ? (
             <VesselFlag country={selected} />
@@ -99,7 +62,7 @@ export default function CountryDropdown({
               {placeholder || "selected Flag"}
             </span>
           )}
-          <span aria-hidden="true" className="ml-2">
+          <span aria-hidden="true" className="ms-2">
             ▾
           </span>
         </button>
@@ -109,7 +72,7 @@ export default function CountryDropdown({
             type="button"
             aria-label="Clear selected country"
             onClick={() => onChange?.("")}
-            className="ml-1 inline-flex shrink-0 items-center justify-center rounded p-1 text-muted-foreground hover:bg-accent hover:text-red-600 focus-visible:outline-2 focus-visible:outline-ring"
+            className="ms-1 inline-flex shrink-0 items-center justify-center rounded p-1 text-muted-foreground hover:bg-accent hover:text-red-600 focus-visible:outline-2 focus-visible:outline-ring"
           >
             <Trash2 aria-hidden="true" className="h-4 w-4" />
           </button>
@@ -121,9 +84,9 @@ export default function CountryDropdown({
           <div
             ref={menuRef}
             style={menuStyle}
-            className="overflow-hidden rounded-md border bg-background shadow-xl"
+            className="flex flex-col overflow-hidden rounded-md border bg-background shadow-xl"
           >
-            <div className="border-b p-2">
+            <div className="shrink-0 border-b p-2">
               <input
                 ref={searchRef}
                 value={search}
@@ -134,11 +97,11 @@ export default function CountryDropdown({
               />
             </div>
 
-            <div className="max-h-64 overflow-y-auto p-1">
+            <div className="min-h-0 max-h-64 overflow-y-auto overscroll-contain p-1">
               <button
                 type="button"
                 onClick={() => selectCountry("")}
-                className="w-full rounded px-3 py-2 text-left text-sm hover:bg-accent"
+                className="w-full rounded px-3 py-2 text-start text-sm hover:bg-accent"
               >
                 Any country
               </button>
@@ -163,7 +126,7 @@ export default function CountryDropdown({
                     type="button"
                     onClick={() => selectCountry(country)}
                     aria-selected={selected === country}
-                    className="flex w-full items-center rounded px-3 py-2 text-left text-sm hover:bg-accent aria-selected:bg-accent"
+                    className="flex w-full items-center rounded px-3 py-2 text-start text-sm hover:bg-accent aria-selected:bg-accent"
                   >
                     <VesselFlag country={country} />
                   </button>

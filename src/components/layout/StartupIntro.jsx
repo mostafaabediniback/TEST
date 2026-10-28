@@ -6,6 +6,9 @@ const EXIT_DURATION = 360;
 
 function shouldShowIntro() {
   if (typeof window === "undefined") return false;
+  // Internal links open directly at their destination, including in a new tab.
+  // Reserve the welcome animation for an initial visit to the app's root.
+  if (window.location.pathname !== "/") return false;
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
     return false;
   try {

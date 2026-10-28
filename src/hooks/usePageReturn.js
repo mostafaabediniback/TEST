@@ -16,16 +16,23 @@ export function usePageState(name, initialValue) {
   const cacheKey = `${key}:${name}`;
   const [snapshot, setSnapshot] = useState(() => ({
     key: cacheKey,
-    value: entries.has(cacheKey) ? entries.get(cacheKey)
-      : typeof initialValue === "function" ? initialValue() : initialValue,
+    value: entries.has(cacheKey)
+      ? entries.get(cacheKey)
+      : typeof initialValue === "function"
+        ? initialValue()
+        : initialValue,
   }));
   let value = snapshot.value;
   if (snapshot.key !== cacheKey) {
-    value = navigationType === "POP" && entries.has(cacheKey)
-      ? entries.get(cacheKey) : snapshot.value;
+    value =
+      navigationType === "POP" && entries.has(cacheKey)
+        ? entries.get(cacheKey)
+        : snapshot.value;
     setSnapshot({ key: cacheKey, value });
   }
-  useLayoutEffect(() => { remember(cacheKey, value); }, [cacheKey, value]);
+  useLayoutEffect(() => {
+    remember(cacheKey, value);
+  }, [cacheKey, value]);
   function setValue(next) {
     setSnapshot((current) => ({
       key: cacheKey,
@@ -42,10 +49,11 @@ export function usePageBack(fallback) {
     // React Router starts a new document at index 0, so direct links never
     // send the user out of the application.
     if (window.history.state?.idx > 0) navigate(-1);
-    else navigate(fallback, {
-      replace: true,
-      state: { tableState: location.state?.tableState },
-    });
+    else
+      navigate(fallback, {
+        replace: true,
+        state: { tableState: location.state?.tableState },
+      });
   };
 }
 
@@ -64,11 +72,15 @@ export function usePageScroll(name, ready = true) {
       element.scrollLeft = saved.left;
     };
     const save = () => {
-      if (!restoring) remember(cacheKey, {
-        top: element.scrollTop, left: element.scrollLeft,
-      });
+      if (!restoring)
+        remember(cacheKey, {
+          top: element.scrollTop,
+          left: element.scrollLeft,
+        });
     };
-    const interact = () => { restoring = false; };
+    const interact = () => {
+      restoring = false;
+    };
     restore();
     // Lists may still be loading when the previous page is mounted again.
     const observer = new ResizeObserver(restore);

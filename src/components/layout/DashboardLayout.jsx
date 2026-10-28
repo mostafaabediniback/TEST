@@ -62,13 +62,13 @@ export function DashboardLayout() {
               </div>
             </div>
           )}
-          <div className="relative h-full w-full">
+          <div className="relative h-full min-w-0 w-full">
             {isDashboard ? (
               <div className="absolute inset-0">
                 <Outlet />
               </div>
             ) : (
-              <div ref={scrollRef} className="h-full w-full overflow-y-auto pt-4">
+              <div ref={scrollRef} className="app-page-content h-full min-w-0 w-full overflow-y-auto pt-16 md:pt-4">
                 <Outlet />
               </div>
             )}

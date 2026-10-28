@@ -70,3 +70,12 @@ export async function getVoyages({
   const response = await axiosClient.get("/mersad/voyages", { params });
   return response.data;
 }
+
+
+export async function getVoyagePositionsTimeline(voyageId) {
+  const response = await axiosClient.get(
+    `/mersad/voyage/${voyageId}/positions/timeline`
+  );
+
+  return response.data;
+}

@@ -1,7 +1,6 @@
 import { usePageState, usePageScroll } from "@/hooks/usePageReturn";
 import {
   useLocation,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import { Navigation } from "lucide-react";
@@ -20,7 +19,6 @@ import VoyagesPagination from "./components/VoyagesPagination";
 export default function Voyages() {
   const { t, direction } = useLocale();
   const scrollRef = usePageScroll("table");
-  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -171,7 +169,7 @@ export default function Voyages() {
     );
   }
 
-  function showDetails(voyage) {
+  function getDetailsNavigation(voyage) {
     const tableState = {
       filters: {
         ...filters,
@@ -187,12 +185,11 @@ export default function Voyages() {
 
     const returnTo = location.pathname + location.search;
 
-    const target = getShipDetailsNavigation(
+    return getShipDetailsNavigation(
       { id: voyage.ship_id },
       { source: "table", returnTo, tableState },
     );
 
-    navigate(target.to, { state: target.state });
   }
 
   return (
@@ -242,7 +239,7 @@ export default function Voyages() {
           isPending={isPending}
           isError={isError}
           error={error}
-          showDetails={showDetails}
+          getDetailsNavigation={getDetailsNavigation}
         />
 
         <VoyagesPagination

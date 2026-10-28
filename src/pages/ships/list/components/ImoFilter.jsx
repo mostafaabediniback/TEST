@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useDropdownPosition } from "@/hooks/useDropdownPosition";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const options = [
@@ -10,7 +11,6 @@ const options = [
 
 export default function ImoFilter({ value = "", onChange }) {
   const [open, setOpen] = useState(false);
-  const [menuStyle, setMenuStyle] = useState({});
 
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
@@ -39,49 +39,12 @@ export default function ImoFilter({ value = "", onChange }) {
       ? normalizedValue
       : "";
 
-  useEffect(() => {
-    if (!open) return;
-
-    function positionMenu() {
-      const rect = buttonRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      const width = Math.min(rect.width, window.innerWidth - 16);
-      const left = Math.min(
-        Math.max(8, rect.left),
-        window.innerWidth - width - 8,
-      );
-
-      setMenuStyle({
-        position: "fixed",
-        top: rect.bottom + 4,
-        left,
-        width,
-        zIndex: 9999,
-      });
-    }
-
-    function closeOnOutsideClick(event) {
-      if (
-        !buttonRef.current?.contains(event.target) &&
-        !menuRef.current?.contains(event.target)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    positionMenu();
-
-    window.addEventListener("resize", positionMenu);
-    window.addEventListener("scroll", positionMenu, true);
-    document.addEventListener("mousedown", closeOnOutsideClick);
-
-    return () => {
-      window.removeEventListener("resize", positionMenu);
-      window.removeEventListener("scroll", positionMenu, true);
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-    };
-  }, [open]);
+  const menuStyle = useDropdownPosition({
+    open,
+    setOpen,
+    anchorRef: buttonRef,
+    menuRef,
+  });
 
   function selectOption(option) {
     onChange?.(option.value);
@@ -98,7 +61,7 @@ export default function ImoFilter({ value = "", onChange }) {
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="flex h-8 w-full min-w-0 items-center justify-between rounded-lg border bg-background px-2.5 text-left text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
+        className="flex h-8 w-full min-w-0 items-center justify-between rounded-lg border bg-background px-2.5 text-start text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
       >
         <span className="truncate">{selectedOption.label}</span>
         <span aria-hidden="true">▾</span>
@@ -109,9 +72,9 @@ export default function ImoFilter({ value = "", onChange }) {
           <div
             ref={menuRef}
             style={menuStyle}
-            className="overflow-hidden rounded-md border bg-background shadow-xl"
+            className="flex flex-col overflow-hidden rounded-md border bg-background shadow-xl"
           >
-            <div role="listbox" aria-label="IMO filter options" className="p-1">
+            <div role="listbox" aria-label="IMO filter options" className="min-h-0 overflow-y-auto overscroll-contain p-1">
               {options.map((option) => {
                 const isSelected =
                   (option.value === "specific" && mode === "specific") ||
@@ -126,7 +89,7 @@ export default function ImoFilter({ value = "", onChange }) {
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => selectOption(option)}
-                    className="w-full rounded px-3 py-2 text-left text-sm hover:bg-accent aria-selected:bg-accent"
+                    className="w-full rounded px-3 py-2 text-start text-sm hover:bg-accent aria-selected:bg-accent"
                   >
                     {option.label}
                   </button>

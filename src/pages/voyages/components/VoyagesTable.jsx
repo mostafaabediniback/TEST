@@ -20,7 +20,7 @@ export default function VoyagesTable({
   isPending,
   isError,
   error,
-  showDetails,
+  getDetailsNavigation,
 }) {
   const { t, direction } = useLocale();
 
@@ -101,7 +101,8 @@ export default function VoyagesTable({
                     aria-label={`${t("viewDetails")}: ${
                       voyage.name ?? voyage.ship_id
                     }`}
-                    onClick={() => showDetails(voyage)}
+                    nativeButton={false}
+                    render={voyage.ship_id != null ? <Link {...getDetailsNavigation(voyage)} /> : <span />}
                   >
                     <Eye aria-hidden="true" />
                   </Button>

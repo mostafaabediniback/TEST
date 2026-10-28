@@ -229,31 +229,33 @@ export default function VoyagesTab({ voyage }) {
               />
             </label>
 
-            <label className="flex flex-col gap-1.5 text-sm">
+            <div className="flex min-w-0 flex-col gap-1.5 text-sm">
               <span className="font-medium text-slate-700">
                 Departure date and time
               </span>
               <DateRangeFilter
+                label="Departure date and time"
                 className="w-full"
                 dateRange={filters.departureRange}
                 onDateRangeChange={(range) =>
                   updateFilter("departureRange", range)
                 }
               />
-            </label>
+            </div>
 
-            <label className="flex flex-col gap-1.5 text-sm">
+            <div className="flex min-w-0 flex-col gap-1.5 text-sm">
               <span className="font-medium text-slate-700">
                 Arrival date and time
               </span>
               <DateRangeFilter
+                label="Arrival date and time"
                 className="w-full"
                 dateRange={filters.arrivalRange}
                 onDateRangeChange={(range) =>
                   updateFilter("arrivalRange", range)
                 }
               />
-            </label>
+            </div>
           </div>
 
           <div className="mt-4 flex flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 p-4 pt-4 sm:flex-row sm:justify-end">

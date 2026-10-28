@@ -14,8 +14,8 @@ export default function VoyagesPagination({
   const { t, formatNumber } = useLocale();
 
   return (
-    <footer className="flex flex-col gap-4 rounded-xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-wrap items-center gap-3">
+    <footer className="flex flex-col gap-3 rounded-xl border bg-background p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:p-4">
+      <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
         <label htmlFor="voyages-page-size" className="text-sm">
           {t("rowsPerPage")}
         </label>
@@ -44,10 +44,11 @@ export default function VoyagesPagination({
         </span>
       </div>
 
-      <nav aria-label={t("pagination")} className="flex gap-2">
+      <nav aria-label={t("pagination")} className="flex w-full gap-2 sm:w-auto sm:shrink-0">
         <Button
           variant="outline"
           size="sm"
+          className="min-w-0 flex-1 sm:flex-none"
           disabled={page <= 1 || isPending}
           onClick={() => setPage((current) => current - 1)}
         >
@@ -57,6 +58,7 @@ export default function VoyagesPagination({
         <Button
           variant="outline"
           size="sm"
+          className="min-w-0 flex-1 sm:flex-none"
           disabled={page >= pageCount || isPending}
           onClick={() => setPage((current) => current + 1)}
         >

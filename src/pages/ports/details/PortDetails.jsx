@@ -9,16 +9,16 @@ import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   useLocation,
-  useNavigate,
+  Link,
   useParams,
   useSearchParams,
 } from "react-router-dom";
 import PortDetailHeader from "./components/PortDetailHeader";
 import { tabPages, tabs } from "./tabs";
 import PortOverview from "./tabs/PortOverview";
+import { isPlainLinkClick } from "@/lib/navigation";
 
 export default function PortDetails() {
-  const navigate = useNavigate();
   const location = useLocation();
   const handleBack = usePageBack("/port");
   const { setSelectedShip, setSelectedPort } = useMapController();
@@ -64,8 +64,8 @@ export default function PortDetails() {
     coordinates,
   );
 
-  function handleShowOnMap() {
-    if (!mapTarget || !port) return;
+  function handleShowOnMap(event) {
+    if (!mapTarget || !port || !isPlainLinkClick(event)) return;
 
     setSelectedShip(null);
     setSelectedPort({
@@ -74,7 +74,6 @@ export default function PortDetails() {
       lon: coordinates[0],
       lat: coordinates[1],
     });
-    navigate(mapTarget.to);
   }
 
   if (isPending) {
@@ -94,7 +93,17 @@ export default function PortDetails() {
   if (isError || !port) {
     return (
       <main className="mx-auto max-w-5xl space-y-4 p-6">
-        <Button onClick={handleBack} variant="outline">
+        <Button
+          nativeButton={false}
+          render={<Link to="/port" />}
+          onClick={(event) => {
+            if (isPlainLinkClick(event)) {
+              event.preventDefault();
+              handleBack();
+            }
+          }}
+          variant="outline"
+        >
             <ArrowLeft className="me-2 size-4" />
             Back to ports
         </Button>
@@ -123,6 +132,7 @@ export default function PortDetails() {
             <PortOverview
               port={port}
               onShowOnMap={handleShowOnMap}
+              mapTo={mapTarget?.to}
               canShowOnMap={Boolean(mapTarget)}
             />
           ) : ActiveTabPage ? (

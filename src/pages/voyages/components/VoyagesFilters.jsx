@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
 import DateRangeFilter from "@/components/DateRangeFilter";
-import FilterInput from "./FilterInput";
 import ShipNameDropdown from "@/components/ShipNameDropdown";
 import PortNameDropdown from "@/components/PortNameDropdown";
 import VesselTypeDropdown from "@/components/ships/VesselTypeDropdown";
@@ -57,12 +56,8 @@ export default function VoyagesFilters({
           />
         </div>
 
-        <div className="flex flex-wrap items-start gap-3">
-          <div
-            className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${
-              departureRange?.from ? "w-max" : "w-0"
-            }`}
-          >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="min-w-0">
             <DateRangeFilter
               className="min-w-full"
               label="Departure time"
@@ -71,11 +66,7 @@ export default function VoyagesFilters({
             />
           </div>
 
-          <div
-            className={`min-w-full max-w-full sm:min-w-[calc((100%-0.75rem)/2)] lg:min-w-[calc((100%-2.25rem)/4)] ${
-              arrivalRange?.from ? "w-max" : "w-0"
-            }`}
-          >
+          <div className="min-w-0">
             <DateRangeFilter
               className="min-w-full"
               label="Arrival time"

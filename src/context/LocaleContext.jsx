@@ -16,17 +16,17 @@ const SUPPORTED_LOCALES = ["fa", "en", "ar"];
 
 function readLocale() {
   if (typeof window === "undefined") {
-    return "fa";
+    return "en";
   }
 
   try {
     const savedLocale = window.localStorage.getItem("language");
-
-    return SUPPORTED_LOCALES.includes(savedLocale) ? savedLocale : "fa";
+    return SUPPORTED_LOCALES.includes(savedLocale) ? savedLocale : "en";
   } catch {
-    return "fa";
+    return "en";
   }
 }
+
 
 export function LocaleProvider({ children }) {
   const [locale, updateLocale] = useState(readLocale);

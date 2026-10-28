@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Anchor, MapPin, Search, Ship } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
 import { getSearchMapFocus } from "@/lib/map/mapFocus";
 import { getPortCoordinates } from "@/lib/map/portMarkers";
 import { cn } from "@/lib/utils";
+import { isPlainLinkClick } from "@/lib/navigation";
 import { VesselFlag } from "../VesselFlag";
 
 const RECENT_SEARCHES_KEY = "recent-searches";
@@ -149,6 +150,34 @@ function getSelectionMapPath(type, id, coordinates) {
   );
 }
 
+// Keep command-palette keyboard selection while exposing a real browser link.
+// Stop click bubbling so cmdk does not also navigate the current tab on Ctrl-click.
+function SearchResultLink({ to, onNavigate, children, className, ...props }) {
+  const linkRef = React.useRef(null);
+  return (
+    <CommandItem
+      {...props}
+      className={cn(className, "p-0 [&>svg]:hidden")}
+      onSelect={() => linkRef.current?.click()}
+    >
+      <Link
+        ref={linkRef}
+        to={to}
+        className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2"
+        onClick={(event) => {
+          event.stopPropagation();
+          if (isPlainLinkClick(event)) {
+            event.preventDefault();
+            onNavigate();
+          }
+        }}
+      >
+        {children}
+      </Link>
+    </CommandItem>
+  );
+}
+
 export default function AppSearch({ className }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -174,17 +203,17 @@ export default function AppSearch({ className }) {
     }
   }, [recentSearches]);
 
-  const shipSearch = useShips(
-    {
-      page: 1,
-      page_size: 8,
-      name: hasQuery && !isImoSearch ? debouncedQuery : undefined,
-      imo: isImoSearch ? debouncedQuery : undefined,
-      sort_by: "id",
-      sort_order: "desc",
-    },
-    { enabled: hasQuery },
-  );
+const shipSearch = useShips(
+  {
+    page: 1,
+    page_size: 8,
+    name: hasQuery && !isImoSearch ? debouncedQuery : undefined,
+    imo_like: isImoSearch ? Number(debouncedQuery) : undefined,
+    sort_by: "id",
+    sort_order: "desc",
+  },
+  { enabled: hasQuery },
+);
 
   const portSearch = usePorts(
     {
@@ -417,9 +446,10 @@ export default function AppSearch({ className }) {
                     key={`${item.type}-${item.title}-${item.detailPath ?? item.path}`}
                     className="flex items-center gap-1"
                   >
-                    <CommandItem
+                    <SearchResultLink
                       value={`recent-${item.title}-${item.type}`}
-                      onSelect={() =>
+                      to={item.detailPath ?? item.path}
+                      onNavigate={() =>
                         selectResult(
                           item.detailPath ?? item.path,
                           item.title,
@@ -441,15 +471,21 @@ export default function AppSearch({ className }) {
                         />
                       )}
                       <span className="truncate">{item.title}</span>
-                    </CommandItem>
+                    </SearchResultLink>
 
                     <Button
-                      type="button"
                       variant="ghost"
                       size="icon"
                       aria-label={`Show ${item.title} on map`}
                       title="Show on map"
-                      onClick={() => selectRecentOnMap(item)}
+                      nativeButton={false}
+                      render={<Link to={item.mapPath ?? item.path} />}
+                      onClick={(event) => {
+                        if (isPlainLinkClick(event)) {
+                          event.preventDefault();
+                          selectRecentOnMap(item);
+                        }
+                      }}
                     >
                       <MapPin className="size-4" aria-hidden="true" />
                     </Button>
@@ -478,9 +514,10 @@ export default function AppSearch({ className }) {
                     key={`ship-${ship.id}`}
                     className="flex items-center gap-1"
                   >
-                    <CommandItem
+                    <SearchResultLink
                       value={`ship-${ship.id}`}
-                      onSelect={() => selectShipDetails(ship)}
+                      to={`/ships/${encodeURIComponent(ship.id)}`}
+                      onNavigate={() => selectShipDetails(ship)}
                       className="min-w-0 flex-1 gap-3 py-2"
                     >
                       <Ship
@@ -508,15 +545,26 @@ export default function AppSearch({ className }) {
                           )}
                         </span>
                       </span>
-                    </CommandItem>
+                    </SearchResultLink>
 
                     <Button
-                      type="button"
                       variant="ghost"
                       size="icon"
                       aria-label={`Show ${ship.name ?? "ship"} on map`}
                       title="Show on map"
-                      onClick={() => selectShip(ship)}
+                      nativeButton={false}
+                      disabled={!getSelectionMapPath("ship", ship.id, getShipCoordinates(ship))}
+                      render={
+                        getSelectionMapPath("ship", ship.id, getShipCoordinates(ship))
+                          ? <Link to={getSelectionMapPath("ship", ship.id, getShipCoordinates(ship))} />
+                          : <span />
+                      }
+                      onClick={(event) => {
+                        if (isPlainLinkClick(event)) {
+                          event.preventDefault();
+                          selectShip(ship);
+                        }
+                      }}
                     >
                       <MapPin className="size-4" aria-hidden="true" />
                     </Button>
@@ -535,9 +583,10 @@ export default function AppSearch({ className }) {
                       key={`port-${portId}`}
                       className="flex items-center gap-1"
                     >
-                      <CommandItem
+                      <SearchResultLink
                         value={`port-${portId}`}
-                        onSelect={() => selectPortDetails(port)}
+                        to={`/ports/${encodeURIComponent(portId)}`}
+                        onNavigate={() => selectPortDetails(port)}
                         className="min-w-0 flex-1 gap-3 py-2"
                       >
                         <Anchor
@@ -558,15 +607,26 @@ export default function AppSearch({ className }) {
                                 : "Port"}
                           </span>
                         </span>
-                      </CommandItem>
+                      </SearchResultLink>
 
                       <Button
-                        type="button"
                         variant="ghost"
                         size="icon"
                         aria-label={`Show ${port.name ?? "port"} on map`}
                         title="Show on map"
-                        onClick={() => selectPort(port)}
+                        nativeButton={false}
+                        disabled={!getSelectionMapPath("port", portId, getPortCoordinates(port))}
+                        render={
+                          getSelectionMapPath("port", portId, getPortCoordinates(port))
+                            ? <Link to={getSelectionMapPath("port", portId, getPortCoordinates(port))} />
+                            : <span />
+                        }
+                        onClick={(event) => {
+                          if (isPlainLinkClick(event)) {
+                            event.preventDefault();
+                            selectPort(port);
+                          }
+                        }}
                       >
                         <MapPin className="size-4" aria-hidden="true" />
                       </Button>

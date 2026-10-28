@@ -74,13 +74,10 @@ function readFiltersFromParams(params) {
 
 function DateRange({ label, from, to, onFromChange, onToChange }) {
   return (
-    <label
-      className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-2rem)/3)] ${
-        from ? "w-max" : "w-0"
-      }`}
-    >
+    <div className="flex w-full min-w-0 flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]">
       <span className="font-medium text-slate-700">{label}</span>
       <DateRangeFilter
+        label={label}
         className="min-w-full"
         dateRange={{ from, to }}
         onDateRangeChange={(range) => {
@@ -88,7 +85,7 @@ function DateRange({ label, from, to, onFromChange, onToChange }) {
           onToChange(range?.to);
         }}
       />
-    </label>
+    </div>
   );
 }
 
@@ -422,7 +419,7 @@ export function ArrivalsDeparturesTab({ port, portId }) {
           </p>
         )}
 
-        <div className="overflow-x-auto">
+        <div tabIndex={0} className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-ring">
           <table className="w-full min-w-[800px] text-left text-sm">
             <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
               <tr>

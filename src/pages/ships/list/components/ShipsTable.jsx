@@ -1,4 +1,5 @@
 import { Eye, Filter } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export default function ShipsTable({
   error,
   filters,
   onImoStatusChange,
-  onViewDetails,
+  getDetailsNavigation,
 }) {
   const { t, direction } = useLocale();
   const messageColumnCount = columns.length + 1;
@@ -58,7 +59,7 @@ export default function ShipsTable({
               className={key === "imo" ? "align-top" : undefined}
             >
               {key === "imo" ? (
-                <div className="flex min-w-32 items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button
                     type="button"
                     variant={imoStatus === "any" ? "ghost" : "secondary"}
@@ -160,7 +161,8 @@ export default function ShipsTable({
                   size="icon-sm"
                   disabled={ship.id == null}
                   aria-label={`${t("viewDetails")}: ${ship.name ?? ship.id}`}
-                  onClick={() => onViewDetails(ship)}
+                  nativeButton={false}
+                  render={ship.id != null ? <Link {...getDetailsNavigation(ship)} /> : <span />}
                 >
                   <Eye aria-hidden="true" />
                 </Button>

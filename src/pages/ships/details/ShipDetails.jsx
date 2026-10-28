@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   useLocation,
-  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -15,6 +14,7 @@ import {
 import { useLocale } from "@/context/LocaleContext";
 import { useMapController } from "@/context/MapControllerContext";
 import { getMapSelectionNavigation } from "@/lib/map/mapSelection";
+import { isPlainLinkClick } from "@/lib/navigation";
 
 import VesselDetailHeader from "./components/VesselDetailHeader";
 import VesselOverview from "./tabs/VesselOverview";
@@ -36,7 +36,6 @@ function getPhotoBlob(photo) {
 }
 
 export default function ShipDetails() {
-  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const { t } = useLocale();
@@ -120,8 +119,8 @@ export default function ShipDetails() {
     );
   }
 
-  function handleShowOnMap() {
-    if (!mapTarget) return;
+  function handleShowOnMap(event) {
+    if (!mapTarget || !isPlainLinkClick(event)) return;
 
     setSelectedPort(null);
     setSelectedShip({
@@ -131,7 +130,6 @@ export default function ShipDetails() {
       lat: coordinates[1],
       position,
     });
-    navigate(mapTarget.to);
   }
 
   function handleAddNote() {
@@ -151,6 +149,7 @@ export default function ShipDetails() {
         activeTab={activeTab}
         tabs={tabs}
         onBack={handleBack}
+        backTo={returnTo}
         onTabChange={handleTabChange}
         onAddNote={handleAddNote}
       />
@@ -169,6 +168,7 @@ export default function ShipDetails() {
               coordinates={coordinates}
               imageUrl={imageUrl}
               onShowOnMap={handleShowOnMap}
+              mapTo={mapTarget?.to}
               canShowOnMap={Boolean(mapTarget)}
             />
           ) : ActiveTabPage ? (

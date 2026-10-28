@@ -18,7 +18,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import MapPopup from "./MapPopup";
 import { usePortOverview } from "@/hooks/usePortOverview";
 import { createPortOverviewLayer } from "@/lib/map/portOverviewLayers";
@@ -33,7 +33,6 @@ const PORT_ICON = {
 };
 
 export default function PortMarkers({ ports = [], map, layerManager }) {
-  const navigate = useNavigate();
   const { t, direction } = useLocale();
   const [search, setSearch] = useSearchParams();
   const selectedId = search.get("portId");
@@ -233,12 +232,9 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
 
             <PortPreview
               port={selected}
-              onDetailsClick={
+              detailsTo={
                 selected.id != null
-                  ? () => {
-                      setSelectedPort(selected);
-                      navigate("/ports/" + encodeURIComponent(selected.id));
-                    }
+                  ? "/ports/" + encodeURIComponent(selected.id)
                   : undefined
               }
             />
@@ -254,7 +250,7 @@ export default function PortMarkers({ ports = [], map, layerManager }) {
   );
 }
 // Port content is kept here; its visual layout follows the ship popup.
-function PortPreview({ port, onDetailsClick }) {
+function PortPreview({ port, detailsTo }) {
   const { locale, t, formatNumber } = useLocale();
   const [now, setNow] = useState(() => Date.now());
   const [failedImage, setFailedImage] = useState(null);
@@ -345,15 +341,14 @@ function PortPreview({ port, onDetailsClick }) {
           <p className="break-words font-semibold">{timezone ?? "—"}</p>
         </div>
       </div>
-      {onDetailsClick && (
+      {detailsTo && (
         <div className="mb-3 flex gap-2">
-          <button
-            type="button"
-            onClick={onDetailsClick}
-            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          <Link
+            to={detailsTo}
+            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
           >
             {t("viewDetails")}
-          </button>
+          </Link>
         </div>
       )}
       <div className="grid grid-cols-3 divide-x rounded-md border text-xs rtl:divide-x-reverse">

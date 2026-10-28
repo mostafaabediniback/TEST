@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import DropdownDoneButton from "@/components/DropdownDoneButton";
 import {
   Popover,
   PopoverContent,
@@ -57,6 +58,7 @@ export function VesselTypeFilter() {
 
   // Empty array means every group starts collapsed.
   const [expanded, setExpanded] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const selected = useMemo(() => new Set(vesselTypes), [vesselTypes]);
   const contentId = useId();
@@ -75,7 +77,7 @@ export function VesselTypeFilter() {
     );
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
           <Button
@@ -109,7 +111,7 @@ export function VesselTypeFilter() {
           {t("vesselType")}
         </PopoverTitle>
 
-        <div className="min-h-0 max-h-[65dvh] overflow-y-auto px-2 py-1">
+        <div className="min-h-0 max-h-[65dvh] overflow-y-auto overscroll-contain px-2 py-1">
           {VESSEL_TYPE_GROUPS.map((group) => {
             const { checked, indeterminate } = getVesselTypeGroupState(
               vesselTypes,
@@ -205,6 +207,7 @@ export function VesselTypeFilter() {
             {t("unselectAllVesselTypes")}
           </button>
         </div>
+        <DropdownDoneButton onClick={() => setOpen(false)} />
       </PopoverContent>
     </Popover>
   );

@@ -1,4 +1,5 @@
 import { Ship, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import ShipPositionMap from "@/components/map/ShipPositionMap";
 import VoyageTimeline from "@/components/ships/VoyageTimeline";
 import DetailCard from "@/components/detail/DetailCard";
@@ -12,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/context/LocaleContext";
 import { VesselFlag } from "@/components/VesselFlag";
+import VoyageTimelineTable from "@/components/formatTimelineTime";
 
 export default function VesselOverview({
   ship = {},
@@ -21,6 +23,7 @@ export default function VesselOverview({
   coordinates,
   imageUrl,
   onShowOnMap,
+  mapTo,
   canShowOnMap = false,
 }) {
   const { t } = useLocale();
@@ -52,7 +55,7 @@ export default function VesselOverview({
     ["Call sign", details.call_sign ?? details.callsign],
     ["AIS transponder class", details.ais_class],
     ["General vessel type", vesselType],
-    ["Detail vessel type", details.detail_vessel_type],
+    ["Detail vessel type", details.vessel_subtype],
     ["Year built", details.yob ?? details.year_built],
     ["Length overall", details.loa == null ? null : `${details.loa} m`],
     ["Width", details.width == null ? null : `${details.width} m`],
@@ -86,9 +89,7 @@ export default function VesselOverview({
     ["True heading", position.heading == null ? null : `${position.heading}°`],
     [
       "Rate of turn",
-      position.rate_of_turn == null
-        ? null
-        : `${position.rate_of_turn} °/min`,
+      position.rate_of_turn == null ? null : `${position.rate_of_turn} °/min`,
     ],
     [
       "Draught",
@@ -98,17 +99,12 @@ export default function VesselOverview({
     ],
     ["Reported destination", voyage.reported_destination ?? voyage.destination],
     ["Matched destination", voyage.matched_destination],
-    [
-      "Reported ETA",
-      formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT),
-    ],
+    ["Reported ETA", formatTimestamp(voyage.create_time, AIS_TIMESTAMP_FORMAT)],
     ["AIS vessel type", position.vessel_type ?? ship.vessel_type],
     ["AIS source", position.source ?? position.ais_source],
     [
       "Destination",
-      voyage.destination ??
-        voyage.destination_port ??
-        voyage.arrival_port_name,
+      voyage.destination ?? voyage.destination_port ?? voyage.arrival_port_name,
     ],
     [
       "ETA",
@@ -119,8 +115,7 @@ export default function VesselOverview({
     value == null || value === "" ? "—" : value,
   ]);
 
-  const vesselImage =
-    imageUrl ?? ship.main_image ?? details.main_image ?? null;
+  const vesselImage = imageUrl ?? ship.main_image ?? details.main_image ?? null;
 
   return (
     <div className="grid gap-5 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
@@ -129,16 +124,15 @@ export default function VesselOverview({
           <div className="relative h-72 overflow-hidden rounded-md bg-slate-100">
             {hasCoordinates ? (
               <>
-                <ShipPositionMap
-                  coordinates={mapCoordinates}
-                  name={name}
-                />
+                <ShipPositionMap coordinates={mapCoordinates} name={name} />
 
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={onShowOnMap}
                   disabled={!canShowOnMap}
+                  nativeButton={false}
+                  render={mapTo ? <Link to={mapTo} /> : <span />}
                   className="absolute end-3 top-3 z-10 bg-background/95 shadow-sm"
                 >
                   <MapPin aria-hidden="true" />
@@ -158,6 +152,9 @@ export default function VesselOverview({
 
           <div className="mt-4">
             <VoyageTimeline voyage={voyage} />
+          </div>
+          <div className="mt-4">
+            <VoyageTimelineTable voyage={voyage} />
           </div>
         </DetailCard>
 
@@ -194,8 +191,7 @@ export default function VesselOverview({
             {details.flag ? (
               <>
                 {" "}
-                and is sailing under the flag of{" "}
-                <strong>{details.flag}</strong>
+                and is sailing under the flag of <strong>{details.flag}</strong>
               </>
             ) : null}
             .{summary.description ? ` ${summary.description}` : ""}

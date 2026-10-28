@@ -226,18 +226,17 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
             </div>
           </label>
 
-          <label
-            className={`flex min-w-full max-w-full flex-col gap-1.5 text-sm sm:min-w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-3rem)/4)] ${dateRange?.from ? "w-max" : "w-0"}`}
-          >
+          <div className="flex w-full min-w-0 flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="block font-medium text-slate-700">
               Arrival date and time
             </span>
             <DateRangeFilter
+              label="Arrival date and time"
               className="min-w-full"
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
             />
-          </label>
+          </div>
 
           <label className="flex w-full flex-col gap-1.5 text-sm sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-3rem)/4)]">
             <span className="font-medium text-slate-700">Vessel type</span>
@@ -294,7 +293,7 @@ const ExpectedArrivalsTab = ({ port, portId }) => {
           </p>
         )}
 
-        <div className="overflow-x-auto">
+        <div tabIndex={0} className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-ring">
           <table className="w-full min-w-[1000px] text-left text-sm">
             <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
               <tr>

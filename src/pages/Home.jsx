@@ -205,7 +205,7 @@ export default function Home() {
             </select>
           </label>
 
-          <div className="grid content-start gap-2 text-sm font-medium">
+          <div className="grid min-w-0 content-start gap-2 text-sm font-medium">
             <span>Date and time range</span>
             <DateRangeFilter
               label="Date and time range"

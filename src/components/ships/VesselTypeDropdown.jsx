@@ -1,16 +1,17 @@
+import { useDropdownPosition } from "@/hooks/useDropdownPosition";
+import DropdownDoneButton from "@/components/DropdownDoneButton";
 import {
   VESSEL_TYPE_GROUPS,
   getVesselTypeGroupState,
   updateVesselTypeSelection,
 } from "@/lib/vesselTypes";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Trash2 } from "lucide-react";
 
 export default function VesselTypeDropdown({ selected, onChange }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [menuStyle, setMenuStyle] = useState({});
   const containerRef = useRef(null);
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
@@ -33,49 +34,13 @@ export default function VesselTypeDropdown({ selected, onChange }) {
       ? "selected Vessel Type/Subtype"
       : `${selected.length} vessel type${selected.length === 1 ? "" : "s"} selected`;
 
-  useEffect(() => {
-    if (!open) return;
-
-    function positionMenu() {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      const menuWidth = Math.min(rect.width, window.innerWidth - 16);
-      const left = Math.min(
-        Math.max(8, rect.left),
-        window.innerWidth - menuWidth - 8,
-      );
-
-      setMenuStyle({
-        position: "fixed",
-        top: rect.bottom + 4,
-        left,
-        width: menuWidth,
-        zIndex: 9999,
-      });
-    }
-
-    function closeOnOutsideClick(event) {
-      if (
-        !containerRef.current?.contains(event.target) &&
-        !menuRef.current?.contains(event.target)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    positionMenu();
-    searchRef.current?.focus();
-    window.addEventListener("resize", positionMenu);
-    window.addEventListener("scroll", positionMenu, true);
-    document.addEventListener("mousedown", closeOnOutsideClick);
-
-    return () => {
-      window.removeEventListener("resize", positionMenu);
-      window.removeEventListener("scroll", positionMenu, true);
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-    };
-  }, [open]);
+  const menuStyle = useDropdownPosition({
+    open,
+    setOpen,
+    anchorRef: containerRef,
+    menuRef,
+    searchRef,
+  });
 
   function toggleType(type, checked) {
     onChange(updateVesselTypeSelection(selected, [type], checked));
@@ -101,7 +66,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
             setSearch("");
             setOpen((value) => !value);
           }}
-          className="flex h-full min-w-0 flex-1 items-center justify-between gap-2 text-left focus-visible:outline-2 focus-visible:outline-ring"
+          className="flex h-full min-w-0 flex-1 items-center justify-between gap-2 text-start focus-visible:outline-2 focus-visible:outline-ring"
         >
           <span
             className={
@@ -134,16 +99,9 @@ export default function VesselTypeDropdown({ selected, onChange }) {
           <div
             ref={menuRef}
             style={menuStyle}
-            onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                event.preventDefault();
-                setOpen(false);
-                buttonRef.current?.focus();
-              }
-            }}
-            className="overflow-hidden rounded-md border bg-background shadow-xl"
+            className="flex flex-col overflow-hidden rounded-md border bg-background shadow-xl"
           >
-            <div className="border-b p-2">
+            <div className="shrink-0 border-b p-2">
               <input
                 ref={searchRef}
                 value={search}
@@ -157,7 +115,7 @@ export default function VesselTypeDropdown({ selected, onChange }) {
               />
             </div>
 
-            <div className="max-h-64 overflow-y-auto p-2">
+            <div className="min-h-0 max-h-64 overflow-y-auto overscroll-contain p-2">
               {filteredGroups.map((group) => {
                 const state = getVesselTypeGroupState(selected, group);
 
@@ -217,6 +175,10 @@ export default function VesselTypeDropdown({ selected, onChange }) {
                 </p>
               )}
             </div>
+            <DropdownDoneButton onClick={() => {
+              setOpen(false);
+              buttonRef.current?.focus({ preventScroll: true });
+            }} />
           </div>,
           document.body,
         )}

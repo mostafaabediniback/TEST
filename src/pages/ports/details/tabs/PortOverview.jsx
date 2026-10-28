@@ -5,6 +5,7 @@ import PortMap from "../components/PortMap";
 export default function PortOverview({
   port = {},
   onShowOnMap,
+  mapTo,
   canShowOnMap = false,
 }) {
   const alternativeNames = Array.isArray(port.alternativeNames)
@@ -25,6 +26,7 @@ export default function PortOverview({
           <PortMap
             port={port}
             onShowOnMap={onShowOnMap}
+            mapTo={mapTo}
             canShowOnMap={canShowOnMap}
           />
 

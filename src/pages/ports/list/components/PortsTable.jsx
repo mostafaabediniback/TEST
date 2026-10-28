@@ -1,5 +1,5 @@
 import { Eye, Tags } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +26,6 @@ export default function PortsTable({
   error,
 }) {
   const { t, formatNumber, direction } = useLocale();
-  const navigate = useNavigate();
 
   if (isPending) {
     return (
@@ -72,7 +71,6 @@ export default function PortsTable({
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  type="button"
                   variant="ghost"
                   size="icon"
                   className="size-8 shrink-0 rounded-full text-muted-foreground"
@@ -131,7 +129,7 @@ export default function PortsTable({
             {columns.map(({ key, labelKey }) => (
               <TableHead
                 key={key}
-                className={key === "name" ? "min-w-56" : undefined}
+                className={key === "name" ? "min-w-36 lg:min-w-48" : undefined}
               >
                 {t(labelKey)}
               </TableHead>
@@ -146,7 +144,7 @@ export default function PortsTable({
               {columns.map(({ key }) => (
                 <TableCell
                   key={key}
-                  className={key === "name" ? "min-w-56" : undefined}
+                  className={key === "name" ? "min-w-36 lg:min-w-48" : undefined}
                 >
                   {renderCell(port, key)}
                 </TableCell>
@@ -159,7 +157,8 @@ export default function PortsTable({
                   size="icon"
                   aria-label={`View details for ${port.name}`}
                   title="View port details"
-                  onClick={() => navigate(`/ports/${port.id}`)}
+                  nativeButton={false}
+                  render={<Link to={`/ports/${encodeURIComponent(port.id)}`} />}
                 >
                   <Eye className="size-4" aria-hidden="true" />
                 </Button>

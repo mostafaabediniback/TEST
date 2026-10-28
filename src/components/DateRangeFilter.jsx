@@ -1,8 +1,9 @@
-import { useLocale } from "@/context/LocaleContext";
+﻿import { useLocale } from "@/context/LocaleContext";
 import { cn } from "@/lib/utils";
-import { faIR, getDateLib } from "@daypicker/persian";
+import { enUS as enUSPersian, faIR, getDateLib } from "@daypicker/persian";
 import { format } from "date-fns";
-import { CalendarIcon, Trash2 } from "lucide-react";
+import { arSA, enUS, faIR as faIRGregorian } from "date-fns/locale";
+import { CalendarIcon, Check, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -10,13 +11,63 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
+  PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const PERSIAN_DATE_LIB = getDateLib({
-  locale: faIR,
-  numerals: "arabext",
-});
+const DATE_TEXT = {
+  fa: {
+    from: "از",
+    to: "تا",
+    single: "انتخاب تاریخ",
+    range: "انتخاب بازهٔ تاریخ",
+    start: "تاریخ شروع",
+    end: "تاریخ پایان",
+    persianCalendar: "شمسی",
+    gregorianCalendar: "میلادی",
+    calendarType: "نوع تقویم",
+    previousMonth: "ماه قبل",
+    nextMonth: "ماه بعد",
+    clear: "پاک کردن تاریخ",
+    done: "انجام شد",
+    selectFrom: "ابتدا تاریخ شروع بازه را انتخاب کنید.",
+    selectTo: "اکنون تاریخ پایان بازه را انتخاب کنید.",
+  },
+  ar: {
+    from: "من",
+    to: "إلى",
+    single: "اختر التاريخ",
+    range: "اختر الفترة الزمنية",
+    start: "تاريخ البداية",
+    end: "تاريخ النهاية",
+    persianCalendar: "شمسي",
+    gregorianCalendar: "ميلادي",
+    calendarType: "نوع التقويم",
+    previousMonth: "الشهر السابق",
+    nextMonth: "الشهر التالي",
+    clear: "مسح التاريخ",
+    done: "تم",
+    selectFrom: "اختر تاريخ بداية الفترة.",
+    selectTo: "اختر تاريخ نهاية الفترة.",
+  },
+  en: {
+    from: "From",
+    to: "To",
+    single: "Select date",
+    range: "Select date range",
+    start: "Start date",
+    end: "End date",
+    persianCalendar: "Shamsi",
+    gregorianCalendar: "Gregorian",
+    calendarType: "Calendar type",
+    previousMonth: "Previous month",
+    nextMonth: "Next month",
+    clear: "Clear date",
+    done: "Done",
+    selectFrom: "Choose the start date of your range.",
+    selectTo: "Now choose the end date of your range.",
+  },
+};
 
 function dateOnly(date) {
   if (!date) return undefined;
@@ -49,7 +100,8 @@ export default function DateRangeFilter({
   className,
   label: fieldLabel,
 }) {
-  const { locale } = useLocale();
+  const { locale, direction } = useLocale();
+  const [open, setOpen] = useState(false);
   const [calendarOverride, setCalendarOverride] = useState(null);
   const [activeTab, setActiveTab] = useState("from");
 
@@ -63,39 +115,31 @@ export default function DateRangeFilter({
   const calendarType = calendarOverride ?? defaultCalendar;
   const isPersian = calendarType === "persian";
   const isSingle = mode === "single";
+  const text = DATE_TEXT[locale] ?? DATE_TEXT.en;
+  const calendarLocale = isPersian
+    ? locale === "en" ? enUSPersian : faIR
+    : locale === "fa" ? faIRGregorian : locale === "ar" ? arSA : enUS;
+  const persianDateLib = getDateLib({
+    locale: calendarLocale,
+    numerals: locale === "en" ? "latn" : "arabext",
+  });
 
-  const text = isPersian
-    ? {
-        from: "از",
-        to: "تا",
-        single: "انتخاب تاریخ",
-        range: "انتخاب بازهٔ تاریخ",
-        end: "انتخاب پایان بازه",
-        persianCalendar: "شمسی",
-        gregorianCalendar: "میلادی",
-        clear: "پاک کردن تاریخ انتخاب‌شده",
-      }
-    : {
-        from: "From",
-        to: "To",
-        single: "Select date",
-        range: "Select date range",
-        end: "Select end",
-        persianCalendar: "Shamsi",
-        gregorianCalendar: "Gregorian",
-        clear: "Clear selected date",
-      };
-
-  const formatDateLabel = (value) =>
+  const formatDateLabel = (value, compact = false) =>
     isPersian
-      ? PERSIAN_DATE_LIB.format(value, "d MMMM yyyy")
-      : format(value, "MMM d, yyyy");
+      ? persianDateLib.format(value, compact ? "yyyy/MM/dd" : "d MMMM yyyy")
+      : format(value, compact ? "yyyy-MM-dd" : "PP", { locale: calendarLocale });
 
-  const separator = isPersian ? "تا" : "›";
   const activeDate = isSingle ? date : dateRange?.[activeTab];
   const hasValue = isSingle
     ? Boolean(date)
     : Boolean(dateRange?.from || dateRange?.to);
+
+  function handleOpenChange(nextOpen) {
+    if (nextOpen && !isSingle) {
+      setActiveTab(dateRange?.from && !dateRange?.to ? "to" : "from");
+    }
+    setOpen(nextOpen);
+  }
 
   function handleClear(event) {
     event.preventDefault();
@@ -136,7 +180,7 @@ export default function DateRangeFilter({
     };
 
     if (activeTab === "from" && nextRange.to && nextRange.from > nextRange.to) {
-      nextRange.to = selected;
+      nextRange.to = undefined;
     }
 
     if (activeTab === "to" && nextRange.from && nextRange.to < nextRange.from) {
@@ -150,38 +194,40 @@ export default function DateRangeFilter({
     }
   }
 
-  const label = isSingle
-    ? date
-      ? formatDateLabel(date)
-      : (fieldLabel ?? text.single)
-    : dateRange?.from && dateRange?.to
-      ? `${formatDateLabel(dateRange.from)}  ${separator}  ${formatDateLabel(dateRange.to)}`
-      : dateRange?.from
-        ? `${formatDateLabel(dateRange.from)}  ${separator}  ${text.end}`
-        : (fieldLabel ?? text.range);
+  function selectionLabel(compact) {
+    if (isSingle) {
+      return date ? formatDateLabel(date, compact) : (fieldLabel ?? text.single);
+    }
+    if (!hasValue) return fieldLabel ?? text.range;
 
-  const displayLabel =
-    fieldLabel && hasValue ? `${fieldLabel}: ${label}` : label;
+    const from = dateRange?.from ? formatDateLabel(dateRange.from, compact) : text.start;
+    const to = dateRange?.to ? formatDateLabel(dateRange.to, compact) : text.end;
+    return `${text.from} ${from} ${text.to} ${to}`;
+  }
+
+  const fullLabel = [hasValue && fieldLabel, selectionLabel(false)].filter(Boolean).join(": ");
 
   return (
-    <Popover>
-      <div className="relative inline-flex w-max min-w-0 min-w-full">
+    <Popover open={open} onOpenChange={handleOpenChange}>
+      <div className="relative flex w-full min-w-0 max-w-full">
         <PopoverTrigger
-          title={displayLabel}
-          aria-label={fieldLabel ?? label}
+          title={fullLabel}
+          aria-label={fullLabel}
           render={
             <Button
+              type="button"
               variant="outline"
               className={cn(
-                "h-auto min-h-8 w-max min-w-0 max-w-full justify-start py-1 pe-9 text-start font-normal whitespace-normal",
+                "h-8 w-full min-w-0 justify-start gap-2 overflow-hidden text-start font-normal",
+                hasValue && "pe-9",
                 className,
               )}
             />
           }
         >
-          <CalendarIcon className="me-2 h-4 w-4 shrink-0" />
-          <span className={cn("min-w-0", !hasValue && "text-muted-foreground")}>
-            {displayLabel}
+          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+          <span className={cn("min-w-0 truncate", !hasValue && "text-muted-foreground")}>
+            {selectionLabel(true)}
           </span>
         </PopoverTrigger>
 
@@ -191,108 +237,112 @@ export default function DateRangeFilter({
             aria-label={text.clear}
             title={text.clear}
             onClick={handleClear}
-            className="absolute end-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-muted-foreground hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="absolute end-1 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <Trash2 className="h-4 w-4" />
+            <X className="size-3.5" />
           </button>
         )}
       </div>
 
       <PopoverContent
-        dir={isPersian ? "rtl" : undefined}
-        className="w-[min(95vw,380px)] p-0"
+        dir={direction}
+        className="w-[min(22rem,calc(100vw-1rem))] max-w-[var(--available-width)] gap-0 overflow-y-auto p-0"
         align="start"
       >
-        <div className="border-t p-2">
+        <div className="space-y-3 border-b p-3">
+          <PopoverTitle className="text-sm font-medium">
+            {fieldLabel ?? (isSingle ? text.single : text.range)}
+          </PopoverTitle>
           <div
-            className="mx-auto flex w-fit rounded-lg bg-slate-100 p-1"
+            className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1"
             role="group"
-            aria-label="Calendar type"
+            aria-label={text.calendarType}
           >
-            <button
-              type="button"
-              aria-pressed={isPersian}
-              onClick={() => setCalendarOverride("persian")}
-              className={cn(
-                "rounded-md px-4 py-2 text-sm transition-colors",
-                isPersian
-                  ? "bg-white font-medium text-slate-900 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900",
-              )}
-            >
-              {text.persianCalendar}
-            </button>
-
-            <button
-              type="button"
-              aria-pressed={!isPersian}
-              onClick={() => setCalendarOverride("gregorian")}
-              className={cn(
-                "rounded-md px-4 py-2 text-sm transition-colors",
-                !isPersian
-                  ? "bg-white font-medium text-slate-900 shadow-sm"
-                  : "text-slate-600 hover:text-slate-900",
-              )}
-            >
-              {text.gregorianCalendar}
-            </button>
+            {[
+              ["persian", text.persianCalendar],
+              ["gregorian", text.gregorianCalendar],
+            ].map(([type, label]) => (
+              <button
+                key={type}
+                type="button"
+                aria-pressed={calendarType === type}
+                onClick={() => setCalendarOverride(type)}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  calendarType === type
+                    ? "bg-background font-medium text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {label}
+              </button>
+            ))}
           </div>
+
+          {!isSingle && (
+            <div className="grid grid-cols-2 gap-2" role="group" aria-label={text.range}>
+              {[
+                ["from", text.start],
+                ["to", text.end],
+              ].map(([tab, label]) => (
+                <button
+                  key={tab}
+                  type="button"
+                  aria-pressed={activeTab === tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "flex min-w-0 flex-col gap-1 rounded-lg border px-3 py-2 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    activeTab === tab ? "border-primary bg-primary/5" : "border-border hover:bg-accent",
+                  )}
+                >
+                  <span className="text-xs text-muted-foreground">{label}</span>
+                  <span className="truncate text-xs font-medium">
+                    {dateRange?.[tab] ? formatDateLabel(dateRange[tab]) : "—"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {!isSingle && (
-          <div className="grid grid-cols-2 border-b">
-            <button
-              type="button"
-              onClick={() => setActiveTab("from")}
-              className={`border-b-2 px-4 py-3 text-sm ${
-                activeTab === "from"
-                  ? "border-slate-900 font-medium text-slate-900"
-                  : "border-transparent text-slate-500"
-              }`}
-            >
-              {text.from}{" "}
-              {dateRange?.from ? formatDateLabel(dateRange.from) : ""}
-            </button>
+        <Calendar
+          key={`${calendarType}-${isSingle ? "single" : activeTab}`}
+          calendar={calendarType}
+          locale={calendarLocale}
+          numerals={locale === "fa" ? "arabext" : locale === "ar" ? "arab" : "latn"}
+          dir={direction}
+          labels={{
+            labelPrevious: () => text.previousMonth,
+            labelNext: () => text.nextMonth,
+          }}
+          mode="single"
+          required
+          fixedWeeks
+          selected={activeDate}
+          onSelect={handleDateSelect}
+          defaultMonth={activeDate ?? (isSingle ? undefined : dateRange?.from)}
+          modifiers={isSingle ? undefined : {
+            range_start: dateRange?.from,
+            range_end: dateRange?.to,
+            range_middle: isRangeMiddle,
+          }}
+          className="w-full"
+        />
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("to")}
-              className={`border-b-2 px-4 py-3 text-sm ${
-                activeTab === "to"
-                  ? "border-slate-900 font-medium text-slate-900"
-                  : "border-transparent text-slate-500"
-              }`}
-            >
-              {text.to}{" "}
-              {dateRange?.to ? formatDateLabel(dateRange.to) : ""}
-            </button>
-          </div>
+        {!isSingle && (
+          <p className="px-3 pb-3 text-xs text-muted-foreground" aria-live="polite">
+            {activeTab === "from" ? text.selectFrom : text.selectTo}
+          </p>
         )}
 
-        <div className="p-2">
-          <Calendar
-            key={`${calendarType}-${isSingle ? "single" : activeTab}`}
-            calendar={calendarType}
-            dir={isPersian ? "rtl" : undefined}
-            mode="single"
-            selected={activeDate}
-            onSelect={handleDateSelect}
-            defaultMonth={activeDate ?? (isSingle ? undefined : dateRange?.from)}
-            modifiers={{
-              range_start: dateRange?.from,
-              range_end: dateRange?.to,
-              range_middle: isRangeMiddle,
-            }}
-            modifiersClassNames={{
-              range_start:
-                "!bg-primary !text-primary-foreground rounded-s-md",
-              range_end:
-                "!bg-primary !text-primary-foreground rounded-e-md",
-              range_middle:
-                "!bg-accent !text-accent-foreground rounded-none",
-            }}
-            className="w-full"
-          />
+        <div className="sticky bottom-0 z-20 flex shrink-0 items-center justify-between gap-2 border-t bg-background p-3">
+          <Button type="button" variant="ghost" size="sm" disabled={!hasValue} onClick={handleClear}>
+            {text.clear}
+          </Button>
+          <Button type="button" size="sm" onClick={() => setOpen(false)}>
+            <Check className="size-4" />
+            {text.done}
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

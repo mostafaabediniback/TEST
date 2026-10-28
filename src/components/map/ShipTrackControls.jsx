@@ -1,7 +1,9 @@
 import { X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { isPlainLinkClick } from "@/lib/navigation";
 import { useLocale } from "@/context/LocaleContext";
 
-export default function ShipTrackControls({ shipName, track, onHide, onDetails, onClose }) {
+export default function ShipTrackControls({ shipName, track, onHide, detailsNavigation, onDetails, onClose }) {
   const { t, direction } = useLocale();
   return (
     <div className="pointer-events-none absolute inset-x-4 bottom-4 z-[1000] flex justify-center">
@@ -23,13 +25,18 @@ export default function ShipTrackControls({ shipName, track, onHide, onDetails, 
           >
             {t("hidePastTrack")}
           </button>
-          <button
-            type="button"
-            onClick={onDetails}
+          <Link
+            {...(detailsNavigation ?? { to: "/ships" })}
+            onClick={(event) => {
+              if (onDetails && isPlainLinkClick(event)) {
+                event.preventDefault();
+                onDetails();
+              }
+            }}
             className="rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
           >
             {t("viewDetails")}
-          </button>
+          </Link>
           <button
             type="button"
             aria-label={t("closeSelection")}

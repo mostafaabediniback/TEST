@@ -7,7 +7,8 @@ function Table({
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      tabIndex={0}
+      className="relative min-w-0 w-full max-w-full overflow-x-auto overscroll-x-contain [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       <table
         data-slot="table"

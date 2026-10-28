@@ -1,3 +1,5 @@
+import { useState } from "react";
+import DropdownDoneButton from "@/components/DropdownDoneButton";
 import { Columns3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +17,11 @@ export default function ShipsColumnsMenu({
   onToggle,
 }) {
   const { t, formatNumber, direction } = useLocale();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex justify-end">
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger render={<Button variant="outline" className="h-10" />}>
           <Columns3 aria-hidden="true" />
           {t("Columns")} ({formatNumber(visibleColumns.length)}/
@@ -35,7 +38,7 @@ export default function ShipsColumnsMenu({
             {t("Choose fields shown in the table.")}
           </PopoverDescription>
 
-          <div className="space-y-1">
+          <div className="min-h-0 overflow-y-auto overscroll-contain space-y-1">
             {columns.map((column) => (
               <label
                 key={column.key}
@@ -54,6 +57,7 @@ export default function ShipsColumnsMenu({
               </label>
             ))}
           </div>
+          <DropdownDoneButton onClick={() => setOpen(false)} />
         </PopoverContent>
       </Popover>
     </div>

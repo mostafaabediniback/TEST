@@ -304,7 +304,7 @@ export function InPortTab({ port }) {
             />
           </div>
 
-          <div className="flex flex-col gap-1.5 text-sm">
+          <div className="flex min-w-0 flex-col gap-1.5 text-sm">
             <span className="font-medium text-slate-700">Arrival time</span>
             <DateRangeFilter
               mode="range"
@@ -343,7 +343,7 @@ export function InPortTab({ port }) {
           </p>
         )}
 
-        <div className="overflow-x-auto">
+        <div tabIndex={0} className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-ring">
           <table className="w-full min-w-[900px] text-left text-sm">
             <thead className="border-b bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
@@ -351,7 +351,7 @@ export function InPortTab({ port }) {
                 <th className="px-4 py-3 font-medium">IMO</th>
                 <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Flag</th>
-                <th className="px-4 py-3 font-medium">Time Anchor</th>
+                <th className="px-4 py-3 font-medium">Time Elapsed</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Arrival</th>
                 <th className="px-4 py-3 font-medium">From</th>

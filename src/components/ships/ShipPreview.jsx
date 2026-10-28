@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { isPlainLinkClick } from "@/lib/navigation";
 import TimestampWithRelative from "@/components/TimestampWithRelative";
 import { useLocale } from "@/context/LocaleContext";
 import { AIS_TIMESTAMP_FORMAT } from "@/lib/dateTime";
@@ -19,6 +21,7 @@ export default function ShipPreview({
   position,
   voyage,
   onDetailsClick,
+  detailsNavigation,
   detailsLabel = "Vessel details",
   onPastTrackClick,
   isPastTrackActive = false,
@@ -131,14 +134,19 @@ export default function ShipPreview({
           {t(isPastTrackActive ? "hidePastTrack" : "pastTrack")}
         </button>
 
-        {onDetailsClick && (
-          <button
-            type="button"
-            onClick={onDetailsClick}
-            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        {(detailsNavigation || onDetailsClick) && (
+          <Link
+            {...(detailsNavigation ?? { to: `/ships/${encodeURIComponent(ship?.id)}` })}
+            onClick={(event) => {
+              if (onDetailsClick && isPlainLinkClick(event)) {
+                event.preventDefault();
+                onDetailsClick();
+              }
+            }}
+            className="flex-1 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
           >
             {detailsLabel}
-          </button>
+          </Link>
         )}
       </div>
 

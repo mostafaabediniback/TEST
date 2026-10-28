@@ -1,3 +1,4 @@
+import { useDropdownPosition } from "@/hooks/useDropdownPosition";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Trash2 } from "lucide-react";
@@ -21,7 +22,6 @@ export default function PortNameDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [menuStyle, setMenuStyle] = useState({});
 
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
@@ -70,50 +70,13 @@ export default function PortNameDropdown({
   const waitingForDebounce =
     search.trim() !== debouncedSearch.trim();
 
-  useEffect(() => {
-    if (!open) return;
-
-    function positionMenu() {
-      const rect = buttonRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      const width = Math.min(rect.width, window.innerWidth - 16);
-      const left = Math.min(
-        Math.max(8, rect.left),
-        window.innerWidth - width - 8,
-      );
-
-      setMenuStyle({
-        position: "fixed",
-        top: rect.bottom + 4,
-        left,
-        width,
-        zIndex: 9999,
-      });
-    }
-
-    function closeOnOutsideClick(event) {
-      if (
-        !buttonRef.current?.contains(event.target) &&
-        !menuRef.current?.contains(event.target)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    positionMenu();
-    searchRef.current?.focus();
-
-    window.addEventListener("resize", positionMenu);
-    window.addEventListener("scroll", positionMenu, true);
-    document.addEventListener("mousedown", closeOnOutsideClick);
-
-    return () => {
-      window.removeEventListener("resize", positionMenu);
-      window.removeEventListener("scroll", positionMenu, true);
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-    };
-  }, [open]);
+  const menuStyle = useDropdownPosition({
+    open,
+    setOpen,
+    anchorRef: buttonRef,
+    menuRef,
+    searchRef,
+  });
 
   function selectPort(port) {
     onChange?.(port?.id ?? "");
@@ -123,13 +86,13 @@ export default function PortNameDropdown({
 
   return (
     <>
-<div className="relative">
+<div className="relative min-w-0">
   <button
     ref={buttonRef}
     type="button"
     aria-expanded={open}
     onClick={() => setOpen((value) => !value)}
-    className="flex h-8 w-full min-w-0 items-center rounded-lg border bg-background px-2.5 pr-16 text-left text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
+    className="flex h-8 w-full min-w-0 items-center rounded-lg border bg-background px-2.5 pe-16 text-start text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
   >
     <span
       className={`truncate ${
@@ -140,7 +103,7 @@ export default function PortNameDropdown({
     </span>
   </button>
 
-  <div className="pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-2">
+  <div className="pointer-events-none absolute end-2 top-1/2 flex -translate-y-1/2 items-center gap-2">
     <span aria-hidden="true">▾</span>
 
     {selectedId && (
@@ -163,9 +126,9 @@ export default function PortNameDropdown({
           <div
             ref={menuRef}
             style={menuStyle}
-            className="overflow-hidden rounded-md border bg-background shadow-xl"
+            className="flex flex-col overflow-hidden rounded-md border bg-background shadow-xl"
           >
-            <div className="border-b p-2">
+            <div className="shrink-0 border-b p-2">
               <input
                 ref={searchRef}
                 value={search}
@@ -176,11 +139,11 @@ export default function PortNameDropdown({
               />
             </div>
 
-            <div className="max-h-64 overflow-y-auto p-1">
+            <div className="min-h-0 max-h-64 overflow-y-auto overscroll-contain p-1">
               <button
                 type="button"
                 onClick={() => selectPort(null)}
-                className="flex w-full items-center gap-2 rounded px-3 py-2 text-left text-sm hover:bg-accent"
+                className="flex w-full items-center gap-2 rounded px-3 py-2 text-start text-sm hover:bg-accent"
               >
                 <Trash2 size={16} aria-hidden="true" />
                 Clear selection
@@ -207,12 +170,12 @@ export default function PortNameDropdown({
                     type="button"
                     onClick={() => selectPort(port)}
                     aria-selected={String(selectedId) === String(port.id)}
-                    className="w-full rounded px-3 py-2 text-left text-sm hover:bg-accent aria-selected:bg-accent"
+                    className="w-full rounded px-3 py-2 text-start text-sm hover:bg-accent aria-selected:bg-accent"
                   >
                     <span>{port.name}</span>
                     {Array.isArray(port.alt_name) &&
                       port.alt_name.length > 0 && (
-                        <span className="ml-2 text-muted-foreground">
+                        <span className="ms-2 text-muted-foreground">
                           ({port.alt_name.join(", ")})
                         </span>
                       )}
